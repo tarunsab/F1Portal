@@ -32,7 +32,8 @@ export default class App extends React.Component {
         <View style={styles.listElem}>
 
           <View style={styles.driverNameBox}>
-            <Text>{standingCell.Driver.familyName}</Text>
+            <Text>{standingCell.Driver.givenName + " " 
+                     + standingCell.Driver.familyName}</Text>
           </View>
 
           <View style={styles.driverPointsBox}>
