@@ -32,12 +32,18 @@ export default class App extends React.Component {
         <View style={styles.listElem}>
 
           <View style={styles.driverNameBox}>
-            <Text>{standingCell.Driver.givenName + " " 
-                     + standingCell.Driver.familyName}</Text>
+
+            <Text>{standingCell.Driver.givenName + " "
+              + standingCell.Driver.familyName}</Text>
+
+            <Text style={{color: 'grey'}}>
+              {standingCell.Constructors[0].name}</Text>
+
           </View>
 
           <View style={styles.driverPointsBox}>
-            <Text>{standingCell.points}</Text>
+            <Text style={{color: 'red'}}>
+              {standingCell.points}</Text>
           </View>
 
         </View>
@@ -104,8 +110,8 @@ const styles = StyleSheet.create({
   },
   listElem:{
     width: Dimensions.get('window').width,
-    paddingTop: 10,
-    paddingBottom: 30,
+    paddingTop: 20,
+    paddingBottom: 20,
     paddingLeft: 30,
     paddingRight: 30,
     flexDirection: 'row',
@@ -119,7 +125,8 @@ const styles = StyleSheet.create({
   },
   driverNameBox:{
     flex: 1,
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
+    flexDirection: 'column'
   }
 });
 
