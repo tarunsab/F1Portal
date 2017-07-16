@@ -103,10 +103,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   listHeader:{
+    backgroundColor: '#F5F5F5',
     paddingTop: 20,
     paddingBottom: 10,
     flexDirection: 'row',
-    alignContent: 'center'
+    alignContent: 'center',
+    borderBottomWidth: 1.5,
+    borderBottomColor: '#EEEEEE',    
   },
   listHeaderText:{
     color: '#F44336',
@@ -123,7 +126,7 @@ const styles = StyleSheet.create({
     paddingRight: 30,
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: '#f1f2f6',    
+    borderBottomColor: '#F5F5F5',    
     alignItems: 'flex-start'
   },
   driverPointsBox:{
