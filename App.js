@@ -44,14 +44,6 @@ export default class App extends React.Component {
       )
   }
 
-  renderSectionHeader() {
-    return (
-      <View style={styles.listHeader}>
-        <Text style={styles.listHeaderText}>{myjson.MRData.StandingsTable.season + " Drivers Championship"}</Text>
-      </View>
-    )
-  }
-
   render() {
     return (
       <View style={styles.container}>
@@ -62,12 +54,15 @@ export default class App extends React.Component {
           </Text>
         </View>
 
+        <View style={styles.listHeader}>
+          <Text style={styles.listHeaderText}>{
+            myjson.MRData.StandingsTable.season + " Drivers Championship"}</Text>
+        </View>
 
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           <ListView
             flex-start dataSource={this.state.dataSource}
             renderRow={this.renderRow.bind(this)}
-            renderHeader={this.renderSectionHeader.bind(this)}
             enableEmptySections={true}
           />
         </View>
