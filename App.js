@@ -27,14 +27,21 @@ export default class App extends React.Component {
     });
   }
 
-  renderRow(standingCell) {
+  renderRow(standingCell, something, rowID) {
       return (
         <View style={styles.listElem}>
+
+          <View style={styles.driverOrder}>
+            <Text style={{color: 'grey'}}>
+              {parseInt(rowID, 10) + 1}
+            </Text>
+          </View>
 
           <View style={styles.driverNameBox}>
 
             <Text>{standingCell.Driver.givenName + " "
-              + standingCell.Driver.familyName}</Text>
+              + standingCell.Driver.familyName}
+            </Text>
 
             <Text style={{color: 'grey'}}>
               {standingCell.Constructors[0].name}</Text>
@@ -127,6 +134,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'flex-start',
     flexDirection: 'column'
+  },
+  driverOrder:{
+    alignItems: 'flex-start',
+    minWidth: 25,
   }
 });
 
