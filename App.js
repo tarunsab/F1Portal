@@ -4,7 +4,8 @@ import {
   Text,
   View,
   ListView,
-  Dimensions
+  Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 
 export default class App extends React.Component {
@@ -16,21 +17,28 @@ export default class App extends React.Component {
         rowHasChanged: (row1, row2) => row1 !== row2,
       }),
       driverJson: [],
+      isLoading: true,
     };
   }
 
-  componentWillMount() {
-    this.setState({
-      driverJson: require('./curr_drivers.json'),
-    });
-  }
-
   componentDidMount() {    
-    this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(
-        this.state.driverJson.MRData.StandingsTable
-        .StandingsLists[0].DriverStandings),
-    });
+
+    return fetch('http://127.0.0.1:5000/get_drivers')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson),
+        this.setState({
+          isLoading: false,
+          driverJson: responseJson,
+          dataSource: this.state.dataSource.cloneWithRows(
+            responseJson.MRData.StandingsTable
+            .StandingsLists[0].DriverStandings),
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
   }
 
   renderRow(standingCell, something, rowID) {
@@ -64,6 +72,15 @@ export default class App extends React.Component {
   }
 
   render() {
+
+    if (this.state.isLoading) {
+      return (
+        <View style={{flex: 1, paddingTop: 20}}>
+          <ActivityIndicator />
+        </View>
+      );
+    }
+
     return (
       <View style={styles.container}>
       
