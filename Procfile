@@ -1,1 +1,1 @@
-web: gunicord backend/app:app
+web: gunicorn backend/app:app
