@@ -7,8 +7,6 @@ import {
   Dimensions
 } from 'react-native';
 
-const myjson = require('./curr_drivers.json');
-
 export default class App extends React.Component {
 
   constructor(props) {
@@ -17,13 +15,21 @@ export default class App extends React.Component {
       dataSource: new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1 !== row2,
       }),
+      driverJson: [],
     };
+  }
+
+  componentWillMount() {
+    this.setState({
+      driverJson: require('./curr_drivers.json'),
+    });
   }
 
   componentDidMount() {    
     this.setState({
       dataSource: this.state.dataSource.cloneWithRows(
-        myjson.MRData.StandingsTable.StandingsLists[0].DriverStandings)
+        this.state.driverJson.MRData.StandingsTable
+        .StandingsLists[0].DriverStandings),
     });
   }
 
@@ -69,7 +75,7 @@ export default class App extends React.Component {
 
         <View style={styles.listHeader}>
           <Text style={styles.listHeaderText}>{
-            myjson.MRData.StandingsTable.season + " Drivers Championship"}</Text>
+            this.state.driverJson.MRData.StandingsTable.season + " Drivers Championship"}</Text>
         </View>
 
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
