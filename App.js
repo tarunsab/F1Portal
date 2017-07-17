@@ -8,6 +8,9 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
+const api = 'https://f1portal.herokuapp.com';
+
+
 export default class App extends React.Component {
 
   constructor(props) {
@@ -23,7 +26,7 @@ export default class App extends React.Component {
 
   componentDidMount() {    
 
-    return fetch('http://127.0.0.1:5000/get_drivers')
+    return fetch(api + '/get_drivers')
       .then((response) => response.json())
       .then((responseJson) => {
         console.log(responseJson),
