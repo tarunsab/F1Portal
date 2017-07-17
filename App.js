@@ -29,7 +29,7 @@ export default class App extends React.Component {
     return fetch(api + '/get_drivers')
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson),
+        //console.log(responseJson),
         this.setState({
           isLoading: false,
           driverJson: responseJson,
