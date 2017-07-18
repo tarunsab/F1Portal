@@ -65,7 +65,7 @@ export default class DriversScreen extends React.Component {
       return (
         <View style={styles.listElem}>
 
-          <View style={styles.driverOrder}>
+          <View style={styles.standingsOrder}>
             <Text style={{color: 'grey'}}>
               {parseInt(rowID, 10) + 1}
             </Text>
@@ -83,8 +83,9 @@ export default class DriversScreen extends React.Component {
           </View>
 
           <View style={styles.driverPointsBox}>
-            <Text style={{color: 'red'}}>
-              {standingCell.points}</Text>
+            <Text>
+              {standingCell.points}
+            </Text>
           </View>
 
         </View>
@@ -181,7 +182,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     flexDirection: 'column'
   },
-  driverOrder:{
+  standingsOrder:{
     alignItems: 'flex-start',
     minWidth: 25,
   },

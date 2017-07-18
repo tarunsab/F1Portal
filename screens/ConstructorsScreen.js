@@ -79,8 +79,9 @@ export default class ConstructorsScreen extends React.Component {
           </View>
 
           <View style={styles.driverPointsBox}>
-            <Text style={{color: 'red'}}>
-              {standingCell.points}</Text>
+            <Text>
+              {standingCell.points}
+            </Text>
           </View>
 
         </View>
