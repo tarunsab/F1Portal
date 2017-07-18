@@ -179,6 +179,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   listElem:{
+    minHeight: 70,
     width: Dimensions.get('window').width,
     paddingTop: 20,
     paddingBottom: 20,
