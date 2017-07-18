@@ -1,4 +1,4 @@
-from urllib.request import urlopen
+from urllib2 import urlopen
 from flask import Flask, jsonify
 from datetime import datetime
 import requests, json
