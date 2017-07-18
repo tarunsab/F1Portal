@@ -31,7 +31,7 @@ def get_drivers():
     if (datetime.now() >= refresh_date):
         return get_drivers_refresh()
     else:
-        print("Obtained driver standing details from cache")
+        app.logger.info("Obtained driver standing details from cached file")
         return jsonify(driver_data)
 
 
@@ -60,7 +60,8 @@ def get_drivers_refresh():
     with open('driver_data.json', 'w') as file:
         json.dump(data, file)
 
-    print("Obtained driver standing details from API call")
+    app.logger.info("Obtained driver standing details from API call")
+
     return str(data)
 
 
