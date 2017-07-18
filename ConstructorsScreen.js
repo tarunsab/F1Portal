@@ -109,7 +109,7 @@ export default class ConstructorsScreen extends React.Component {
 
         <View style={styles.listHeader}>
           <Text style={styles.listHeaderText}>{
-            this.state.driverJson.MRData.StandingsTable.season + " Drivers Championship"}</Text>
+            this.state.driverJson.MRData.StandingsTable.season + " Constructors Championship"}</Text>
         </View>
 
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -144,8 +144,8 @@ const styles = StyleSheet.create({
   },
   listHeader:{
     backgroundColor: '#F5F5F5',
-    paddingTop: 20,
-    paddingBottom: 10,
+    paddingTop: 12,
+    paddingBottom: 12,
     flexDirection: 'row',
     alignContent: 'center',
     borderBottomWidth: 1.5,

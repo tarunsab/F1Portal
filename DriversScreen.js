@@ -143,8 +143,8 @@ const styles = StyleSheet.create({
   },
   listHeader:{
     backgroundColor: '#F5F5F5',
-    paddingTop: 20,
-    paddingBottom: 10,
+    paddingTop: 12,
+    paddingBottom: 12,
     flexDirection: 'row',
     alignContent: 'center',
     borderBottomWidth: 1.5,
