@@ -51,9 +51,14 @@ export default class ConstructorsScreen extends React.Component {
         this.setState({
           isLoading: false,
           constructorJson: responseJson,
+
           dataSource: this.state.dataSource.cloneWithRows(
             responseJson.MRData.StandingsTable
             .StandingsLists[0].ConstructorStandings),
+
+          leadingConstructorPoints: responseJson.MRData.StandingsTable
+            .StandingsLists[0].ConstructorStandings[0].points,
+
         });
       })
       .catch((error) => {
@@ -79,10 +84,24 @@ export default class ConstructorsScreen extends React.Component {
           </View>
 
           <View style={styles.driverPointsBox}>
+
             <Text>
               {standingCell.points}
             </Text>
+
+            {(rowID !== '0') && 
+
+              <Text style={{color: 'grey'}}>
+                {'-' + (this.state.leadingConstructorPoints 
+                  - parseInt(standingCell.points))}
+              </Text>
+
+            }
+
+
           </View>
+
+        
 
         </View>
       )
