@@ -11,20 +11,25 @@ import {
   View,
   ListView,
   Dimensions,
+  Image,  
   ActivityIndicator,
 } from 'react-native';
 
 const api = 'https://f1portal.herokuapp.com';
 
-export default class DriversScreen extends React.Component {
+export default class ConstructorsScreen extends React.Component {
 
   static navigationOptions = {
-    tabBarLabel: 'Drivers',
-    //tabBar: {
-    //  label: 'Drivers',
-    //  //icon: '',
-    //}
+    tabBarLabel: 'Constructors',
+    tabBarIcon: ({ tintColor }) => (
+      <Image
+        source={require('../images/icons/car.png')}
+        style={[styles.icon, {tintColor: tintColor}]}
+      />
+    ),
+
   };
+
 
   constructor(props) {
     super(props);
@@ -32,7 +37,7 @@ export default class DriversScreen extends React.Component {
       dataSource: new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1 !== row2,
       }),
-      driverJson: [],
+      constructorJson: [],
       isLoading: true,
     };
   }
@@ -45,14 +50,14 @@ export default class DriversScreen extends React.Component {
         //console.log(responseJson),
         this.setState({
           isLoading: false,
-          driverJson: responseJson,
+          constructorJson: responseJson,
           dataSource: this.state.dataSource.cloneWithRows(
             responseJson.MRData.StandingsTable
             .StandingsLists[0].DriverStandings),
         });
       })
       .catch((error) => {
-        //console.error(error);
+        console.error(error);
       });
 
   }
@@ -108,7 +113,7 @@ export default class DriversScreen extends React.Component {
 
         <View style={styles.listHeader}>
           <Text style={styles.listHeaderText}>{
-            this.state.driverJson.MRData.StandingsTable.season + " Drivers Championship"}</Text>
+            this.state.constructorJson.MRData.StandingsTable.season + " Constructors Championship"}</Text>
         </View>
 
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -116,6 +121,7 @@ export default class DriversScreen extends React.Component {
             flex-start dataSource={this.state.dataSource}
             renderRow={this.renderRow.bind(this)}
             enableEmptySections={true}
+            removeClippedSubviews={false}
           />
         </View>
 
@@ -180,7 +186,12 @@ const styles = StyleSheet.create({
   driverOrder:{
     alignItems: 'flex-start',
     minWidth: 25,
-  }
+  },
+  icon: {
+    width: 26,
+    height: 26,
+  },  
 });
+
 
 

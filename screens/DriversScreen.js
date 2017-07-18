@@ -12,20 +12,23 @@ import {
   ListView,
   Dimensions,
   ActivityIndicator,
+  Image,
 } from 'react-native';
 
 const api = 'https://f1portal.herokuapp.com';
 
-export default class ConstructorsScreen extends React.Component {
+export default class DriversScreen extends React.Component {
 
   static navigationOptions = {
-    tabBarLabel: 'Constructors',
-    //tabBar: {
-    //  label: 'Constructors',
-    //  //icon: '',
-    //}
-  };
+    tabBarLabel: 'Drivers',
+    tabBarIcon: ({ tintColor }) => (
+      <Image
+        source={require('../images/icons/helmet.png')}
+        style={[styles.icon, {tintColor: tintColor}]}
+      />
+    ),
 
+  };
 
   constructor(props) {
     super(props);
@@ -33,7 +36,7 @@ export default class ConstructorsScreen extends React.Component {
       dataSource: new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1 !== row2,
       }),
-      constructorJson: [],
+      driverJson: [],
       isLoading: true,
     };
   }
@@ -46,14 +49,14 @@ export default class ConstructorsScreen extends React.Component {
         //console.log(responseJson),
         this.setState({
           isLoading: false,
-          constructorJson: responseJson,
+          driverJson: responseJson,
           dataSource: this.state.dataSource.cloneWithRows(
             responseJson.MRData.StandingsTable
             .StandingsLists[0].DriverStandings),
         });
       })
       .catch((error) => {
-        console.error(error);
+        //console.error(error);
       });
 
   }
@@ -109,7 +112,7 @@ export default class ConstructorsScreen extends React.Component {
 
         <View style={styles.listHeader}>
           <Text style={styles.listHeaderText}>{
-            this.state.constructorJson.MRData.StandingsTable.season + " Constructors Championship"}</Text>
+            this.state.driverJson.MRData.StandingsTable.season + " Drivers Championship"}</Text>
         </View>
 
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -117,7 +120,6 @@ export default class ConstructorsScreen extends React.Component {
             flex-start dataSource={this.state.dataSource}
             renderRow={this.renderRow.bind(this)}
             enableEmptySections={true}
-            removeClippedSubviews={false}
           />
         </View>
 
@@ -182,8 +184,11 @@ const styles = StyleSheet.create({
   driverOrder:{
     alignItems: 'flex-start',
     minWidth: 25,
-  }
+  },
+  icon: {
+    width: 26,
+    height: 26,
+  },
 });
-
 
 

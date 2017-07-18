@@ -6,8 +6,8 @@ import {
 } from 'react-navigation';
 
 
-import DriversScreen from './DriversScreen';
-import ConstructorsScreen from './ConstructorsScreen';
+import DriversScreen from './screens/DriversScreen';
+import ConstructorsScreen from './screens/ConstructorsScreen';
 
 const Tabs = TabNavigator({
 
@@ -23,7 +23,7 @@ const Tabs = TabNavigator({
 
   {
     tabBarOptions: {
-    activeTintColor: '#e91e63',
+    activeTintColor: '#F44336',
     swipeEnabled: true,
   },
 
