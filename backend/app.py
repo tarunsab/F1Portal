@@ -18,8 +18,11 @@ def homepage():
 def get_drivers():
 
     #Obtain current cached file's expiry info
-    with open('driver_data.json') as file:
-        driver_data = json.load(file)
+    try:
+        with open('driver_data.json') as file:
+            driver_data = json.load(file)
+    except FileNotFoundError:
+        return get_drivers_refresh()
 
     driver_data_expiry = driver_data["expiryDate"]
     refresh_date = datetime.strptime(driver_data_expiry, '%Y-%m-%d')
