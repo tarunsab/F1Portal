@@ -1,4 +1,3 @@
-from urllib.request import urlopen
 from flask import Flask, jsonify
 from datetime import datetime
 import requests, json
@@ -18,8 +17,8 @@ def homepage():
 def get_drivers():
 
     #Obtain current cached file's expiry info
-    response = urlopen(s3Url + "driver_data.json")
-    driver_data = json.load(response)
+    response = requests.get(s3Url + "driver_data.json")
+    driver_data = response.json()
 
     driver_data_expiry = driver_data["expiryDate"]
     refresh_date = datetime.strptime(driver_data_expiry, '%Y-%m-%d')
@@ -42,8 +41,8 @@ def get_drivers_refresh():
     #TODO: Update requirements.txt to add urlopen
     #TODO: Cache this to a json file too
 
-    response = urlopen("http://ergast.com/api/f1/current.json")
-    race_schedule = json.load(response)
+    response = requests.get("http://ergast.com/api/f1/current.json")
+    race_schedule = response.json()
 
     racesJson = race_schedule["MRData"]["RaceTable"]["Races"]
     curr_date = datetime.now()
