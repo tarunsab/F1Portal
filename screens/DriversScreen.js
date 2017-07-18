@@ -27,7 +27,7 @@ export default class DriversScreen extends React.Component {
         style={[styles.icon, {tintColor: tintColor}]}
       />
     ),
-
+    tabBarPosition: 'bottom',
   };
 
   constructor(props) {

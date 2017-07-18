@@ -23,9 +23,12 @@ const Tabs = TabNavigator({
 
   {
     tabBarOptions: {
-    activeTintColor: '#F44336',
-    swipeEnabled: true,
-  },
+      activeTintColor: '#F44336',
+      swipeEnabled: true,
+      tabBarPosition: 'bottom',
+    },
+
+    tabBarPosition: 'bottom',
 
 });
 

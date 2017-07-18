@@ -27,7 +27,7 @@ export default class ConstructorsScreen extends React.Component {
         style={[styles.icon, {tintColor: tintColor}]}
       />
     ),
-
+    tabBarPosition: 'bottom',
   };
 
 
@@ -44,7 +44,7 @@ export default class ConstructorsScreen extends React.Component {
 
   componentDidMount() {    
 
-    return fetch(api + '/get_drivers')
+    return fetch(api + '/get_constructors')
       .then((response) => response.json())
       .then((responseJson) => {
         //console.log(responseJson),
@@ -53,7 +53,7 @@ export default class ConstructorsScreen extends React.Component {
           constructorJson: responseJson,
           dataSource: this.state.dataSource.cloneWithRows(
             responseJson.MRData.StandingsTable
-            .StandingsLists[0].DriverStandings),
+            .StandingsLists[0].ConstructorStandings),
         });
       })
       .catch((error) => {
@@ -70,22 +70,6 @@ export default class ConstructorsScreen extends React.Component {
             <Text style={{color: 'grey'}}>
               {parseInt(rowID, 10) + 1}
             </Text>
-          </View>
-
-          <View style={styles.driverNameBox}>
-
-            <Text>{standingCell.Driver.givenName + " "
-              + standingCell.Driver.familyName}
-            </Text>
-
-            <Text style={{color: 'grey'}}>
-              {standingCell.Constructors[0].name}</Text>
-
-          </View>
-
-          <View style={styles.driverPointsBox}>
-            <Text style={{color: 'red'}}>
-              {standingCell.points}</Text>
           </View>
 
         </View>
