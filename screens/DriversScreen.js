@@ -38,6 +38,7 @@ export default class DriversScreen extends React.Component {
       }),
       driverJson: [],
       isLoading: true,
+      leadingDriverPoints: 0,
     };
   }
 
@@ -50,9 +51,14 @@ export default class DriversScreen extends React.Component {
         this.setState({
           isLoading: false,
           driverJson: responseJson,
+
           dataSource: this.state.dataSource.cloneWithRows(
             responseJson.MRData.StandingsTable
             .StandingsLists[0].DriverStandings),
+
+          leadingDriverPoints: responseJson.MRData.StandingsTable
+                                .StandingsLists[0].DriverStandings[0].points,
+
         });
       })
       .catch((error) => {
@@ -62,35 +68,48 @@ export default class DriversScreen extends React.Component {
   }
 
   renderRow(standingCell, something, rowID) {
-      return (
-        <View style={styles.listElem}>
+      
+    return (
+      <View style={styles.listElem}>
 
-          <View style={styles.standingsOrder}>
-            <Text style={{color: 'grey'}}>
-              {parseInt(rowID, 10) + 1}
-            </Text>
-          </View>
+        <View style={styles.standingsOrder}>
+          <Text style={{color: 'grey'}}>
+            {parseInt(rowID, 10) + 1}
+          </Text>
+        </View>
 
-          <View style={styles.driverNameBox}>
+        <View style={styles.driverNameBox}>
 
-            <Text>{standingCell.Driver.givenName + " "
-              + standingCell.Driver.familyName}
-            </Text>
+          <Text>{standingCell.Driver.givenName + " "
+            + standingCell.Driver.familyName}
+          </Text>
 
-            <Text style={{color: 'grey'}}>
-              {standingCell.Constructors[0].name}</Text>
-
-          </View>
-
-          <View style={styles.driverPointsBox}>
-            <Text>
-              {standingCell.points}
-            </Text>
-          </View>
+          <Text style={{color: 'grey'}}>
+            {standingCell.Constructors[0].name}</Text>
 
         </View>
-      )
+
+        <View style={styles.driverPointsBox}>
+
+          <Text>
+            {standingCell.points}
+          </Text>
+
+          {(rowID !== '0') && 
+
+            <Text style={{color: 'grey'}}>
+              {'-' + (this.state.leadingDriverPoints 
+                - parseInt(standingCell.points))}
+            </Text>
+
+          }
+
+        </View>
+
+      </View>
+    )
   }
+
 
   render() {
 
