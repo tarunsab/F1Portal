@@ -1,4 +1,3 @@
-# from urllib2 import urlopen
 from urllib.request import urlopen
 from flask import Flask, jsonify
 from datetime import datetime
@@ -31,7 +30,7 @@ def get_drivers():
     if (datetime.now() >= refresh_date):
         return get_drivers_refresh()
     else:
-        app.logger.info("Obtained driver standing details from cached file")
+        print("Obtained driver standing details from cached file")
         return jsonify(driver_data)
 
 
@@ -60,7 +59,7 @@ def get_drivers_refresh():
     with open('driver_data.json', 'w') as file:
         json.dump(data, file)
 
-    app.logger.info("Obtained driver standing details from API call")
+    print("Obtained driver standing details from API call")
 
     return str(data)
 
