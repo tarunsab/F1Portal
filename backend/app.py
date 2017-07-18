@@ -6,6 +6,7 @@ import requests, json
 app = Flask(__name__)
 
 apiUrl = "http://ergast.com/api/f1/current/"
+s3Url = "https://s3.eu-west-2.amazonaws.com/f1portal/"
 
 @app.route('/')
 def homepage():
@@ -17,11 +18,8 @@ def homepage():
 def get_drivers():
 
     #Obtain current cached file's expiry info
-    try:
-        with open('driver_data.json') as file:
-            driver_data = json.load(file)
-    except FileNotFoundError:
-        return get_drivers_refresh()
+    response = urlopen(s3Url + "driver_data.json")
+    driver_data = json.load(response)
 
     driver_data_expiry = driver_data["expiryDate"]
     refresh_date = datetime.strptime(driver_data_expiry, '%Y-%m-%d')
@@ -56,6 +54,7 @@ def get_drivers_refresh():
             data["expiryDate"] = race_date.strftime('%Y-%m-%d')
             break
 
+    #TODO: Upload to amazon s3
     with open('driver_data.json', 'w') as file:
         json.dump(data, file)
 
