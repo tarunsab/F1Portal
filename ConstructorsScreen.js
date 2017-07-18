@@ -33,7 +33,7 @@ export default class ConstructorsScreen extends React.Component {
       dataSource: new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1 !== row2,
       }),
-      driverJson: [],
+      constructorJson: [],
       isLoading: true,
     };
   }
@@ -46,14 +46,14 @@ export default class ConstructorsScreen extends React.Component {
         //console.log(responseJson),
         this.setState({
           isLoading: false,
-          driverJson: responseJson,
+          constructorJson: responseJson,
           dataSource: this.state.dataSource.cloneWithRows(
             responseJson.MRData.StandingsTable
             .StandingsLists[0].DriverStandings),
         });
       })
       .catch((error) => {
-        //console.error(error);
+        console.error(error);
       });
 
   }
@@ -109,7 +109,7 @@ export default class ConstructorsScreen extends React.Component {
 
         <View style={styles.listHeader}>
           <Text style={styles.listHeaderText}>{
-            this.state.driverJson.MRData.StandingsTable.season + " Constructors Championship"}</Text>
+            this.state.constructorJson.MRData.StandingsTable.season + " Constructors Championship"}</Text>
         </View>
 
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -117,6 +117,7 @@ export default class ConstructorsScreen extends React.Component {
             flex-start dataSource={this.state.dataSource}
             renderRow={this.renderRow.bind(this)}
             enableEmptySections={true}
+            removeClippedSubviews={false}
           />
         </View>
 
