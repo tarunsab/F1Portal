@@ -20,7 +20,7 @@ def homepage():
 def get_drivers():
 
     #Obtain current cached file's expiry info
-    # api.download('driver_data.json')
+    api.download('driver_data.json')
     with open('driver_data.json', 'r') as file:
         driver_data = json.load(file)
 
