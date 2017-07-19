@@ -1,11 +1,14 @@
 from flask import Flask, jsonify
 from datetime import datetime
+from smartfile import BasicClient
 import requests, json
 
 app = Flask(__name__)
 
 apiUrl = "http://ergast.com/api/f1/current/"
 s3Url = "https://s3.eu-west-2.amazonaws.com/f1portal/"
+api = BasicClient('tx1UMGxzsmsNYeygrykEcs9KFE58HY',
+                  'vPgNHEE1LY1GOz626Qon8g4oerPrDm')
 
 @app.route('/')
 def homepage():
@@ -17,8 +20,9 @@ def homepage():
 def get_drivers():
 
     #Obtain current cached file's expiry info
-    response = requests.get(s3Url + "driver_data.json")
-    driver_data = response.json()
+    api.download('driver_data.json')
+    with open('driver_data.json') as file:
+        driver_data = json.load(file)
 
     driver_data_expiry = driver_data["expiryDate"]
     refresh_date = datetime.strptime(driver_data_expiry, '%Y-%m-%d')
@@ -38,9 +42,7 @@ def get_drivers_refresh():
     data = drivers_standings.json()
 
     #Adding expiry date to drivers standings json file to aid Caching
-    #TODO: Update requirements.txt to add urlopen
     #TODO: Cache this to a json file too
-
     response = requests.get("http://ergast.com/api/f1/current.json")
     race_schedule = response.json()
 
@@ -53,9 +55,9 @@ def get_drivers_refresh():
             data["expiryDate"] = race_date.strftime('%Y-%m-%d')
             break
 
-    #TODO: Upload to amazon s3
     with open('driver_data.json', 'w') as file:
         json.dump(data, file)
+        api.upload('driver_data.json', file)
 
     print("Obtained driver standing details from API call")
 
