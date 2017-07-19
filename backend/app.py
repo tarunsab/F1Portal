@@ -16,8 +16,8 @@ api = BasicClient('tx1UMGxzsmsNYeygrykEcs9KFE58HY',
 
 @app.route('/')
 def homepage():
-    with open('backend/driver_data.json', 'r+') as file:
-        api.upload('driver_data.json', file)
+    # with open('backend/driver_data.json', 'r+') as file:
+    #     api.upload('driver_data.json', file)
     return "Backend for F1 Portal app"
 
 
