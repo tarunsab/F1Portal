@@ -19,7 +19,7 @@ def homepage():
 @app.route('/get_standings')
 def get_standings():
 
-    # Obtaining cached drivers standings data from database
+    # Obtaining cached standings data from database
     entry = DBManager.get_standings_entry()
     standings_json = entry[0][0]
 
@@ -35,10 +35,10 @@ def get_standings():
     # Check to obtain from cache or refresh from API and re-cache based on
     # cache's expiry date
     if datetime.now() >= refresh_date:
-        print("Cached Standings file out of date.")
+        print("Cached standings file out of date.")
         return jsonify(get_standings_from_api())
     else:
-        print("Obtained driver standing details from cached file")
+        print("Obtained standings from cached file")
         return jsonify(standings_json)
 
 
@@ -57,7 +57,7 @@ def get_standings_from_api():
     constructor_json = constructor_standings.json()
     standings_json["constructor_standings"] = constructor_json
 
-    # Adding expiry date to drivers standings json file to aid Caching
+    # Adding expiry date to standings json file to aid Caching
     # by finding next race to add expiry info to json
     schedule_json = json.loads(get_schedule().data)
     races_json = schedule_json["MRData"]["RaceTable"]["Races"]

@@ -144,6 +144,7 @@ export default class DriversScreen extends React.Component {
             flex-start dataSource={this.state.dataSource}
             renderRow={this.renderRow.bind(this)}
             enableEmptySections={true}
+            removeClippedSubviews={false}
           />
         </View>
 
