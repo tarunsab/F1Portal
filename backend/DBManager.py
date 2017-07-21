@@ -114,5 +114,4 @@ class DBManager:
 
 if __name__ == '__main__':
     print("Shouldn't open DBManager!")
-    db = DBManager()
-    print(db.get_schedule_entry())
+    exit()

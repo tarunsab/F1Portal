@@ -8,7 +8,7 @@ import json
 app = Flask(__name__)
 
 apiUrl = "http://ergast.com/api/f1/current/"
-dbManager = None
+dbManager = DBManager()
 
 
 @app.route('/')
@@ -109,4 +109,5 @@ def get_schedule_from_api():
 
 if __name__ == '__main__':
     dbManager = DBManager()
+    print("Got here")
     app.run()
