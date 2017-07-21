@@ -47,7 +47,7 @@ export default class ConstructorsScreen extends React.Component {
     return fetch(api + '/get_standings')
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson.constructor_standings.MRData.StandingsTable.StandingsLists[0]),
+        // console.log(responseJson),
         this.setState({
           isLoading: false,
           constructorJson: responseJson,
