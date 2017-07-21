@@ -5,7 +5,7 @@ import {
   TabNavigator,
 } from 'react-navigation';
 
-import { 
+import {
   StyleSheet,
   Text,
   View,
@@ -42,9 +42,9 @@ export default class DriversScreen extends React.Component {
     };
   }
 
-  componentDidMount() {    
+  componentDidMount() {
 
-    return fetch(api + '/get_drivers')
+    return fetch(api + '/get_standings')
       .then((response) => response.json())
       .then((responseJson) => {
         //console.log(responseJson),
@@ -53,11 +53,14 @@ export default class DriversScreen extends React.Component {
           driverJson: responseJson,
 
           dataSource: this.state.dataSource.cloneWithRows(
-            responseJson.MRData.StandingsTable
+            responseJson.driver_standings.MRData.StandingsTable
             .StandingsLists[0].DriverStandings),
 
-          leadingDriverPoints: responseJson.MRData.StandingsTable
-                                .StandingsLists[0].DriverStandings[0].points,
+          leadingDriverPoints: responseJson.driver_standings
+                                .MRData.StandingsTable
+                                .StandingsLists[0]
+                                .DriverStandings[0]
+                                .points,
 
         });
       })
@@ -68,7 +71,7 @@ export default class DriversScreen extends React.Component {
   }
 
   renderRow(standingCell, something, rowID) {
-      
+
     return (
       <View style={styles.listElem}>
 
@@ -95,10 +98,10 @@ export default class DriversScreen extends React.Component {
             {standingCell.points}
           </Text>
 
-          {(rowID !== '0') && 
+          {(rowID !== '0') &&
 
             <Text style={{color: 'grey'}}>
-              {'-' + (this.state.leadingDriverPoints 
+              {'-' + (this.state.leadingDriverPoints
                 - parseInt(standingCell.points))}
             </Text>
 
@@ -123,7 +126,7 @@ export default class DriversScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-      
+
         <View style={styles.header}>
           <Text style={styles.headerText}>
             F1 Portal
@@ -132,7 +135,8 @@ export default class DriversScreen extends React.Component {
 
         <View style={styles.listHeader}>
           <Text style={styles.listHeaderText}>{
-            this.state.driverJson.MRData.StandingsTable.season + " Drivers Championship"}</Text>
+            this.state.driverJson.driver_standings.MRData.StandingsTable.season
+            + " Drivers Championship"}</Text>
         </View>
 
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -172,7 +176,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignContent: 'center',
     borderBottomWidth: 1.5,
-    borderBottomColor: '#EEEEEE',    
+    borderBottomColor: '#EEEEEE',
   },
   listHeaderText:{
     color: '#F44336',
@@ -189,7 +193,7 @@ const styles = StyleSheet.create({
     paddingRight: 30,
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: '#F5F5F5',    
+    borderBottomColor: '#F5F5F5',
     alignItems: 'flex-start'
   },
   driverPointsBox:{
@@ -210,5 +214,3 @@ const styles = StyleSheet.create({
     height: 26,
   },
 });
-
-

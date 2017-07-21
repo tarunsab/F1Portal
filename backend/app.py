@@ -11,6 +11,7 @@ apiUrl = "http://ergast.com/api/f1/current"
 
 @app.route('/')
 def homepage():
+    get_standings_from_api()
     return "Backend for F1 Portal app"
 
 
@@ -52,7 +53,7 @@ def get_standings_from_api():
     driver_json = drivers_standings.json()
     standings_json["driver_standings"] = driver_json
 
-    constructor_standings = requests.get(apiUrl + '/driverStandings.json')
+    constructor_standings = requests.get(apiUrl + '/constructorStandings.json')
     constructor_json = constructor_standings.json()
     standings_json["constructor_standings"] = constructor_json
 

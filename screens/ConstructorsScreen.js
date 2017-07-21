@@ -5,13 +5,13 @@ import {
   TabNavigator,
 } from 'react-navigation';
 
-import { 
+import {
   StyleSheet,
   Text,
   View,
   ListView,
   Dimensions,
-  Image,  
+  Image,
   ActivityIndicator,
 } from 'react-native';
 
@@ -42,22 +42,25 @@ export default class ConstructorsScreen extends React.Component {
     };
   }
 
-  componentDidMount() {    
+  componentDidMount() {
 
-    return fetch(api + '/get_constructors')
+    return fetch(api + '/get_standings')
       .then((response) => response.json())
       .then((responseJson) => {
-        //console.log(responseJson),
+        console.log(responseJson.constructor_standings.MRData.StandingsTable.StandingsLists[0]),
         this.setState({
           isLoading: false,
           constructorJson: responseJson,
 
           dataSource: this.state.dataSource.cloneWithRows(
-            responseJson.MRData.StandingsTable
+            responseJson.constructor_standings.MRData.StandingsTable
             .StandingsLists[0].ConstructorStandings),
 
-          leadingConstructorPoints: responseJson.MRData.StandingsTable
-            .StandingsLists[0].ConstructorStandings[0].points,
+          leadingConstructorPoints: responseJson.constructor_standings
+                                    .MRData.StandingsTable
+                                    .StandingsLists[0]
+                                    .ConstructorStandings[0]
+                                    .points,
 
         });
       })
@@ -89,10 +92,10 @@ export default class ConstructorsScreen extends React.Component {
               {standingCell.points}
             </Text>
 
-            {(rowID !== '0') && 
+            {(rowID !== '0') &&
 
               <Text style={{color: 'grey'}}>
-                {'-' + (this.state.leadingConstructorPoints 
+                {'-' + (this.state.leadingConstructorPoints
                   - parseInt(standingCell.points))}
               </Text>
 
@@ -101,7 +104,7 @@ export default class ConstructorsScreen extends React.Component {
 
           </View>
 
-        
+
 
         </View>
       )
@@ -119,7 +122,7 @@ export default class ConstructorsScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-      
+
         <View style={styles.header}>
           <Text style={styles.headerText}>
             F1 Portal
@@ -128,7 +131,8 @@ export default class ConstructorsScreen extends React.Component {
 
         <View style={styles.listHeader}>
           <Text style={styles.listHeaderText}>{
-            this.state.constructorJson.MRData.StandingsTable.season + " Constructors Championship"}</Text>
+            this.state.constructorJson.constructor_standings.MRData
+            .StandingsTable.season + " Constructors Championship"}</Text>
         </View>
 
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -169,7 +173,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignContent: 'center',
     borderBottomWidth: 1.5,
-    borderBottomColor: '#EEEEEE',    
+    borderBottomColor: '#EEEEEE',
   },
   listHeaderText:{
     color: '#F44336',
@@ -187,7 +191,7 @@ const styles = StyleSheet.create({
     paddingRight: 30,
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: '#F5F5F5',    
+    borderBottomColor: '#F5F5F5',
     alignItems: 'flex-start'
   },
   driverPointsBox:{
@@ -206,8 +210,5 @@ const styles = StyleSheet.create({
   icon: {
     width: 26,
     height: 26,
-  },  
+  },
 });
-
-
-
