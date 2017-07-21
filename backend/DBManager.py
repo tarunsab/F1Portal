@@ -2,39 +2,31 @@ import psycopg2
 import json
 import os
 
+# ID fields --------------------------------------------------------------------
+schedule_id = "schedule"
+standings_id = "standings"
+
+# SQL queries ------------------------------------------------------------------
 CREATE_PORTAL_TABLE = '''
     CREATE TABLE portaltable
     (ID              TEXT PRIMARY KEY,
     jsonData        JSONB);
     '''
 
-# Standings -----------------------------------------------------------------
-CREATE_STANDINGS_ENTRY = '''
+CREATE_ENTRY = '''
     INSERT INTO portaltable VALUES (%s, %s)
     '''
 
-UPDATE_STANDINGS_ENTRY = '''
+UPDATE_ENTRY = '''
     UPDATE portaltable SET jsonData = %s WHERE ID = %s
     '''
 
-GET_STANDINGS_ENTRY = '''
-    SELECT jsonData FROM portaltable WHERE id='standings'
-    '''
-
-# Schedule -----------------------------------------------------------------
-CREATE_SCHEDULE_ENTRY = '''
-    INSERT INTO portaltable VALUES (%s, %s)
-    '''
-
-UPDATE_SCHEDULE_ENTRY = '''
-    UPDATE portaltable SET jsonData = %s WHERE ID = %s
-    '''
-
-GET_SCHEDULE_ENTRY = '''
-    SELECT jsonData FROM portaltable WHERE id='schedule'
+GET_ENTRY = '''
+    SELECT jsonData FROM portaltable WHERE id= %s
     '''
 
 
+# Private methods to manage connections ----------------------------------------
 def establish_connection():
     database = "d1v9krcmhtm93t"
     user = os.environ.get('DB_USR')
@@ -69,48 +61,56 @@ def close_connection(cnxn, cursor):
         exit(message)
 
 
+# Class to manage entries ------------------------------------------------------
 class DBManager:
-    def create_portal_table(self):
+
+    @staticmethod
+    def create_portal_table():
         conn, cur = establish_connection()
         cur.execute(CREATE_PORTAL_TABLE)
         close_connection(conn, cur)
 
     # Standings ----------------------------------------------------------------
-    def create_standings_entry(self, data):
+    @staticmethod
+    def create_standings_entry(data):
         conn, cur = establish_connection()
-        cur.execute(CREATE_STANDINGS_ENTRY, ("standings", json.dumps(data)))
+        cur.execute(CREATE_ENTRY, (standings_id, json.dumps(data)))
         close_connection(conn, cur)
 
-    def update_standings_entry(self, data):
+    @staticmethod
+    def update_standings_entry(data):
         conn, cur = establish_connection()
-        cur.execute(UPDATE_STANDINGS_ENTRY, (json.dumps(data), "standings"))
+        cur.execute(UPDATE_ENTRY, (json.dumps(data), standings_id))
         close_connection(conn, cur)
 
-    def get_standings_entry(self):
+    @staticmethod
+    def get_standings_entry():
         conn, cur = establish_connection()
-        cur.execute(GET_STANDINGS_ENTRY)
+        cur.execute(GET_ENTRY, (standings_id,))
         result = cur.fetchall()
         close_connection(conn, cur)
         return result
 
     # Schedule -----------------------------------------------------------------
-    def create_schedule_entry(self, data):
+    @staticmethod
+    def create_schedule_entry(data):
         conn, cur = establish_connection()
-        cur.execute(CREATE_SCHEDULE_ENTRY, ("schedule", json.dumps(data)))
+        cur.execute(CREATE_ENTRY, (schedule_id, json.dumps(data)))
         close_connection(conn, cur)
 
-    def update_schedule_entry(self, data):
+    @staticmethod
+    def update_schedule_entry(data):
         conn, cur = establish_connection()
-        cur.execute(UPDATE_SCHEDULE_ENTRY, (json.dumps(data), "schedule"))
+        cur.execute(UPDATE_ENTRY, (json.dumps(data), schedule_id))
         close_connection(conn, cur)
 
-    def get_schedule_entry(self):
+    @staticmethod
+    def get_schedule_entry():
         conn, cur = establish_connection()
-        cur.execute(GET_SCHEDULE_ENTRY)
+        cur.execute(GET_ENTRY, (schedule_id,))
         result = cur.fetchall()
         close_connection(conn, cur)
         return result
-
 
 if __name__ == '__main__':
     print("Shouldn't open DBManager!")
