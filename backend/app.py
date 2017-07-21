@@ -1,57 +1,58 @@
 from flask import Flask, jsonify
 from datetime import datetime
-from smartfile import BasicClient
+from DBManager import DBManager
 
 import requests
 import json
-import shutil
 
 app = Flask(__name__)
 
 apiUrl = "http://ergast.com/api/f1/current/"
-s3Url = "https://s3.eu-west-2.amazonaws.com/f1portal/"
-api = BasicClient('tx1UMGxzsmsNYeygrykEcs9KFE58HY',
-                  'vPgNHEE1LY1GOz626Qon8g4oerPrDm')
+dbManager = None
 
 
 @app.route('/')
 def homepage():
-    # with open('backend/driver_data.json', 'r+') as file:
-    #     api.upload('driver_data.json', file)
     return "Backend for F1 Portal app"
 
 
 # Obtaining the drivers standings data
 @app.route('/get_drivers')
 def get_drivers():
-    # Obtain current cached file's expiry info
-    api.download('driver_data.json')
-    shutil.move("driver_data.json",
-                "backend/driver_data.json")
-    with open('backend/driver_data.json', 'r+') as file:
-        driver_data = json.load(file)
 
+    # Obtaining cached drivers standings data from database
+    entry = dbManager.get_standings_entry()
+    driver_data = entry[0][0]
+
+    # If standings data not in database, refresh from API and store in DB
+    if driver_data == '':
+        print("Cached Standings file not found.")
+        return jsonify(get_drivers_from_api())
+
+    # Obtaining the expiry date of the cached standings data
     driver_data_expiry = driver_data["expiryDate"]
     refresh_date = datetime.strptime(driver_data_expiry, '%Y-%m-%d')
 
     # Check to obtain from cache or refresh data based on cache's expiry info
     if datetime.now() >= refresh_date:
-        return get_drivers_refresh()
+        print("Cached Standings file out of date.")
+        return jsonify(get_drivers_from_api())
     else:
         print("Obtained driver standing details from cached file")
         return jsonify(driver_data)
 
 
 # Obtaining the drivers standings data from the Ergast API
-def get_drivers_refresh():
+def get_drivers_from_api():
+
+    # Obtaining json from API
     drivers_standings = requests.get(apiUrl + 'driverStandings.json')
     data = drivers_standings.json()
 
     # Adding expiry date to drivers standings json file to aid Caching
-    # TODO: Cache this to a json file too
-    response = requests.get("http://ergast.com/api/f1/current.json")
-    race_schedule = response.json()
-
+    # by finding next race to add expiry info to json
+    race_schedule = json.loads(get_schedule().data)
+    # print(race_schedule["MRData"])
     races_json = race_schedule["MRData"]["RaceTable"]["Races"]
     curr_date = datetime.now()
     for r_json in races_json:
@@ -61,13 +62,9 @@ def get_drivers_refresh():
             data["expiryDate"] = race_date.strftime('%Y-%m-%d')
             break
 
-    with open('backend/driver_data.json', 'w') as file:
-        json.dump(data, file)
-        api.upload('driver_data.json', file)
-
-    print("Obtained driver standing details from API call")
-
-    return str(data)
+    dbManager.update_standings_entry(data)
+    print("Updated standings from API")
+    return data
 
 
 @app.route('/get_constructors')
@@ -76,5 +73,40 @@ def get_constructors():
     return constructors_standings.text
 
 
+@app.route('/get_schedule')
+def get_schedule():
+
+    # Obtaining cached schedule data from database
+    entry = dbManager.get_schedule_entry()
+    schedule_data = entry[0][0]
+
+    # If standings data not in database, refresh from API and store in DB
+    if schedule_data == '':
+        print("Cached Schedule file not found.")
+        return jsonify(get_schedule_from_api())
+
+    # If data isn't for the current season, update it
+    json_season = int(schedule_data["MRData"]["RaceTable"]["season"])
+    current_season = datetime.now().year
+    if json_season != current_season:
+        print("Cached Schedule file out of date. "
+              "Cached season = " + str(json_season) +
+              ", Current season = " + str(current_season))
+        return jsonify(get_schedule_from_api())
+
+    print("Obtained season schedule from cached file")
+    return jsonify(schedule_data)
+
+
+def get_schedule_from_api():
+
+    response = requests.get("http://ergast.com/api/f1/current.json")
+    new_schedule_data = response.json()
+    dbManager.update_schedule_entry(new_schedule_data)
+    print("Updated season schedule for new season from API")
+
+    return new_schedule_data
+
 if __name__ == '__main__':
+    dbManager = DBManager()
     app.run()
