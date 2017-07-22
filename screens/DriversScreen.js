@@ -15,6 +15,8 @@ import {
   Image,
 } from 'react-native';
 
+import {styles} from './StandingsStyles.js'
+
 const api = 'https://f1portal.herokuapp.com';
 
 export default class DriversScreen extends React.Component {
@@ -81,7 +83,7 @@ export default class DriversScreen extends React.Component {
           </Text>
         </View>
 
-        <View style={styles.driverNameBox}>
+        <View style={styles.standingsNameBox}>
 
           <Text>{standingCell.Driver.givenName + " "
             + standingCell.Driver.familyName}
@@ -127,16 +129,10 @@ export default class DriversScreen extends React.Component {
     return (
       <View style={styles.container}>
 
-        <View style={styles.header}>
-          <Text style={styles.headerText}>
-            F1 Portal
-          </Text>
-        </View>
-
         <View style={styles.listHeader}>
           <Text style={styles.listHeaderText}>{
             this.state.driverJson.driver_standings.MRData.StandingsTable.season
-            + " Drivers Championship"}</Text>
+            + " Drivers Standings"}</Text>
         </View>
 
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -152,66 +148,3 @@ export default class DriversScreen extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  header:{
-    backgroundColor: '#F44336',
-    paddingTop: 20,
-    paddingBottom: 10,
-    flexDirection: 'row'
-  },
-  headerText:{
-    color: '#fff',
-    textAlign: 'center',
-    fontWeight: 'normal',
-    flex: 1,
-    fontSize: 20,
-  },
-  listHeader:{
-    backgroundColor: '#F5F5F5',
-    paddingTop: 12,
-    paddingBottom: 12,
-    flexDirection: 'row',
-    alignContent: 'center',
-    borderBottomWidth: 1.5,
-    borderBottomColor: '#EEEEEE',
-  },
-  listHeaderText:{
-    color: '#F44336',
-    textAlign: 'center',
-    fontWeight: 'normal',
-    flex: 1,
-    fontSize: 20,
-  },
-  listElem:{
-    width: Dimensions.get('window').width,
-    paddingTop: 20,
-    paddingBottom: 20,
-    paddingLeft: 30,
-    paddingRight: 30,
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderBottomColor: '#F5F5F5',
-    alignItems: 'flex-start'
-  },
-  driverPointsBox:{
-    flex: 1,
-    alignItems: 'flex-end'
-  },
-  driverNameBox:{
-    flex: 1,
-    alignItems: 'flex-start',
-    flexDirection: 'column'
-  },
-  standingsOrder:{
-    alignItems: 'flex-start',
-    minWidth: 25,
-  },
-  icon: {
-    width: 26,
-    height: 26,
-  },
-});
