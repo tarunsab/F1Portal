@@ -6,6 +6,7 @@ import {
 } from 'react-navigation';
 
 import {
+  RefreshControl,
   StyleSheet,
   Text,
   View,
@@ -41,6 +42,7 @@ export default class ConstructorsScreen extends React.Component {
       }),
       constructorJson: [],
       isLoading: true,
+      refreshing: false,
     };
   }
 
@@ -71,6 +73,38 @@ export default class ConstructorsScreen extends React.Component {
       });
 
   }
+
+   _onRefresh() {
+    this.setState({refreshing: true});
+
+    fetch(api + '/get_standings')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        // console.log(responseJson),
+        this.setState({
+          isLoading: false,
+          constructorJson: responseJson,
+
+          dataSource: this.state.dataSource.cloneWithRows(
+            responseJson.constructor_standings.MRData.StandingsTable
+            .StandingsLists[0].ConstructorStandings),
+
+          leadingConstructorPoints: responseJson.constructor_standings
+                                    .MRData.StandingsTable
+                                    .StandingsLists[0]
+                                    .ConstructorStandings[0]
+                                    .points,
+
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    console.log("Refreshed drivers standings");
+    this.setState({refreshing: false});
+  }
+
 
   renderRow(standingCell, something, rowID) {
       return (
@@ -137,6 +171,14 @@ export default class ConstructorsScreen extends React.Component {
             renderRow={this.renderRow.bind(this)}
             enableEmptySections={true}
             removeClippedSubviews={false}
+            automaticallyAdjustContentInsets={false}
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={this._onRefresh.bind(this)}
+              />
+            }
+
           />
         </View>
 

@@ -7,12 +7,14 @@ import {
 
 import {
   StyleSheet,
+  Alert,
   Text,
   View,
   ListView,
   Dimensions,
   ActivityIndicator,
   Image,
+  RefreshControl,
 } from 'react-native';
 
 import {styles} from './StandingsStyles.js'
@@ -53,6 +55,7 @@ export default class DriversScreen extends React.Component {
         this.setState({
           isLoading: false,
           driverJson: responseJson,
+          refreshing: false,
 
           dataSource: this.state.dataSource.cloneWithRows(
             responseJson.driver_standings.MRData.StandingsTable
@@ -67,10 +70,39 @@ export default class DriversScreen extends React.Component {
         });
       })
       .catch((error) => {
-        //console.error(error);
+        console.error(error);
       });
 
   }
+
+   _onRefresh() {
+    this.setState({refreshing: true});
+
+    fetch(api + '/get_standings')
+    .then((response) => response.json())
+    .then((responseJson) => {
+      // console.log(responseJson),
+      this.setState({
+        driverJson: responseJson,
+        dataSource: this.state.dataSource.cloneWithRows(
+          responseJson.driver_standings.MRData.StandingsTable
+          .StandingsLists[0].DriverStandings),
+
+        leadingDriverPoints: responseJson.driver_standings
+                              .MRData.StandingsTable
+                              .StandingsLists[0]
+                              .DriverStandings[0]
+                              .points,
+      });
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
+    console.log("Refreshed drivers standings");
+    this.setState({refreshing: false});
+  }
+
 
   renderRow(standingCell, something, rowID) {
 
@@ -132,7 +164,8 @@ export default class DriversScreen extends React.Component {
         <View style={styles.listHeader}>
           <Text style={styles.listHeaderText}>{
             this.state.driverJson.driver_standings.MRData.StandingsTable.season
-            + " Drivers Standings"}</Text>
+            + " Drivers Standings"}
+          </Text>
         </View>
 
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -141,6 +174,13 @@ export default class DriversScreen extends React.Component {
             renderRow={this.renderRow.bind(this)}
             enableEmptySections={true}
             removeClippedSubviews={false}
+            automaticallyAdjustContentInsets={false}
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={this._onRefresh.bind(this)}
+              />
+            }
           />
         </View>
 

@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "f1",
-    "description": "An empty new project",
-    "slug": "f1",
+    "name": "F1 Portal",
+    "description": "Stay up to date on the current Formula 1 season",
+    "slug": "F1_Portal",
     "privacy": "public",
     "sdkVersion": "18.0.0",
     "version": "1.0.0",
@@ -11,7 +11,7 @@
     "icon": "./assets/icons/app.png",
     "loading": {
       "icon": "./assets/icons/loading.png",
-      "hideExponentText": false
+      "hideExponentText": true
     },
     "packagerOpts": {
       "assetExts": ["ttf", "mp4"]
