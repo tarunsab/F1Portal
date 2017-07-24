@@ -18,6 +18,7 @@ import {
 } from 'react-native';
 
 import Toast, {DURATION} from 'react-native-easy-toast'
+import Tabs from 'react-native-tabs';
 import {styles} from './StandingsStyles.js'
 
 const api = 'https://f1portal.herokuapp.com';
@@ -45,6 +46,7 @@ export default class DriversScreen extends React.Component {
       isLoading: true,
       refreshing: false,
       leadingDriverPoints: 0,
+      page:'drivers'
     };
   }
 
@@ -169,6 +171,14 @@ export default class DriversScreen extends React.Component {
             this.state.driverJson.driver_standings.MRData.StandingsTable.season
             + " Drivers Standings"}
           </Text>
+        </View>
+
+        <View style={styles.listHeader}>
+          <Tabs selected={this.state.page} style={{backgroundColor:'white'}}
+                selectedStyle={{color:'red'}} onSelect={el=>this.setState({page:el.props.name})}>
+              <Text name="drivers">Drivers</Text>
+              <Text name="constructors">Constructors</Text>
+          </Tabs>
         </View>
 
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>

@@ -11,8 +11,8 @@ export const styles = StyleSheet.create({
   },
   listHeader:{
     backgroundColor: '#F5F5F5',
-    paddingTop: 22,
-    paddingBottom: 12,
+    paddingTop: 25,
+    paddingBottom: 20,
     flexDirection: 'row',
     alignContent: 'center',
     borderBottomWidth: 1.5,
