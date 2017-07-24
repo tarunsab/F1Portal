@@ -17,6 +17,7 @@ import {
   RefreshControl,
 } from 'react-native';
 
+import Toast, {DURATION} from 'react-native-easy-toast'
 import {styles} from './StandingsStyles.js'
 
 const api = 'https://f1portal.herokuapp.com';
@@ -42,6 +43,7 @@ export default class DriversScreen extends React.Component {
       }),
       driverJson: [],
       isLoading: true,
+      refreshing: false,
       leadingDriverPoints: 0,
     };
   }
@@ -55,7 +57,6 @@ export default class DriversScreen extends React.Component {
         this.setState({
           isLoading: false,
           driverJson: responseJson,
-          refreshing: false,
 
           dataSource: this.state.dataSource.cloneWithRows(
             responseJson.driver_standings.MRData.StandingsTable
@@ -99,6 +100,7 @@ export default class DriversScreen extends React.Component {
       console.error(error);
     });
 
+    this.refs.refresh_toast.show('Refreshed drivers standings');
     console.log("Refreshed drivers standings");
     this.setState({refreshing: false});
   }
@@ -161,6 +163,7 @@ export default class DriversScreen extends React.Component {
     return (
       <View style={styles.container}>
 
+
         <View style={styles.listHeader}>
           <Text style={styles.listHeaderText}>{
             this.state.driverJson.driver_standings.MRData.StandingsTable.season
@@ -183,6 +186,8 @@ export default class DriversScreen extends React.Component {
             }
           />
         </View>
+
+        <Toast ref="refresh_toast"/>
 
       </View>
     );

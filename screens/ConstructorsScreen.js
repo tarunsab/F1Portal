@@ -16,6 +16,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
+import Toast, {DURATION} from 'react-native-easy-toast'
 import {styles} from './StandingsStyles.js'
 
 const api = 'https://f1portal.herokuapp.com';
@@ -101,7 +102,8 @@ export default class ConstructorsScreen extends React.Component {
         console.error(error);
       });
 
-    console.log("Refreshed drivers standings");
+    this.refs.refresh_toast.show('Refreshed constructors standings');
+    console.log("Refreshed Constructors standings");
     this.setState({refreshing: false});
   }
 
@@ -181,6 +183,8 @@ export default class ConstructorsScreen extends React.Component {
 
           />
         </View>
+
+        <Toast ref="refresh_toast"/>
 
       </View>
     );
