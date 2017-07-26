@@ -48,7 +48,7 @@ export default class DriversScreen extends React.Component {
       leadingDriverPoints: 0,
       page:'drivers'
     };
-  }
+  }  
 
   componentDidMount() {
 
@@ -59,7 +59,6 @@ export default class DriversScreen extends React.Component {
         this.setState({
           isLoading: false,
           driverJson: responseJson,
-
           dataSource: this.state.dataSource.cloneWithRows(
             responseJson.driver_standings.MRData.StandingsTable
             .StandingsLists[0].DriverStandings),
@@ -69,7 +68,6 @@ export default class DriversScreen extends React.Component {
                                 .StandingsLists[0]
                                 .DriverStandings[0]
                                 .points,
-
         });
       })
       .catch((error) => {
@@ -85,18 +83,40 @@ export default class DriversScreen extends React.Component {
     .then((response) => response.json())
     .then((responseJson) => {
       // console.log(responseJson),
-      this.setState({
-        driverJson: responseJson,
-        dataSource: this.state.dataSource.cloneWithRows(
-          responseJson.driver_standings.MRData.StandingsTable
-          .StandingsLists[0].DriverStandings),
 
-        leadingDriverPoints: responseJson.driver_standings
-                              .MRData.StandingsTable
-                              .StandingsLists[0]
-                              .DriverStandings[0]
-                              .points,
-      });
+      {
+
+      if (this.state.page === 'drivers') {
+        this.setState({
+          isLoading: false,
+          driverJson: responseJson,
+          dataSource: this.state.dataSource.cloneWithRows(
+            responseJson.driver_standings.MRData.StandingsTable
+            .StandingsLists[0].DriverStandings),
+
+          leadingDriverPoints: responseJson.driver_standings
+                                .MRData.StandingsTable
+                                .StandingsLists[0]
+                                .DriverStandings[0]
+                                .points,
+        });
+      } else {
+        this.setState({
+          isLoading: false,
+          driverJson: responseJson,
+          dataSource: this.state.dataSource.cloneWithRows(
+            responseJson.constructor_standings.MRData.StandingsTable
+            .StandingsLists[0].ConstructorStandings),
+
+          leadingDriverPoints: responseJson.constructor_standings
+                                    .MRData.StandingsTable
+                                    .StandingsLists[0]
+                                    .ConstructorStandings[0]
+                                    .points,
+        });
+      }
+
+      }
     })
     .catch((error) => {
       console.error(error);
@@ -106,7 +126,6 @@ export default class DriversScreen extends React.Component {
     console.log("Refreshed drivers standings");
     this.setState({refreshing: false});
   }
-
 
   renderRow(standingCell, something, rowID) {
 
@@ -119,16 +138,37 @@ export default class DriversScreen extends React.Component {
           </Text>
         </View>
 
-        <View style={styles.standingsNameBox}>
+        {
 
-          <Text>{standingCell.Driver.givenName + " "
-            + standingCell.Driver.familyName}
-          </Text>
+          ((this.state.page === 'drivers') &&
 
-          <Text style={{color: 'grey'}}>
-            {standingCell.Constructors[0].name}</Text>
+          <View style={styles.standingsNameBox}>
+            <Text>
+              {
+                standingCell.Driver.givenName + " "
+                + standingCell.Driver.familyName
+              }
+            </Text>
 
-        </View>
+            <Text style={{color: 'grey'}}>
+              {standingCell.Constructors[0].name}
+            </Text>
+          </View>
+          )
+
+        }
+        {
+
+          ((this.state.page === 'constructors') &&
+              
+          <View style={styles.standingsNameBox}>
+            <Text>
+              {standingCell.Constructor.name}
+            </Text>
+          </View>
+          )
+
+        }
 
         <View style={styles.driverPointsBox}>
 
@@ -149,6 +189,49 @@ export default class DriversScreen extends React.Component {
 
       </View>
     )
+  }
+
+  updateStandings(event){
+    var responseJson = this.state.driverJson;
+    var nextPage = event.props.name;
+
+    switch (nextPage) {
+
+      case 'drivers':
+        this.setState({
+          page:'drivers',
+          dataSource: this.state.dataSource.cloneWithRows(
+            responseJson.driver_standings.MRData.StandingsTable
+            .StandingsLists[0].DriverStandings),
+
+          leadingDriverPoints: responseJson.driver_standings
+                                .MRData.StandingsTable
+                                .StandingsLists[0]
+                                .DriverStandings[0]
+                                .points,
+        });
+        break
+
+      case 'constructors':
+        this.setState({
+          page:'constructors',
+          dataSource: this.state.dataSource.cloneWithRows(
+                responseJson.constructor_standings.MRData.StandingsTable
+                .StandingsLists[0].ConstructorStandings),
+
+          leadingDriverPoints: responseJson.constructor_standings
+                                  .MRData.StandingsTable
+                                  .StandingsLists[0]
+                                  .ConstructorStandings[0]
+                                  .points,
+        });
+        break
+
+      default:
+        console.log("Undefined tab switch")
+
+    }
+
   }
 
 
@@ -175,7 +258,7 @@ export default class DriversScreen extends React.Component {
 
         <View style={styles.listHeader}>
           <Tabs selected={this.state.page} style={{backgroundColor:'white'}}
-                selectedStyle={{color:'red'}} onSelect={el=>this.setState({page:el.props.name})}>
+                selectedStyle={{color:'red'}} onSelect={el => this.updateStandings(el)}>
               <Text name="drivers">Drivers</Text>
               <Text name="constructors">Constructors</Text>
           </Tabs>
