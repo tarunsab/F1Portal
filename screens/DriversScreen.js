@@ -50,25 +50,46 @@ export default class DriversScreen extends React.Component {
     };
   }  
 
+  updateDriverStandings(dataJson) {
+    //console.log(dataJson),
+    this.setState({
+        isLoading: false,
+        standingsJson: dataJson,
+        dataSource: this.state.dataSource.cloneWithRows(
+          dataJson.driver_standings.MRData.StandingsTable
+          .StandingsLists[0].DriverStandings),
+
+        leadingPoints: dataJson.driver_standings
+                              .MRData.StandingsTable
+                              .StandingsLists[0]
+                              .DriverStandings[0]
+                              .points,
+      });
+  }
+
+  updateConstructorsStandings(dataJson) {
+    //console.log(dataJson),
+    this.setState({
+        isLoading: false,
+        standingsJson: dataJson,
+        dataSource: this.state.dataSource.cloneWithRows(
+          dataJson.constructor_standings.MRData.StandingsTable
+          .StandingsLists[0].ConstructorStandings),
+
+        leadingPoints: dataJson.constructor_standings
+                                  .MRData.StandingsTable
+                                  .StandingsLists[0]
+                                  .ConstructorStandings[0]
+                                  .points,
+      });
+  }
+
   componentDidMount() {
 
     return fetch(api + '/get_standings')
       .then((response) => response.json())
       .then((responseJson) => {
-        //console.log(responseJson),
-        this.setState({
-          isLoading: false,
-          standingsJson: responseJson,
-          dataSource: this.state.dataSource.cloneWithRows(
-            responseJson.driver_standings.MRData.StandingsTable
-            .StandingsLists[0].DriverStandings),
-
-          leadingPoints: responseJson.driver_standings
-                                .MRData.StandingsTable
-                                .StandingsLists[0]
-                                .DriverStandings[0]
-                                .points,
-        });
+        this.updateDriverStandings(responseJson);
       })
       .catch((error) => {
         console.error(error);
@@ -84,41 +105,13 @@ export default class DriversScreen extends React.Component {
     fetch(api + '/get_standings')
     .then((response) => response.json())
     .then((responseJson) => {
-      // console.log(responseJson),
-
-      {
 
       if (this.state.page === 'drivers') {
-        this.setState({
-          isLoading: false,
-          standingsJson: responseJson,
-          dataSource: this.state.dataSource.cloneWithRows(
-            responseJson.driver_standings.MRData.StandingsTable
-            .StandingsLists[0].DriverStandings),
-
-          leadingPoints: responseJson.driver_standings
-                                .MRData.StandingsTable
-                                .StandingsLists[0]
-                                .DriverStandings[0]
-                                .points,
-        });
+        this.updateDriverStandings(responseJson);
       } else {
-        this.setState({
-          isLoading: false,
-          standingsJson: responseJson,
-          dataSource: this.state.dataSource.cloneWithRows(
-            responseJson.constructor_standings.MRData.StandingsTable
-            .StandingsLists[0].ConstructorStandings),
-
-          leadingPoints: responseJson.constructor_standings
-                                    .MRData.StandingsTable
-                                    .StandingsLists[0]
-                                    .ConstructorStandings[0]
-                                    .points,
-        });
+        this.updateConstructorsStandings(responseJson);
       }
 
-      }
     })
     .catch((error) => {
       console.error(error);
@@ -127,6 +120,29 @@ export default class DriversScreen extends React.Component {
     this.refs.refresh_toast.show('Refreshed championship standings');
     console.log("Refreshed championship standings");
     this.setState({refreshing: false});
+  }
+
+  changeTabs(event){
+    var responseJson = this.state.standingsJson;
+    var nextPage = event.props.name;
+
+    switch (nextPage) {
+
+      case 'drivers':
+        this.updateDriverStandings(responseJson);
+        break
+
+      case 'constructors':
+        this.updateConstructorsStandings(responseJson);
+        break
+
+      default:
+        console.log("Undefined tab switch")
+
+    }
+
+    this.setState({page: nextPage});
+
   }
 
   renderRow(standingCell, something, rowID) {
@@ -193,49 +209,6 @@ export default class DriversScreen extends React.Component {
     )
   }
 
-  updateStandings(event){
-    var responseJson = this.state.standingsJson;
-    var nextPage = event.props.name;
-
-    switch (nextPage) {
-
-      case 'drivers':
-        this.setState({
-          page:'drivers',
-          dataSource: this.state.dataSource.cloneWithRows(
-            responseJson.driver_standings.MRData.StandingsTable
-            .StandingsLists[0].DriverStandings),
-
-          leadingPoints: responseJson.driver_standings
-                                .MRData.StandingsTable
-                                .StandingsLists[0]
-                                .DriverStandings[0]
-                                .points,
-        });
-        break
-
-      case 'constructors':
-        this.setState({
-          page:'constructors',
-          dataSource: this.state.dataSource.cloneWithRows(
-                responseJson.constructor_standings.MRData.StandingsTable
-                .StandingsLists[0].ConstructorStandings),
-
-          leadingPoints: responseJson.constructor_standings
-                                  .MRData.StandingsTable
-                                  .StandingsLists[0]
-                                  .ConstructorStandings[0]
-                                  .points,
-        });
-        break
-
-      default:
-        console.log("Undefined tab switch")
-
-    }
-
-  }
-
 
   render() {
 
@@ -260,7 +233,7 @@ export default class DriversScreen extends React.Component {
 
         <View style={styles.listHeader}>
           <Tabs selected={this.state.page} style={{backgroundColor:'white'}}
-                selectedStyle={{color:'red'}} onSelect={el => this.updateStandings(el)}>
+                selectedStyle={{color:'red'}} onSelect={el => this.changeTabs(el)}>
               <Text name="drivers">Drivers</Text>
               <Text name="constructors">Constructors</Text>
           </Tabs>
