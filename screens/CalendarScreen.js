@@ -71,9 +71,16 @@ export default class CalendarScreen extends React.Component {
         style={local_styles.raceImage} 
         source={{uri: 'http://www.f1fanatic.co.uk/wp-content/uploads/2015/11/start-p1.jpg'}}>
           <View style={local_styles.raceImageView}>
-            <Text style={local_styles.raceNameText}>
-              {standingCell.raceName}
-            </Text>
+            <View style={local_styles.raceNameTextView}>
+              <Text style={local_styles.raceNameText}>
+                {standingCell.raceName}
+              </Text>
+            </View>
+            <View style={local_styles.raceDateTextView}>
+              <Text style={local_styles.raceDateText}>
+                {standingCell.date}
+              </Text>
+            </View>
           </View>
       </Image>
     )
@@ -123,25 +130,33 @@ var local_styles = StyleSheet.create({
   },
   raceImageView: {
     flex: 1,
-    flexDirection: 'column',
+    flexDirection: 'row',
     justifyContent: 'flex-start',
     width: Dimensions.get('window').width,
-    backgroundColor: 'rgba(255,255,255,0.8)',
+    backgroundColor: 'rgba(255,255,255,0.85)',
     borderBottomWidth: 0.5,
     borderBottomColor: '#A0A0A0',
   },
   raceNameText: {
     paddingLeft: 15,
     paddingTop: 15,
-    fontSize: 20,
+    fontSize: 19,
     textAlign: 'left',
-    color: '#202020',
+    color: '#404040',
+  },
+  raceNameTextView:{
+    flex: 5,
+    alignItems: 'flex-start',
   },
   raceDateText: {
     paddingRight: 15,
     paddingTop: 15,
-    fontSize: 20,
+    fontSize: 16,
     textAlign: 'right',
-    color: '#404040',
-  }
+    color: '#606060',
+  },
+  raceDateTextView:{
+    flex: 2,
+    alignItems: 'flex-end',
+  },
 });
