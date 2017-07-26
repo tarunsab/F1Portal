@@ -6,17 +6,17 @@ import {
 } from 'react-navigation';
 
 
-import DriversScreen from './screens/DriversScreen';
-import ConstructorsScreen from './screens/ConstructorsScreen';
+import StandingsScreen from './screens/StandingsScreen';
+import CalendarScreen from './screens/CalendarScreen';
 
 const Tabs = TabNavigator({
 
-  DriversStandings: {
-    screen: DriversScreen
+  Standings: {
+    screen: StandingsScreen
   },
 
-  ConstructorsStandings: {
-    screen: ConstructorsScreen
+  Calendar: {
+    screen: CalendarScreen
   },
 
 }, 

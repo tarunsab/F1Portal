@@ -7,29 +7,27 @@ import {
 
 import {
   StyleSheet,
-  Alert,
   Text,
   View,
   ListView,
-  Dimensions,
   ActivityIndicator,
   Image,
   RefreshControl,
 } from 'react-native';
 
-import Toast, {DURATION} from 'react-native-easy-toast'
+import Toast from 'react-native-easy-toast'
 import Tabs from 'react-native-tabs';
 import {styles} from './StandingsStyles.js'
 
 const api = 'https://f1portal.herokuapp.com';
 
-export default class DriversScreen extends React.Component {
+export default class StandingsScreen extends React.Component {
 
   static navigationOptions = {
-    tabBarLabel: 'Drivers',
+    tabBarLabel: 'Standings',
     tabBarIcon: ({ tintColor }) => (
       <Image
-        source={require('../images/icons/helmet.png')}
+        source={require('../images/icons/standings.png')}
         style={[styles.icon, {tintColor: tintColor}]}
       />
     ),
@@ -160,30 +158,31 @@ export default class DriversScreen extends React.Component {
 
           ((this.state.page === 'drivers') &&
 
-          <View style={styles.standingsNameBox}>
-            <Text>
-              {
-                standingCell.Driver.givenName + " "
-                + standingCell.Driver.familyName
-              }
-            </Text>
+            <View style={styles.standingsNameBox}>
+              <Text>
+                {
+                  standingCell.Driver.givenName + " "
+                  + standingCell.Driver.familyName
+                }
+              </Text>
 
-            <Text style={{color: 'grey'}}>
-              {standingCell.Constructors[0].name}
-            </Text>
-          </View>
+              <Text style={{color: 'grey'}}>
+                {standingCell.Constructors[0].name}
+              </Text>
+            </View>
           )
 
         }
+
         {
 
           ((this.state.page === 'constructors') &&
               
-          <View style={styles.standingsNameBox}>
-            <Text>
-              {standingCell.Constructor.name}
-            </Text>
-          </View>
+            <View style={styles.standingsNameBox}>
+              <Text>
+                {standingCell.Constructor.name}
+              </Text>
+            </View>
           )
 
         }
