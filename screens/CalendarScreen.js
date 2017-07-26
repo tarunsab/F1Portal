@@ -71,7 +71,7 @@ export default class CalendarScreen extends React.Component {
         style={local_styles.raceImage} 
         source={{uri: 'http://www.f1fanatic.co.uk/wp-content/uploads/2015/11/start-p1.jpg'}}>
           <View style={local_styles.raceImageView}>
-            <Text style={local_styles.raceText}>
+            <Text style={local_styles.raceNameText}>
               {standingCell.raceName}
             </Text>
           </View>
@@ -123,17 +123,25 @@ var local_styles = StyleSheet.create({
   },
   raceImageView: {
     flex: 1,
+    flexDirection: 'column',
     justifyContent: 'flex-start',
     width: Dimensions.get('window').width,
-    backgroundColor: 'rgba(0,0,0,0.7)',
-    borderBottomWidth: 0.4,
-    borderBottomColor: '#BDBDBD',
+    backgroundColor: 'rgba(255,255,255,0.8)',
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#A0A0A0',
   },
-  raceText: {
+  raceNameText: {
     paddingLeft: 15,
     paddingTop: 15,
     fontSize: 20,
     textAlign: 'left',
-    color: '#CDCDCD',
+    color: '#202020',
+  },
+  raceDateText: {
+    paddingRight: 15,
+    paddingTop: 15,
+    fontSize: 20,
+    textAlign: 'right',
+    color: '#404040',
   }
 });
