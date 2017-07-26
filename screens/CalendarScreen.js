@@ -17,7 +17,6 @@ import {
 } from 'react-native';
 
 import {styles} from './StandingsStyles.js'
-
 const api = 'https://f1portal.herokuapp.com';
 
 export default class CalendarScreen extends React.Component {
@@ -68,14 +67,15 @@ export default class CalendarScreen extends React.Component {
   renderRow(standingCell, something, rowID) {
 
     return(
-      <View style={styles.listElem}>
-
-        <View style={styles.standingsOrder}>
-            <Text style={{color: 'grey'}}>
+      <Image
+        style={local_styles.raceImage} 
+        source={{uri: 'http://www.f1fanatic.co.uk/wp-content/uploads/2015/11/start-p1.jpg'}}>
+          <View style={local_styles.raceImageView}>
+            <Text style={local_styles.raceText}>
               {standingCell.raceName}
             </Text>
           </View>
-        </View>
+      </Image>
     )
  
   }
@@ -115,3 +115,25 @@ export default class CalendarScreen extends React.Component {
     );
   }
 }
+
+var local_styles = StyleSheet.create({
+  raceImage: {
+    width: Dimensions.get('window').width,
+    height: 120,
+  },
+  raceImageView: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    width: Dimensions.get('window').width,
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    borderBottomWidth: 0.4,
+    borderBottomColor: '#BDBDBD',
+  },
+  raceText: {
+    paddingLeft: 15,
+    paddingTop: 15,
+    fontSize: 20,
+    textAlign: 'left',
+    color: '#CDCDCD',
+  }
+});
