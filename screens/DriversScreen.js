@@ -42,10 +42,10 @@ export default class DriversScreen extends React.Component {
       dataSource: new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1 !== row2,
       }),
-      driverJson: [],
+      standingsJson: [],
       isLoading: true,
       refreshing: false,
-      leadingDriverPoints: 0,
+      leadingPoints: 0,
       page:'drivers'
     };
   }  
@@ -58,12 +58,12 @@ export default class DriversScreen extends React.Component {
         //console.log(responseJson),
         this.setState({
           isLoading: false,
-          driverJson: responseJson,
+          standingsJson: responseJson,
           dataSource: this.state.dataSource.cloneWithRows(
             responseJson.driver_standings.MRData.StandingsTable
             .StandingsLists[0].DriverStandings),
 
-          leadingDriverPoints: responseJson.driver_standings
+          leadingPoints: responseJson.driver_standings
                                 .MRData.StandingsTable
                                 .StandingsLists[0]
                                 .DriverStandings[0]
@@ -77,7 +77,9 @@ export default class DriversScreen extends React.Component {
   }
 
    _onRefresh() {
-    this.setState({refreshing: true});
+    this.setState({
+      refreshing: true,
+    });
 
     fetch(api + '/get_standings')
     .then((response) => response.json())
@@ -89,12 +91,12 @@ export default class DriversScreen extends React.Component {
       if (this.state.page === 'drivers') {
         this.setState({
           isLoading: false,
-          driverJson: responseJson,
+          standingsJson: responseJson,
           dataSource: this.state.dataSource.cloneWithRows(
             responseJson.driver_standings.MRData.StandingsTable
             .StandingsLists[0].DriverStandings),
 
-          leadingDriverPoints: responseJson.driver_standings
+          leadingPoints: responseJson.driver_standings
                                 .MRData.StandingsTable
                                 .StandingsLists[0]
                                 .DriverStandings[0]
@@ -103,12 +105,12 @@ export default class DriversScreen extends React.Component {
       } else {
         this.setState({
           isLoading: false,
-          driverJson: responseJson,
+          standingsJson: responseJson,
           dataSource: this.state.dataSource.cloneWithRows(
             responseJson.constructor_standings.MRData.StandingsTable
             .StandingsLists[0].ConstructorStandings),
 
-          leadingDriverPoints: responseJson.constructor_standings
+          leadingPoints: responseJson.constructor_standings
                                     .MRData.StandingsTable
                                     .StandingsLists[0]
                                     .ConstructorStandings[0]
@@ -122,8 +124,8 @@ export default class DriversScreen extends React.Component {
       console.error(error);
     });
 
-    this.refs.refresh_toast.show('Refreshed drivers standings');
-    console.log("Refreshed drivers standings");
+    this.refs.refresh_toast.show('Refreshed championship standings');
+    console.log("Refreshed championship standings");
     this.setState({refreshing: false});
   }
 
@@ -179,7 +181,7 @@ export default class DriversScreen extends React.Component {
           {(rowID !== '0') &&
 
             <Text style={{color: 'grey'}}>
-              {'-' + (this.state.leadingDriverPoints
+              {'-' + (this.state.leadingPoints
                 - parseInt(standingCell.points))}
             </Text>
 
@@ -192,7 +194,7 @@ export default class DriversScreen extends React.Component {
   }
 
   updateStandings(event){
-    var responseJson = this.state.driverJson;
+    var responseJson = this.state.standingsJson;
     var nextPage = event.props.name;
 
     switch (nextPage) {
@@ -204,7 +206,7 @@ export default class DriversScreen extends React.Component {
             responseJson.driver_standings.MRData.StandingsTable
             .StandingsLists[0].DriverStandings),
 
-          leadingDriverPoints: responseJson.driver_standings
+          leadingPoints: responseJson.driver_standings
                                 .MRData.StandingsTable
                                 .StandingsLists[0]
                                 .DriverStandings[0]
@@ -219,7 +221,7 @@ export default class DriversScreen extends React.Component {
                 responseJson.constructor_standings.MRData.StandingsTable
                 .StandingsLists[0].ConstructorStandings),
 
-          leadingDriverPoints: responseJson.constructor_standings
+          leadingPoints: responseJson.constructor_standings
                                   .MRData.StandingsTable
                                   .StandingsLists[0]
                                   .ConstructorStandings[0]
@@ -251,7 +253,7 @@ export default class DriversScreen extends React.Component {
 
         <View style={styles.listHeader}>
           <Text style={styles.listHeaderText}>{
-            this.state.driverJson.driver_standings.MRData.StandingsTable.season
+            this.state.standingsJson.driver_standings.MRData.StandingsTable.season
             + " Drivers Standings"}
           </Text>
         </View>
