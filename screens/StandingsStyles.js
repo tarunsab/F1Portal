@@ -36,7 +36,7 @@ export const styles = StyleSheet.create({
     borderBottomColor: '#F5F5F5',
     alignItems: 'flex-start'
   },
-  driverPointsBox:{
+  pointsBox:{
     flex: 1,
     alignItems: 'flex-end'
   },

@@ -172,7 +172,7 @@ export default class DriversScreen extends React.Component {
 
         }
 
-        <View style={styles.driverPointsBox}>
+        <View style={styles.pointsBox}>
 
           <Text>
             {standingCell.points}
@@ -254,7 +254,7 @@ export default class DriversScreen extends React.Component {
         <View style={styles.listHeader}>
           <Text style={styles.listHeaderText}>{
             this.state.standingsJson.driver_standings.MRData.StandingsTable.season
-            + " Drivers Standings"}
+            + " Championship Standings"}
           </Text>
         </View>
 
