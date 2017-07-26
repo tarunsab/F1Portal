@@ -50,7 +50,7 @@ export const styles = StyleSheet.create({
     minWidth: 25,
   },
   icon: {
-    width: 26,
-    height: 26,
+    width: 25,
+    height: 25,
   },
 });
