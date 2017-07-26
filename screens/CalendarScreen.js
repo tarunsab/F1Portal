@@ -126,7 +126,7 @@ export default class CalendarScreen extends React.Component {
 var local_styles = StyleSheet.create({
   raceImage: {
     width: Dimensions.get('window').width,
-    height: 120,
+    height: 130,
   },
   raceImageView: {
     flex: 1,
@@ -134,8 +134,9 @@ var local_styles = StyleSheet.create({
     justifyContent: 'flex-start',
     width: Dimensions.get('window').width,
     backgroundColor: 'rgba(255,255,255,0.85)',
-    borderBottomWidth: 0.5,
-    borderBottomColor: '#A0A0A0',
+    borderBottomWidth: 5,
+    borderBottomColor: 'white',
+    // borderBottomColor: '#A0A0A0',
   },
   raceNameText: {
     paddingLeft: 15,
