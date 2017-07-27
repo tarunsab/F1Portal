@@ -71,8 +71,14 @@ export default class CalendarScreen extends React.Component {
     var imgStyle;
     if (raceDate < today) {
       imgStyle = local_styles.elapsedRaceImageView;
+      raceNameTextStyle = local_styles.elapsedRaceNameText;
+      raceCircuitTextStyle = local_styles.elapsedRaceCircuitText;
+      raceDateTextStyle = local_styles.elapsedRaceDateText;
     } else {
       imgStyle = local_styles.raceImageView;
+      raceNameTextStyle = local_styles.raceNameText;
+      raceCircuitTextStyle = local_styles.raceCircuitText;
+      raceDateTextStyle = local_styles.raceDateText;
     }
 
     return(
@@ -85,15 +91,15 @@ export default class CalendarScreen extends React.Component {
           <View style={imgStyle}>
 
             <View style={local_styles.raceNameTextView}>
-              <Text style={local_styles.raceNameText}>
+              <Text style={raceNameTextStyle}>
                 {standingCell.raceName}
               </Text>
-              <Text style={local_styles.raceCircuitText}>
+              <Text style={raceCircuitTextStyle}>
                 {standingCell.Circuit.circuitName}
               </Text>
             </View>
             <View style={local_styles.raceDateTextView}>
-              <Text style={local_styles.raceDateText}>
+              <Text style={raceDateTextStyle}>
                 {standingCell.date}
               </Text>
             </View>
@@ -142,14 +148,14 @@ export default class CalendarScreen extends React.Component {
 var local_styles = StyleSheet.create({
   raceImage: {
     width: Dimensions.get('window').width,
-    height: 130,
+    height: 170,
   },
   elapsedRaceImageView: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     width: Dimensions.get('window').width,
-    backgroundColor: 'rgba(255,255,255,0.9)',
+    backgroundColor: 'rgba(255,255,255,0.8)',
     borderBottomWidth: 5,
     borderBottomColor: 'white',
   },
@@ -158,13 +164,37 @@ var local_styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     width: Dimensions.get('window').width,
-    backgroundColor: 'rgba(255,255,255,0.7)',
+    backgroundColor: 'rgba(0,0,0,0.3)',
     borderBottomWidth: 5,
     borderBottomColor: 'white',
+  },
+  elapsedRaceCircuitText: {
+    paddingLeft: 15,
+    fontSize: 12,
+    // fontWeight: 'bold',
+    textAlign: 'left',
+    color: '#404040',
+    // color: 'white',
+    // textShadowColor: 'black',
+    // textShadowOffset: {width: 1, height: 1},
+    // textShadowRadius: 3,
   },
   raceCircuitText: {
     paddingLeft: 15,
     fontSize: 12,
+    // fontWeight: 'bold',
+    textAlign: 'left',
+    // color: '#404040',
+    color: 'white',
+    textShadowColor: 'black',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: 3,
+  },
+  elapsedRaceNameText: {
+    paddingLeft: 15,
+    paddingTop: 15,
+    fontSize: 19,
+    fontWeight: '500',
     textAlign: 'left',
     color: '#404040',
   },
@@ -172,22 +202,35 @@ var local_styles = StyleSheet.create({
     paddingLeft: 15,
     paddingTop: 15,
     fontSize: 19,
+    fontWeight: '500',
     textAlign: 'left',
-    color: '#404040',
-    // textShadowColor: 'white',
-    // textShadowOffset: {width: 1, height: 1},
-    // textShadowRadius: 5,
+    // color: '#404040',
+    color: 'white',
+    textShadowColor: 'black',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: 3,
   },
   raceNameTextView:{
     flex: 5,
     alignItems: 'flex-start',
+  },
+  elapsedRaceDateText: {
+    paddingRight: 15,
+    paddingTop: 15,
+    fontSize: 16,
+    textAlign: 'right',
+    color: '#606060',
   },
   raceDateText: {
     paddingRight: 15,
     paddingTop: 15,
     fontSize: 16,
     textAlign: 'right',
-    color: '#606060',
+    // color: '#606060',
+    color: 'white',
+    textShadowColor: 'black',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: 3,
   },
   raceDateTextView:{
     flex: 2,
