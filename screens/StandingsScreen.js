@@ -224,9 +224,8 @@ export default class StandingsScreen extends React.Component {
 
 
         <View style={styles.listHeader}>
-          <Text style={styles.listHeaderText}>{
-            this.state.standingsJson.driver_standings.MRData.StandingsTable.season
-            + " Championship Standings"}
+          <Text style={styles.listHeaderText}>
+            {"Championship Standings"}
           </Text>
         </View>
 
