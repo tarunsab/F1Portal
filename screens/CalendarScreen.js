@@ -75,6 +75,9 @@ export default class CalendarScreen extends React.Component {
               <Text style={local_styles.raceNameText}>
                 {standingCell.raceName}
               </Text>
+              <Text style={local_styles.raceCircuitText}>
+                {standingCell.Circuit.circuitName}
+              </Text>
             </View>
             <View style={local_styles.raceDateTextView}>
               <Text style={local_styles.raceDateText}>
@@ -136,7 +139,13 @@ var local_styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.85)',
     borderBottomWidth: 5,
     borderBottomColor: 'white',
-    // borderBottomColor: '#A0A0A0',
+  },
+  raceCircuitText: {
+    paddingLeft: 15,
+    fontSize: 12,
+    textAlign: 'left',
+    // color: '#757575',
+    color: '#9E9E9E',
   },
   raceNameText: {
     paddingLeft: 15,
