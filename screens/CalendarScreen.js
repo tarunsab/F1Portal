@@ -19,6 +19,7 @@ import {
 
 import {styles} from './StandingsStyles.js'
 const api = 'https://f1portal.herokuapp.com';
+const today = new Date();
 
 export default class CalendarScreen extends React.Component {
 
@@ -67,7 +68,6 @@ export default class CalendarScreen extends React.Component {
 
   renderRow(standingCell, something, rowID) {
 
-    var today = new Date();
     var raceDate = new Date(standingCell.date);
     var imgStyle;
     if (raceDate < today) {
