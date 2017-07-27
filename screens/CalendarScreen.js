@@ -66,11 +66,24 @@ export default class CalendarScreen extends React.Component {
 
   renderRow(standingCell, something, rowID) {
 
+    var today = new Date();
+    var raceDate = new Date(standingCell.date);
+    var imgStyle;
+    if (raceDate < today) {
+      imgStyle = local_styles.elapsedRaceImageView;
+    } else {
+      imgStyle = local_styles.raceImageView;
+    }
+
     return(
       <Image
         style={local_styles.raceImage} 
-        source={{uri: 'http://www.f1fanatic.co.uk/wp-content/uploads/2015/11/start-p1.jpg'}}>
-          <View style={local_styles.raceImageView}>
+        source={
+          {uri: 'http://www.f1fanatic.co.uk/wp-content/uploads/2015/11/start-p1.jpg'}
+        }>
+
+          <View style={imgStyle}>
+
             <View style={local_styles.raceNameTextView}>
               <Text style={local_styles.raceNameText}>
                 {standingCell.raceName}
@@ -131,12 +144,21 @@ var local_styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     height: 130,
   },
+  elapsedRaceImageView: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    width: Dimensions.get('window').width,
+    backgroundColor: 'rgba(255,255,255,0.9)',
+    borderBottomWidth: 5,
+    borderBottomColor: 'white',
+  },
   raceImageView: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     width: Dimensions.get('window').width,
-    backgroundColor: 'rgba(255,255,255,0.85)',
+    backgroundColor: 'rgba(255,255,255,0.7)',
     borderBottomWidth: 5,
     borderBottomColor: 'white',
   },
@@ -144,8 +166,7 @@ var local_styles = StyleSheet.create({
     paddingLeft: 15,
     fontSize: 12,
     textAlign: 'left',
-    // color: '#757575',
-    color: '#9E9E9E',
+    color: '#404040',
   },
   raceNameText: {
     paddingLeft: 15,
@@ -153,6 +174,9 @@ var local_styles = StyleSheet.create({
     fontSize: 19,
     textAlign: 'left',
     color: '#404040',
+    // textShadowColor: 'white',
+    // textShadowOffset: {width: 1, height: 1},
+    // textShadowRadius: 5,
   },
   raceNameTextView:{
     flex: 5,
@@ -169,4 +193,6 @@ var local_styles = StyleSheet.create({
     flex: 2,
     alignItems: 'flex-end',
   },
+
+
 });
