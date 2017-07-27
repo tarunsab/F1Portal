@@ -1,4 +1,5 @@
 import React from 'react';
+var dateFormat = require('dateformat');
 
 import {
   StackNavigator,
@@ -100,7 +101,7 @@ export default class CalendarScreen extends React.Component {
             </View>
             <View style={local_styles.raceDateTextView}>
               <Text style={raceDateTextStyle}>
-                {standingCell.date}
+                {dateFormat(raceDate, "mmmm dS")}
               </Text>
             </View>
           </View>
@@ -171,20 +172,13 @@ var local_styles = StyleSheet.create({
   elapsedRaceCircuitText: {
     paddingLeft: 15,
     fontSize: 12,
-    // fontWeight: 'bold',
     textAlign: 'left',
     color: '#404040',
-    // color: 'white',
-    // textShadowColor: 'black',
-    // textShadowOffset: {width: 1, height: 1},
-    // textShadowRadius: 3,
   },
   raceCircuitText: {
     paddingLeft: 15,
     fontSize: 12,
-    // fontWeight: 'bold',
     textAlign: 'left',
-    // color: '#404040',
     color: 'white',
     textShadowColor: 'black',
     textShadowOffset: {width: 1, height: 1},
@@ -204,7 +198,6 @@ var local_styles = StyleSheet.create({
     fontSize: 19,
     fontWeight: '500',
     textAlign: 'left',
-    // color: '#404040',
     color: 'white',
     textShadowColor: 'black',
     textShadowOffset: {width: 1, height: 1},
@@ -226,14 +219,13 @@ var local_styles = StyleSheet.create({
     paddingTop: 15,
     fontSize: 16,
     textAlign: 'right',
-    // color: '#606060',
     color: 'white',
     textShadowColor: 'black',
     textShadowOffset: {width: 1, height: 1},
     textShadowRadius: 3,
   },
   raceDateTextView:{
-    flex: 2,
+    flex: 3,
     alignItems: 'flex-end',
   },
 
