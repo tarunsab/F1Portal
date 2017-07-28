@@ -18,7 +18,7 @@ import {
 
 import Toast from 'react-native-easy-toast'
 import Tabs from 'react-native-tabs';
-import {styles} from './StandingsStyles.js'
+import {styles} from './GlobalStyles.js'
 
 const api = 'https://f1portal.herokuapp.com';
 

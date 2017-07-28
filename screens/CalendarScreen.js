@@ -17,7 +17,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-import {styles} from './StandingsStyles.js'
+import {styles} from './GlobalStyles.js'
 const api = 'https://f1portal.herokuapp.com';
 const today = new Date();
 
