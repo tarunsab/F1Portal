@@ -1,4 +1,7 @@
 import React from 'react';
+import ActionButton from 'react-native-action-button';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {styles} from './GlobalStyles.js'
 var dateFormat = require('dateformat');
 
 import {
@@ -11,14 +14,13 @@ import {
   StyleSheet,
   Text,
   View,
-  ListView,
+  FlatList,
   Dimensions,
   Image,
   ActivityIndicator,
   TouchableHighlight,
 } from 'react-native';
 
-import {styles} from './GlobalStyles.js'
 const api = 'https://f1portal.herokuapp.com';
 const today = new Date();
 
@@ -39,14 +41,18 @@ export default class CalendarScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataSource: new ListView.DataSource({
-        rowHasChanged: (row1, row2) => row1 !== row2,
-      }),
+      dataSource: [],
       calendarJson: [],
       isLoading: true,
       refreshing: false,
     };
 
+  }
+
+  onNavigatorEvent(event) {
+    if(event.id == 'tabSelected'){
+          console.log('it is clicked')
+    }
   }
 
   componentDidMount() {
@@ -57,8 +63,7 @@ export default class CalendarScreen extends React.Component {
         this.setState({
           isLoading: false,
           calendarJson: responseJson,
-          dataSource: this.state.dataSource.cloneWithRows(
-            responseJson.MRData.RaceTable.Races),
+          dataSource: responseJson.MRData.RaceTable.Races,
         });
       })
       .catch((error) => {
@@ -71,8 +76,14 @@ export default class CalendarScreen extends React.Component {
     console.log("Clicked on " + raceInfo.raceName);
   }
 
-  renderRow(standingCell, something, rowID) {
+  scrollToLatest(){
+    console.log("Scrollest to latest race");
+    this.refs.flatlist.scrollToIndex({index: 10, animated: true});
+  }
 
+  renderRow(data) {
+
+    var standingCell = data.item;
     var imageURL = standingCell.Circuit.imageURL;
     var raceDate = new Date(standingCell.date);
     var imgStyle;
@@ -120,6 +131,8 @@ export default class CalendarScreen extends React.Component {
 
   render() {
 
+
+
     if (this.state.isLoading) {
       return (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -139,22 +152,37 @@ export default class CalendarScreen extends React.Component {
         </View>
 
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <ListView
-            flex-start dataSource={this.state.dataSource}
-            renderRow={this.renderRow.bind(this)}
-            enableEmptySections={true}
-            removeClippedSubviews={false}
-            automaticallyAdjustContentInsets={false}
+          <FlatList ref="flatlist"
+            data={this.state.dataSource}
+            renderItem={this.renderRow.bind(this)}
+            getItemLayout={this.getItemLayout}
+            keyExtractor={item => item.raceName}
           />
         </View>
 
+        <ActionButton
+         buttonColor="#F44336"
+         buttonText="[ ]"
+         onPress={() => this.scrollToLatest()}
+         icon={<Icon name="calendar-check-o" size={30} color="#900" />}>
+         >
+        </ActionButton>
       </View>
 
     );
   }
+
+  getItemLayout = (data, index) => (
+    { length: 170, offset: 170 * index, index }
+  )
 }
 
 var local_styles = StyleSheet.create({
+  actionButtonIcon: {
+    fontSize: 20,
+    height: 22,
+    color: 'white',
+  },
   raceImage: {
     width: Dimensions.get('window').width,
     height: 170,
