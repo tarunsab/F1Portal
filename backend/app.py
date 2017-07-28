@@ -156,13 +156,14 @@ def add_images_to_schedule(new_schedule_data):
                  "italian.jpg",
         "Singapore": "https://www.imageupload.co.uk/images/2017/07/28/"
                      "singapore.jpg",
-        "Malaysia": "https://www.imageupload.co.uk/image/DPbz",
+        "Malaysia": "https://www.imageupload.co.uk/images/2017/07/28/"
+                    "malaysian.jpg",
         "Japan": "https://www.imageupload.co.uk/images/2017/07/28/"
                  "japanese.jpg",
-        "America": "https://www.imageupload.co.uk/images/2017/07/28/"
+        "USA": "https://www.imageupload.co.uk/images/2017/07/28/"
                    "american2.jpg",
         "Mexico": "https://www.imageupload.co.uk/images/2017/07/28/"
-                  "mexican2.jpg",
+                  "mexican297780.png",
         "Brazil": "https://www.imageupload.co.uk/images/2017/07/28/"
                   "brazilian.jpg",
         "UAE": "https://www.imageupload.co.uk/images/2017/07/28/"
