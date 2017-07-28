@@ -13,6 +13,7 @@ import {
   ActivityIndicator,
   Image,
   RefreshControl,
+  Dimensions,
 } from 'react-native';
 
 import Toast from 'react-native-easy-toast'
@@ -146,9 +147,9 @@ export default class StandingsScreen extends React.Component {
   renderRow(standingCell, something, rowID) {
 
     return (
-      <View style={styles.listElem}>
+      <View style={local_styles.listElem}>
 
-        <View style={styles.standingsOrder}>
+        <View style={local_styles.standingsOrder}>
           <Text style={{color: 'grey'}}>
             {parseInt(rowID, 10) + 1}
           </Text>
@@ -158,7 +159,7 @@ export default class StandingsScreen extends React.Component {
 
           ((this.state.page === 'drivers') &&
 
-            <View style={styles.standingsNameBox}>
+            <View style={local_styles.standingsNameBox}>
               <Text>
                 {
                   standingCell.Driver.givenName + " "
@@ -178,7 +179,7 @@ export default class StandingsScreen extends React.Component {
 
           ((this.state.page === 'constructors') &&
               
-            <View style={styles.standingsNameBox}>
+            <View style={local_styles.standingsNameBox}>
               <Text>
                 {standingCell.Constructor.name}
               </Text>
@@ -187,7 +188,7 @@ export default class StandingsScreen extends React.Component {
 
         }
 
-        <View style={styles.pointsBox}>
+        <View style={local_styles.pointsBox}>
 
           <Text>
             {standingCell.points}
@@ -223,13 +224,13 @@ export default class StandingsScreen extends React.Component {
       <View style={styles.container}>
 
 
-        <View style={styles.listHeader}>
-          <Text style={styles.listHeaderText}>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>
             {"Championship Standings"}
           </Text>
         </View>
 
-        <View style={styles.listHeader}>
+        <View style={styles.header}>
           <Tabs selected={this.state.page} style={{backgroundColor:'white'}}
                 selectedStyle={{color:'red'}} onSelect={el => this.changeTabs(el)}>
               <Text name="drivers">Drivers</Text>
@@ -259,3 +260,30 @@ export default class StandingsScreen extends React.Component {
     );
   }
 }
+
+const local_styles = StyleSheet.create({
+  listElem:{
+    width: Dimensions.get('window').width,
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingLeft: 30,
+    paddingRight: 30,
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: '#F5F5F5',
+    alignItems: 'flex-start'
+  },
+  pointsBox:{
+    flex: 1,
+    alignItems: 'flex-end'
+  },
+  standingsNameBox:{
+    flex: 1,
+    alignItems: 'flex-start',
+    flexDirection: 'column'
+  },
+  standingsOrder:{
+    alignItems: 'flex-start',
+    minWidth: 25,
+  },
+});

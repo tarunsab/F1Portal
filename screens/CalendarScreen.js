@@ -125,8 +125,8 @@ export default class CalendarScreen extends React.Component {
 
       <View style={styles.container}>
 
-        <View style={styles.listHeader}>
-          <Text style={styles.listHeaderText}>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>
             Race Calendar
           </Text>
         </View>
