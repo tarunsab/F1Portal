@@ -166,8 +166,7 @@ def add_images_to_schedule(new_schedule_data):
                   "mexican297780.png",
         "Brazil": "https://www.imageupload.co.uk/images/2017/07/28/"
                   "brazilian.jpg",
-        "UAE": "https://www.imageupload.co.uk/images/2017/07/28/"
-               "uae.jpg",
+        "UAE": "https://www.imageupload.co.uk/images/2017/07/28/uae2.jpg",
     }
 
     race_list = new_schedule_data["MRData"]["RaceTable"]["Races"]
