@@ -9,6 +9,7 @@ app = Flask(__name__)
 
 apiUrl = "http://ergast.com/api/f1/current"
 
+
 @app.route('/')
 def homepage():
     get_standings_from_api()
@@ -18,7 +19,6 @@ def homepage():
 # Obtaining the drivers and constructors standings data
 @app.route('/get_standings')
 def get_standings():
-
     # Obtaining cached standings data from database
     entry = DBManager.get_standings_entry()
     standings_json = entry[0][0]
@@ -45,7 +45,6 @@ def get_standings():
 # Obtaining the drivers and constructors standings data from Ergast API and
 # caching to database
 def get_standings_from_api():
-
     # Obtaining drivers and constructors json from API
     standings_json = {}
 
@@ -85,7 +84,6 @@ def get_standings_from_api():
 # Obtaining the current season's race schedule
 @app.route('/get_schedule')
 def get_schedule():
-
     # Obtaining cached schedule data from database
     entry = DBManager.get_schedule_entry()
     schedule_data = entry[0][0]
@@ -113,10 +111,12 @@ def get_schedule():
 # Obtaining the current season's race schedule from ErgastAPI and caching it
 # in the database
 def get_schedule_from_api():
-
     # Obtain cached race schedule form API
     response = requests.get(apiUrl + ".json")
     new_schedule_data = response.json()
+
+    # Add image per track to data
+    new_schedule_data = add_images_to_schedule(new_schedule_data)
 
     # Cache new data in database
     DBManager.update_schedule_entry(new_schedule_data)
@@ -125,5 +125,67 @@ def get_schedule_from_api():
     return new_schedule_data
 
 
+# Adding track images to every race in the season schedule/calendar
+def add_images_to_schedule(new_schedule_data):
+    track_image_url = {
+        "Australia": "https://www.imageupload.co.uk/images/2017/07/28/"
+                     "australian.jpg",
+        "China": "https://www.imageupload.co.uk/images/2017/07/28/"
+                 "chinese.jpg",
+        "Bahrain": "https://www.imageupload.co.uk/images/2017/07/28/"
+                   "bahrain.jpg",
+        "Russia": "https://www.imageupload.co.uk/images/2017/07/28/"
+                  "russian.jpg",
+        "Spain": "https://www.imageupload.co.uk/images/2017/07/28/"
+                 "spanish.jpg",
+        "Monaco": "https://www.imageupload.co.uk/images/2017/07/28/"
+                  "monaco.jpg",
+        "Canada": "https://www.imageupload.co.uk/images/2017/07/28/"
+                  "canadian.jpg",
+        "Azerbaijan": "https://www.imageupload.co.uk/images/2017/07/28/"
+                      "azerbaijan.jpg",
+        "Austria": "https://www.imageupload.co.uk/images/2017/07/28/"
+                   "austrian.jpg",
+        "UK": "https://www.imageupload.co.uk/images/2017/07/28/"
+              "british.jpg",
+        "Hungary": "https://www.imageupload.co.uk/images/2017/07/28/"
+                   "hungary.jpg",
+        "Belgium": "https://www.imageupload.co.uk/images/2017/07/28/"
+                   "belgian.jpg",
+        "Italy": "https://www.imageupload.co.uk/images/2017/07/28/"
+                 "italian.jpg",
+        "Singapore": "https://www.imageupload.co.uk/images/2017/07/28/"
+                     "singapore.jpg",
+        "Malaysia": "https://www.imageupload.co.uk/image/DPbz",
+        "Japan": "https://www.imageupload.co.uk/images/2017/07/28/"
+                 "japanese.jpg",
+        "America": "https://www.imageupload.co.uk/images/2017/07/28/"
+                   "american2.jpg",
+        "Mexico": "https://www.imageupload.co.uk/images/2017/07/28/"
+                  "mexican2.jpg",
+        "Brazil": "https://www.imageupload.co.uk/images/2017/07/28/"
+                  "brazilian.jpg",
+        "UAE": "https://www.imageupload.co.uk/images/2017/07/28/"
+               "uae.jpg",
+    }
+
+    race_list = new_schedule_data["MRData"]["RaceTable"]["Races"]
+
+    for track in race_list:
+        track_country = track["Circuit"]["Location"]["country"]
+        image_url = track_image_url.get(track_country
+                                        ,"https://www.imageupload.co.uk/image/DPb2")
+        track["Circuit"]["imageURL"] = image_url
+
+    return new_schedule_data
+
+
+# Tester function for quick debugging
+def test():
+    # get_schedule_from_api()
+    pass
+
+
 if __name__ == '__main__':
     app.run()
+    # test()
