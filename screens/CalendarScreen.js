@@ -68,6 +68,7 @@ export default class CalendarScreen extends React.Component {
 
   renderRow(standingCell, something, rowID) {
 
+    var imageURL = standingCell.Circuit.imageURL;
     var raceDate = new Date(standingCell.date);
     var imgStyle;
     if (raceDate < today) {
@@ -86,7 +87,7 @@ export default class CalendarScreen extends React.Component {
       <Image
         style={local_styles.raceImage} 
         source={
-          {uri: 'http://www.f1fanatic.co.uk/wp-content/uploads/2015/11/start-p1.jpg'}
+          {uri: imageURL}
         }>
 
           <View style={imgStyle}>
