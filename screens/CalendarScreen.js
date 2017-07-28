@@ -15,6 +15,7 @@ import {
   Dimensions,
   Image,
   ActivityIndicator,
+  TouchableHighlight,
 } from 'react-native';
 
 import {styles} from './GlobalStyles.js'
@@ -66,6 +67,10 @@ export default class CalendarScreen extends React.Component {
 
   }
 
+  raceInfoClick(raceInfo){
+    console.log("Clicked on " + raceInfo.raceName);
+  }
+
   renderRow(standingCell, something, rowID) {
 
     var imageURL = standingCell.Circuit.imageURL;
@@ -84,29 +89,31 @@ export default class CalendarScreen extends React.Component {
     }
 
     return(
-      <Image
-        style={local_styles.raceImage} 
-        source={
-          {uri: imageURL}
-        }>
+      <TouchableHighlight onPress={() => this.raceInfoClick(standingCell)}>
+        <Image
+          style={local_styles.raceImage} 
+          source={
+            {uri: imageURL}
+          }>
 
-          <View style={imgStyle}>
+            <View style={imgStyle}>
 
-            <View style={local_styles.raceNameTextView}>
-              <Text style={raceNameTextStyle}>
-                {standingCell.raceName}
-              </Text>
-              <Text style={raceCircuitTextStyle}>
-                {standingCell.Circuit.circuitName}
-              </Text>
+              <View style={local_styles.raceNameTextView}>
+                <Text style={raceNameTextStyle}>
+                  {standingCell.raceName}
+                </Text>
+                <Text style={raceCircuitTextStyle}>
+                  {standingCell.Circuit.circuitName}
+                </Text>
+              </View>
+              <View style={local_styles.raceDateTextView}>
+                <Text style={raceDateTextStyle}>
+                  {dateFormat(raceDate, "mmmm dS")}
+                </Text>
+              </View>
             </View>
-            <View style={local_styles.raceDateTextView}>
-              <Text style={raceDateTextStyle}>
-                {dateFormat(raceDate, "mmmm dS")}
-              </Text>
-            </View>
-          </View>
-      </Image>
+        </Image>
+      </TouchableHighlight>
     )
  
   }
