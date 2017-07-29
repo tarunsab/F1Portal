@@ -2,6 +2,8 @@ import React from 'react';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {styles} from './GlobalStyles.js'
+import CountDownTimer from 'react_native_countdowntimer' 
+
 var dateFormat = require('dateformat');
 
 import {
@@ -23,6 +25,7 @@ import {
 
 const api = 'https://f1portal.herokuapp.com';
 const today = new Date();
+var seasonIndex;
 
 export default class CalendarScreen extends React.Component {
 
@@ -49,12 +52,6 @@ export default class CalendarScreen extends React.Component {
 
   }
 
-  onNavigatorEvent(event) {
-    if(event.id == 'tabSelected'){
-          console.log('it is clicked')
-    }
-  }
-
   componentDidMount() {
 
     return fetch(api + '/get_schedule')
@@ -77,8 +74,8 @@ export default class CalendarScreen extends React.Component {
   }
 
   scrollToLatest(){
-    console.log("Scrollest to latest race");
-    this.refs.flatlist.scrollToIndex({index: 10, animated: true});
+    console.log("Scrolled to latest race");
+    this.refs.flatlist.scrollToIndex({index: seasonIndex, animated: true});
   }
 
   renderRow(data) {
@@ -87,7 +84,7 @@ export default class CalendarScreen extends React.Component {
     var imageURL = standingCell.Circuit.imageURL;
     var raceDate = new Date(standingCell.date);
     var imgStyle;
-    if (raceDate < today) {
+    if (data.index < seasonIndex) {
       imgStyle = local_styles.elapsedRaceImageView;
       raceNameTextStyle = local_styles.elapsedRaceNameText;
       raceCircuitTextStyle = local_styles.elapsedRaceCircuitText;
@@ -98,6 +95,10 @@ export default class CalendarScreen extends React.Component {
       raceCircuitTextStyle = local_styles.raceCircuitText;
       raceDateTextStyle = local_styles.raceDateText;
     }
+
+    var date = raceDate.toISOString();
+    console.log(date)
+
 
     return(
       <TouchableHighlight onPress={() => this.raceInfoClick(standingCell)}>
@@ -116,6 +117,23 @@ export default class CalendarScreen extends React.Component {
                 <Text style={raceCircuitTextStyle}>
                   {standingCell.Circuit.circuitName}
                 </Text>
+                <CountDownTimer
+                  // date="2017-11-28T00:00:00+00:00"
+                  // date="2017-10-26T00:00:00+00:00"
+                  // date={standingCell.date}
+                  date={date}
+                  days={{plural: 'Days ',singular: 'day '}}
+                  hours=':'
+                  mins=':'
+                  segs=''
+
+                  daysStyle={styles.time}
+                  hoursStyle={styles.time}
+                  minsStyle={styles.time}
+                  secsStyle={styles.time}
+                  firstColonStyle={styles.colon}
+                  secondColonStyle={styles.colon}
+                />
               </View>
               <View style={local_styles.raceDateTextView}>
                 <Text style={raceDateTextStyle}>
@@ -131,7 +149,15 @@ export default class CalendarScreen extends React.Component {
 
   render() {
 
-
+    var racesList = this.state.dataSource;
+    for (var i = 0; i < racesList.length; i++) { 
+      var raceDate = new Date(racesList[i].date);
+      if (raceDate > today) {
+        seasonIndex = i;
+        console.log("Season index: " + i);
+        break
+      }
+    }
 
     if (this.state.isLoading) {
       return (
@@ -163,7 +189,7 @@ export default class CalendarScreen extends React.Component {
         <ActionButton
          buttonColor="#FAFAFA"
          onPress={() => this.scrollToLatest()}
-         icon={<Icon name="calendar-check-o" size={30} color="red" />}>
+         icon={<Icon name="chevron-down" size={30} color="red" />}>
          >
         </ActionButton>
       </View>
