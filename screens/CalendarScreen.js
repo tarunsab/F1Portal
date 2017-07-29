@@ -117,6 +117,11 @@ export default class CalendarScreen extends React.Component {
                 <Text style={raceCircuitTextStyle}>
                   {standingCell.Circuit.circuitName}
                 </Text>
+              </View>
+              <View style={local_styles.raceDateTextView}>
+                <Text style={raceDateTextStyle}>
+                  {dateFormat(raceDate, "mmmm dS")}
+                </Text>
                 <CountDownTimer
                   // date="2017-11-28T00:00:00+00:00"
                   // date="2017-10-26T00:00:00+00:00"
@@ -134,11 +139,6 @@ export default class CalendarScreen extends React.Component {
                   firstColonStyle={styles.colon}
                   secondColonStyle={styles.colon}
                 />
-              </View>
-              <View style={local_styles.raceDateTextView}>
-                <Text style={raceDateTextStyle}>
-                  {dateFormat(raceDate, "mmmm dS")}
-                </Text>
               </View>
             </View>
         </Image>
