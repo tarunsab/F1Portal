@@ -25,7 +25,7 @@ import {
 
 const api = 'https://f1portal.herokuapp.com';
 const today = new Date();
-var seasonIndex;
+var seasonRound;
 
 export default class CalendarScreen extends React.Component {
 
@@ -75,16 +75,16 @@ export default class CalendarScreen extends React.Component {
 
   scrollToLatest(){
     console.log("Scrolled to latest race");
-    this.refs.flatlist.scrollToIndex({index: seasonIndex, animated: true});
+    this.refs.flatlist.scrollToIndex({index: seasonRound, animated: true});
   }
 
   renderRow(data) {
 
     var standingCell = data.item;
     var imageURL = standingCell.Circuit.imageURL;
-    var raceDate = new Date(standingCell.date);
+    var raceDate = new Date(standingCell.date + "T" + standingCell.time)
     var imgStyle;
-    if (data.index < seasonIndex) {
+    if (data.index < seasonRound) {
       imgStyle = local_styles.elapsedRaceImageView;
       raceNameTextStyle = local_styles.elapsedRaceNameText;
       raceCircuitTextStyle = local_styles.elapsedRaceCircuitText;
@@ -97,7 +97,6 @@ export default class CalendarScreen extends React.Component {
     }
 
     var date = raceDate.toISOString();
-    console.log(date)
 
 
     return(
@@ -148,10 +147,11 @@ export default class CalendarScreen extends React.Component {
 
     var racesList = this.state.dataSource;
     for (var i = 0; i < racesList.length; i++) { 
-      var raceDate = new Date(racesList[i].date);
+      var raceDate = new Date(racesList[i].date + "T" + racesList[i].time)
+      raceDate.setHours(raceDate.getHours() + 2);
       if (raceDate > today) {
-        seasonIndex = i;
-        console.log("Season index: " + i);
+        seasonRound = i;
+        console.log("Season round: " + i);
         break
       }
     }
