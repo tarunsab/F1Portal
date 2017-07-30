@@ -118,23 +118,31 @@ export default class CalendarScreen extends React.Component {
                 </Text>
               </View>
               <View style={local_styles.raceDateTextView}>
+
                 <Text style={raceDateTextStyle}>
                   {dateFormat(raceDate, "mmmm dS")}
                 </Text>
-                <CountDownTimer
-                  date={date}
-                  days={{plural: 'Days ',singular: 'day '}}
-                  hours=':'
-                  mins=':'
-                  segs=''
 
-                  daysStyle={styles.time}
-                  hoursStyle={styles.time}
-                  minsStyle={styles.time}
-                  secsStyle={styles.time}
-                  firstColonStyle={styles.colon}
-                  secondColonStyle={styles.colon}
-                />
+
+                {(data.index === seasonRound) && 
+
+                  <CountDownTimer
+                    date={date}
+                    days={{plural: 'Days ',singular: 'day '}}
+                    hours=':'
+                    mins=':'
+                    segs=''
+
+                    daysStyle={styles.time}
+                    hoursStyle={styles.time}
+                    minsStyle={styles.time}
+                    secsStyle={styles.time}
+                    firstColonStyle={styles.colon}
+                    secondColonStyle={styles.colon}
+                  />
+
+                }
+
               </View>
             </View>
         </Image>
