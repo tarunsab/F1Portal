@@ -30,7 +30,8 @@ def get_standings():
 
     # Obtaining the expiry date of the cached standings data
     refresh_date_raw = standings_json["expiryDate"]
-    refresh_date = datetime.strptime(refresh_date_raw, '%Y-%m-%dT%H:%M:%SZ')
+    refresh_date = datetime.strptime(refresh_date_raw,
+                                     '%Y-%m-%dT%H:%M:%SZ')
     refresh_date = refresh_date + timedelta(hours=2) + timedelta(minutes=30)
 
     # Check to obtain from cache or refresh from API and re-cache based on
@@ -72,8 +73,8 @@ def get_standings_from_api():
         # If race date has not elapsed for the current race in the ordered
         # list, then set json to be that race date
         if curr_date < race_date:
-            standings_json["expiryDate"] \
-                = race_date.strftime('%Y-%m-%dT%H:%M:%SZ')
+            standings_json["expiryDate"] = race_date.strftime(
+                '%Y-%m-%dT%H:%M:%SZ')
             break
 
     # Update cached standings file in database
@@ -163,7 +164,7 @@ def add_images_to_schedule(new_schedule_data):
         "Japan": "https://www.imageupload.co.uk/images/2017/07/28/"
                  "japanese.jpg",
         "USA": "https://www.imageupload.co.uk/images/2017/07/28/"
-                   "american2.jpg",
+               "american2.jpg",
         "Mexico": "https://www.imageupload.co.uk/images/2017/07/28/"
                   "mexican297780.png",
         "Brazil": "https://www.imageupload.co.uk/images/2017/07/28/"
@@ -176,16 +177,17 @@ def add_images_to_schedule(new_schedule_data):
     for track in race_list:
         track_country = track["Circuit"]["Location"]["country"]
         image_url = track_image_url.get(track_country
-                                        ,"https://www.imageupload.co.uk/image/DPb2")
+                                        ,
+                                        "https://www.imageupload.co.uk/image/DPb2")
         track["Circuit"]["imageURL"] = image_url
 
     return new_schedule_data
 
 
 # Tester function for quick debugging
-# @app.route('/test')
-# def test():
-#     return jsonify(get_standings_from_api())
+@app.route('/test')
+def test():
+    return jsonify(get_standings_from_api())
 
 
 if __name__ == '__main__':
