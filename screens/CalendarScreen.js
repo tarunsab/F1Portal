@@ -194,7 +194,8 @@ export default class CalendarScreen extends React.Component {
         <ActionButton
          buttonColor="#FAFAFA"
          onPress={() => this.scrollToLatest()}
-         icon={<Icon name="chevron-down" size={30} color="red" />}>
+         // icon={<Icon name="chevron-down" size={30} color="red" />}>
+         icon={<Icon name="calendar-check-o" size={30} color="red" />}>
          >
         </ActionButton>
       </View>
