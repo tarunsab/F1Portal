@@ -1,5 +1,5 @@
 from flask import Flask, jsonify
-from datetime import datetime
+from datetime import datetime, timedelta
 from DBManager import DBManager
 
 import requests
@@ -30,11 +30,12 @@ def get_standings():
 
     # Obtaining the expiry date of the cached standings data
     refresh_date_raw = standings_json["expiryDate"]
-    refresh_date = datetime.strptime(refresh_date_raw, '%Y-%m-%d')
+    refresh_date = datetime.strptime(refresh_date_raw, '%Y-%m-%dT%H:%M:%SZ')
+    refresh_date = refresh_date + timedelta(hours=2) + timedelta(minutes=30)
 
     # Check to obtain from cache or refresh from API and re-cache based on
     # cache's expiry date
-    if datetime.now() >= refresh_date:
+    if datetime.utcnow() > refresh_date:
         print("Cached standings file out of date.")
         return jsonify(get_standings_from_api())
     else:
@@ -60,18 +61,19 @@ def get_standings_from_api():
     # by finding next race to add expiry info to json
     schedule_json = json.loads(get_schedule().data)
     races_json = schedule_json["MRData"]["RaceTable"]["Races"]
-    curr_date = datetime.now()
+    curr_date = datetime.utcnow()
 
     for race in races_json:
 
-        # Obtain race date
-        race_date_raw = race["date"]
-        race_date = datetime.strptime(race_date_raw, '%Y-%m-%d')
+        # Obtain race date and time
+        race_date_raw = race["date"] + "T" + race["time"]
+        race_date = datetime.strptime(race_date_raw, '%Y-%m-%dT%H:%M:%SZ')
 
         # If race date has not elapsed for the current race in the ordered
         # list, then set json to be that race date
         if curr_date < race_date:
-            standings_json["expiryDate"] = race_date.strftime('%Y-%m-%d')
+            standings_json["expiryDate"] \
+                = race_date.strftime('%Y-%m-%dT%H:%M:%SZ')
             break
 
     # Update cached standings file in database
@@ -181,11 +183,10 @@ def add_images_to_schedule(new_schedule_data):
 
 
 # Tester function for quick debugging
-def test():
-    # get_schedule_from_api()
-    pass
+# @app.route('/test')
+# def test():
+#     return jsonify(get_standings_from_api())
 
 
 if __name__ == '__main__':
     app.run()
-    # test()

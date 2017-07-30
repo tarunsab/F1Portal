@@ -123,9 +123,6 @@ export default class CalendarScreen extends React.Component {
                   {dateFormat(raceDate, "mmmm dS")}
                 </Text>
                 <CountDownTimer
-                  // date="2017-11-28T00:00:00+00:00"
-                  // date="2017-10-26T00:00:00+00:00"
-                  // date={standingCell.date}
                   date={date}
                   days={{plural: 'Days ',singular: 'day '}}
                   hours=':'
