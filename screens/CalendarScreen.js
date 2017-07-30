@@ -110,39 +110,45 @@ export default class CalendarScreen extends React.Component {
             <View style={imgStyle}>
 
               <View style={local_styles.raceNameTextView}>
+
                 <Text style={raceNameTextStyle}>
                   {standingCell.raceName}
                 </Text>
+
                 <Text style={raceCircuitTextStyle}>
                   {standingCell.Circuit.circuitName}
                 </Text>
+
               </View>
+
               <View style={local_styles.raceDateTextView}>
 
                 <Text style={raceDateTextStyle}>
                   {dateFormat(raceDate, "mmmm dS")}
                 </Text>
 
+                <View style={local_styles.raceCountdownView}>
 
-                {(data.index === seasonRound) && 
+                  {(data.index === seasonRound) && 
 
-                  <CountDownTimer
-                    date={date}
-                    // days={{plural: 'D ',singular: 'D'}}
-                    days={{plural: 'Days ',singular: 'day '}}
-                    hours=':'
-                    mins=':'
-                    segs=''
+                    <CountDownTimer
+                      date={date}
+                      // days={{plural: 'Days ',singular: 'day '}}
+                      hours=':'
+                      mins=':'
+                      segs=''
 
-                    daysStyle={styles.time}
-                    hoursStyle={styles.time}
-                    minsStyle={styles.time}
-                    secsStyle={styles.time}
-                    firstColonStyle={styles.colon}
-                    secondColonStyle={styles.colon}
-                  />
+                      daysStyle={styles.time}
+                      hoursStyle={styles.time}
+                      minsStyle={styles.time}
+                      secsStyle={styles.time}
+                      firstColonStyle={styles.colon}
+                      secondColonStyle={styles.colon}
+                    />
 
-                }
+                  }
+
+                </View>
 
               </View>
             </View>
@@ -296,6 +302,10 @@ var local_styles = StyleSheet.create({
     flex: 3,
     alignItems: 'flex-end',
   },
-
+  raceCountdownView:{
+    flex: 3,
+    alignItems: 'flex-start',
+    paddingLeft:1,
+  },
 
 });
