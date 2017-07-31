@@ -12,7 +12,6 @@ apiUrl = "http://ergast.com/api/f1/current"
 
 @app.route('/')
 def homepage():
-    get_standings_from_api()
     return "Backend for F1 Portal app"
 
 
@@ -26,19 +25,19 @@ def get_standings():
     # If standings data not in database, refresh from API and cache in DB
     if standings_json == '':
         print("Cached Standings file not found.")
-        return jsonify(get_standings_from_api())
+        return jsonify(get_standings_from_api(None))
 
     # Obtaining the expiry date of the cached standings data
     refresh_date_raw = standings_json["expiryDate"]
     refresh_date = datetime.strptime(refresh_date_raw,
                                      '%Y-%m-%dT%H:%M:%SZ')
-    refresh_date = refresh_date + timedelta(hours=2) + timedelta(minutes=30)
+    refresh_date = refresh_date + timedelta(hours=2)
 
     # Check to obtain from cache or refresh from API and re-cache based on
     # cache's expiry date
     if datetime.utcnow() > refresh_date:
         print("Cached standings file out of date.")
-        return jsonify(get_standings_from_api())
+        return jsonify(get_standings_from_api(standings_json))
     else:
         print("Obtained standings from cached file")
         return jsonify(standings_json)
@@ -46,17 +45,31 @@ def get_standings():
 
 # Obtaining the drivers and constructors standings data from Ergast API and
 # caching to database
-def get_standings_from_api():
+def get_standings_from_api(old_standings_json):
     # Obtaining drivers and constructors json from API
-    standings_json = {}
+    new_standings_json = {}
 
     drivers_standings = requests.get(apiUrl + '/driverStandings.json')
     driver_json = drivers_standings.json()
-    standings_json["driver_standings"] = driver_json
+    new_standings_json["driver_standings"] = driver_json
+
+    # Checking if API standings are updated after race has ended
+    if old_standings_json is not None:
+
+        old_round = int(old_standings_json["driver_data"]["MRData"]
+                        ["StandingsTable"]["StandingsLists"]["round"])
+        new_round = int(new_standings_json["driver_data"]["MRData"]
+                        ["StandingsTable"]["StandingsLists"]["round"])
+
+        # If API standings are not yet updated, return old standings data with
+        # the same expiry so this check will be conducted again next time
+        if old_round == new_round:
+            print("API standings are not yet updated. Using old cached data.")
+            return old_standings_json
 
     constructor_standings = requests.get(apiUrl + '/constructorStandings.json')
     constructor_json = constructor_standings.json()
-    standings_json["constructor_standings"] = constructor_json
+    new_standings_json["constructor_standings"] = constructor_json
 
     # Adding expiry date to standings json file to aid Caching
     # by finding next race to add expiry info to json
@@ -73,15 +86,15 @@ def get_standings_from_api():
         # If race date has not elapsed for the current race in the ordered
         # list, then set json to be that race date
         if curr_date < race_date:
-            standings_json["expiryDate"] = race_date.strftime(
+            new_standings_json["expiryDate"] = race_date.strftime(
                 '%Y-%m-%dT%H:%M:%SZ')
             break
 
     # Update cached standings file in database
-    DBManager.update_standings_entry(standings_json)
+    DBManager.update_standings_entry(new_standings_json)
 
     print("Updated standings from API")
-    return standings_json
+    return new_standings_json
 
 
 # Obtaining the current season's race schedule
@@ -177,8 +190,7 @@ def add_images_to_schedule(new_schedule_data):
     for track in race_list:
         track_country = track["Circuit"]["Location"]["country"]
         image_url = track_image_url.get(track_country
-                                        ,
-                                        "https://www.imageupload.co.uk/image/DPb2")
+                        ,"https://www.imageupload.co.uk/image/DPb2")
         track["Circuit"]["imageURL"] = image_url
 
     return new_schedule_data
