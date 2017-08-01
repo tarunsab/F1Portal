@@ -178,12 +178,6 @@ export default class CalendarScreen extends React.Component {
 
       <View style={styles.container}>
 
-        <View style={styles.header}>
-          <Text style={styles.headerText}>
-            Race Calendar
-          </Text>
-        </View>
-
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           <FlatList ref="flatlist"
             data={this.state.dataSource}

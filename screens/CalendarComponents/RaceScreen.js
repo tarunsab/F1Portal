@@ -34,15 +34,8 @@ export default class RaceScreen extends React.Component {
 
     return (
 
-
-
       <View style={styles.container}>
 
-        <View style={styles.header}>
-          <Text style={styles.headerText}>
-            {"Race Screen"}
-          </Text>
-        </View>
 
       </View>
 
