@@ -1,8 +1,8 @@
 import React from 'react';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {styles} from './GlobalStyles.js'
-import CountDownTimer from './Components/CountDownReact.js' 
+import {styles} from '../GlobalStyles.js'
+import CountDownTimer from '../OtherComponents/CountDownReact.js' 
 
 var dateFormat = require('dateformat');
 
@@ -27,17 +27,11 @@ const api = 'https://f1portal.herokuapp.com';
 const today = new Date();
 var seasonRound;
 
+
 export default class CalendarScreen extends React.Component {
 
   static navigationOptions = {
-    tabBarLabel: 'Calendar',
-    tabBarIcon: ({ tintColor }) => (
-      <Image
-        source={require('../images/icons/calendar.png')}
-        style={[styles.icon, {tintColor: tintColor}]}
-      />
-    ),
-    tabBarPosition: 'bottom',
+    title: 'Race Calendar',
   };
 
 
@@ -71,6 +65,7 @@ export default class CalendarScreen extends React.Component {
 
   raceInfoClick(raceInfo){
     console.log("Clicked on " + raceInfo.raceName);
+    this.props.navigation.navigate('RaceScreen', {race_name: raceInfo.raceName})
   }
 
   scrollToLatest(){

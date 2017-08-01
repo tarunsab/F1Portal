@@ -7,7 +7,7 @@ import {
 
 
 import StandingsScreen from './screens/StandingsScreen';
-import CalendarScreen from './screens/CalendarScreen';
+import CalendarNavigator from './screens/CalendarNavigator';
 
 const Tabs = TabNavigator({
 
@@ -16,7 +16,7 @@ const Tabs = TabNavigator({
   },
 
   Calendar: {
-    screen: CalendarScreen
+    screen: CalendarNavigator
   },
 
 }, 
