@@ -20,9 +20,12 @@ const RaceStackNavigator = StackNavigator({
   },
 
   RaceScreen: {
-    screen: RaceScreen
-  },
-
+    screen: RaceScreen,
+  }
+},{
+    navigationOptions: {
+      header: null,
+    },
 });
 
 export default class CalendarNavigator extends React.Component {

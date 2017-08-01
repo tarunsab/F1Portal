@@ -302,5 +302,4 @@ var local_styles = StyleSheet.create({
     alignItems: 'flex-start',
     paddingLeft: 1,
   },
-
 });

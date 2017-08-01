@@ -223,12 +223,12 @@ export default class StandingsScreen extends React.Component {
     return (
       <View style={styles.container}>
 
-
         <View style={styles.header}>
           <Text style={styles.headerText}>
             {"Championship Standings"}
           </Text>
         </View>
+
 
         <View style={styles.header}>
           <Tabs selected={this.state.page} style={{backgroundColor:'white'}}
