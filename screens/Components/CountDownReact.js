@@ -1,6 +1,5 @@
 import React, {
     Component,
-    PropTypes,
 } from 'react';
 
 import {
@@ -12,7 +11,6 @@ import {
 
 const styles = StyleSheet.create({
   cardItemTimeRemainTxt: {
-    // fontSize: 20,
     color: '#ee394b',
     textAlign: 'left',
   },
@@ -29,59 +27,36 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
   },
-  //时间文字
   defaultTime: {
     paddingHorizontal: 3,
     backgroundColor: 'rgba(85, 85, 85, 1)',
-    // fontSize: 12,
-    // color: 'white',
     marginHorizontal: 3,
     borderRadius: 2,
   },
-  //冒号
   defaultColon: {
-    // fontSize: 12,
-    // color: 'rgba(85, 85, 85, 1)'
   }
 });
 
 class CountDown extends Component {
   static displayName = 'Simple countDown';
-  static propTypes = {
-    date: PropTypes.string,
-    days: PropTypes.objectOf(PropTypes.string),
-    hours: PropTypes.string,
-    mins: PropTypes.string,
-    segs: PropTypes.string,
-    onEnd: PropTypes.func,
-
-    containerStyle: View.propTypes.style,
-    daysStyle: View.propTypes.style,
-    hoursStyle: View.propTypes.style,
-    minsStyle: View.propTypes.style,
-    secsStyle: View.propTypes.style,
-    firstColonStyle: View.propTypes.style,
-    secondColonStyle: View.propTypes.style,
-
-  };
   static defaultProps = {
     date: new Date(),
     days: {
-      plural: '天',
-      singular: '天',
+      plural: 'Days',
+      singular: 'Day',
     },
     hours: ':',
     mins: ':',
     segs: ':',
     onEnd: () => {},
 
-    containerStyle: styles.container,//container 的style
-    daysStyle: styles.defaultTime,//天数 字体的style
-    hoursStyle: styles.defaultTime,//小时 字体的style
-    minsStyle: styles.defaultTime,//分钟 字体的style
-    secsStyle: styles.defaultTime,//秒数 字体的style
-    firstColonStyle: styles.defaultColon,//从左向右 第一个冒号 字体的style
-    secondColonStyle: styles.defaultColon,//从左向右 第2个冒号 字体的style
+    containerStyle: styles.container,
+    daysStyle: styles.defaultTime,
+    hoursStyle: styles.defaultTime,
+    minsStyle: styles.defaultTime,
+    secsStyle: styles.defaultTime,
+    firstColonStyle: styles.defaultColon,
+    secondColonStyle: styles.defaultColon,
 
   };
   state = {
@@ -91,7 +66,6 @@ class CountDown extends Component {
     sec: 0,
   };
   componentDidMount() {
-    //console.log(this.props.date);//"2017-03-29T00:00:00+00:00"
     this.interval = setInterval(()=> {
       const date = this.getDateData(this.props.date);
       if (date) {
@@ -169,18 +143,6 @@ class CountDown extends Component {
          </View>
        </View>
     
-
-        //WORKING but styles broken 
-        // <View style={this.props.containerStyle}>
-          // { (countDown.days>0) ? <Text style={this.props.daysStyle}>{ this.leadingZeros(countDown.days)+days}</Text> : null}
-          // <Text style={this.props.hoursStyle}>{ this.leadingZeros(countDown.hours)}</Text>
-          // <Text style={ this.props.firstColonStyle}>:</Text>
-          // <Text style={this.props.minsStyle}>{this.leadingZeros(countDown.min)}</Text>
-          // <Text style={this.props.secondColonStyle}>:</Text>
-          // <Text style={this.props.secsStyle}>{this.leadingZeros(countDown.sec)}</Text>
-        // </View>
-
-
     );
   }
   stop() {
