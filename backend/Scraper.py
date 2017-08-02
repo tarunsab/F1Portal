@@ -4,7 +4,9 @@ from urllib.request import urlopen
 
 class Scraper:
     @staticmethod
-    def scrape_practice_results(practice_json, url):
+    def scrape_practice_results(url):
+
+        practice_json = {}
         r = urlopen(url).read()
         soup = BeautifulSoup(r, "html.parser")
 
@@ -35,7 +37,9 @@ class Scraper:
         return practice_json
 
     @staticmethod
-    def scrape_qualifying_results(practice_json, url):
+    def scrape_qualifying_results(url):
+
+        practice_json = {}
         r = urlopen(url).read()
         soup = BeautifulSoup(r, "html.parser")
 
@@ -66,7 +70,9 @@ class Scraper:
         return practice_json
 
     @staticmethod
-    def scrape_race_results(practice_json, url):
+    def scrape_race_results(url):
+
+        practice_json = {}
         r = urlopen(url).read()
         soup = BeautifulSoup(r, "html.parser")
 

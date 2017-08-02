@@ -201,28 +201,22 @@ def add_images_to_schedule(new_schedule_data):
 
 
 # Get race results
-def populate_practice_results(results_json, json_title, url):
-    sessionJson = Scraper.scrape_practice_results({}, url)
-    results_json[json_title] = sessionJson
-    return results_json
+def populate_practice_results(url):
+    return Scraper.scrape_practice_results(url)
 
 
-def scrape_populate_qualifying(results_json, json_title, url):
-    sessionJson = Scraper.scrape_qualifying_results({}, url)
-    results_json[json_title] = sessionJson
-    return results_json
+def populate_qualifying_results(url):
+    return Scraper.scrape_qualifying_results(url)
 
 
-def scrape_populate_race(results_json, url):
-    sessionJson = Scraper.scrape_race_results({}, url)
-    results_json["race"] = sessionJson
-    return results_json
+def populate_race_results(url):
+    return Scraper.scrape_race_results(url)
 
 
-@app.route('/get_results/<race_country>/<season>')
-def get_results(race_country, season):
+@app.route('/get_results/<season>/<race_country>')
+def get_results(season, race_country):
+
     # Constructing URLs---------------------------------------------------------
-
     # e.g. http://www.skysports.com/f1/grandprix/australia/results/2017/
     #                                                               qualifying-1
 
@@ -242,51 +236,31 @@ def get_results(race_country, season):
     # Race results URL
     race_url = url + "/race"
 
-    start = time.time()
-
     # Scraping and populating results JSON--------------------------------------
     results_json = {}
     pool = ThreadPool(processes=7)
 
-    fp1_data = pool.apply_async(populate_practice_results, ({}
-                                                         , "fp1", p1_url))
-    fp2_data = pool.apply_async(populate_practice_results, ({}
-                                                         , "fp2", p2_url))
-    fp3_data = pool.apply_async(populate_practice_results, ({}
-                                                         , "fp3", p3_url))
+    # Submitting tasks
+    fp1_data = pool.apply_async(populate_practice_results, (p1_url, ))
+    fp2_data = pool.apply_async(populate_practice_results, (p2_url, ))
+    fp3_data = pool.apply_async(populate_practice_results, (p3_url, ))
 
-    q1_data = pool.apply_async(scrape_populate_qualifying, ({}
-                                                         , "q1", q1_url))
-    q2_data = pool.apply_async(scrape_populate_qualifying, ({}
-                                                         ,"q2", q2_url))
-    q3_data = pool.apply_async(scrape_populate_qualifying, ({}
-                                                         ,"q3", q3_url))
+    q1_data = pool.apply_async(populate_qualifying_results, (q1_url,))
+    q2_data = pool.apply_async(populate_qualifying_results, (q2_url,))
+    q3_data = pool.apply_async(populate_qualifying_results, (q3_url,))
 
-    race_data = pool.apply_async(scrape_populate_race, ({}, race_url))
+    race_data = pool.apply_async(populate_race_results, (race_url,))
 
-    results_json["fp1_data"] = fp1_data.get()
-    results_json["fp2_data"] = fp2_data.get()
-    results_json["fp3_data"] = fp3_data.get()
+    # Waiting for executing tasks to obtain JSON results
+    results_json["fp1"] = fp1_data.get()
+    results_json["fp2"] = fp2_data.get()
+    results_json["fp3"] = fp3_data.get()
 
-    results_json["q1_data"] = q1_data.get()
-    results_json["q2_data"] = q2_data.get()
-    results_json["q3_data"] = q3_data.get()
+    results_json["q1"] = q1_data.get()
+    results_json["q2"] = q2_data.get()
+    results_json["q3"] = q3_data.get()
 
-    results_json["race_data"] = race_data.get()
-
-    # results_json = populate_practice_results(results_json, "fp1", p1_url)
-    # results_json = populate_practice_results(results_json, "fp2", p2_url)
-    # results_json = populate_practice_results(results_json, "fp3", p3_url)
-    #
-    # results_json = scrape_populate_qualifying(results_json, "q1", q1_url)
-    # results_json = scrape_populate_qualifying(results_json, "q2", q2_url)
-    # results_json = scrape_populate_qualifying(results_json, "q3", q3_url)
-    #
-    # results_json = scrape_populate_race(results_json, race_url)
-
-    end = time.time()
-
-    print("Time Taken: " + str(end - start))
+    results_json["race"] = race_data.get()
 
     return jsonify(results_json)
 
