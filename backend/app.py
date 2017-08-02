@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 from datetime import datetime, timedelta
 from DBManager import DBManager
 from Scraper import Scraper
+from multiprocessing.pool import ThreadPool
 
 import requests
 import json
@@ -242,16 +243,43 @@ def get_results(race_country, season):
 
     # Scraping and populating results JSON--------------------------------------
     results_json = {}
+    pool = ThreadPool(processes=7)
 
-    results_json = populate_practice_results(results_json, "fp1", p1_url)
-    results_json = populate_practice_results(results_json, "fp2", p2_url)
-    results_json = populate_practice_results(results_json, "fp3", p3_url)
+    fp1_data = pool.apply_async(populate_practice_results, ({}
+                                                         , "fp1", p1_url))
+    fp2_data = pool.apply_async(populate_practice_results, ({}
+                                                         , "fp2", p2_url))
+    fp3_data = pool.apply_async(populate_practice_results, ({}
+                                                         , "fp3", p3_url))
 
-    results_json = scrape_populate_qualifying(results_json, "q1", q1_url)
-    results_json = scrape_populate_qualifying(results_json, "q2", q2_url)
-    results_json = scrape_populate_qualifying(results_json, "q3", q3_url)
+    q1_data = pool.apply_async(scrape_populate_qualifying, ({}
+                                                         , "q1", q1_url))
+    q2_data = pool.apply_async(scrape_populate_qualifying, ({}
+                                                         ,"q2", q2_url))
+    q3_data = pool.apply_async(scrape_populate_qualifying, ({}
+                                                         ,"q3", q3_url))
 
-    results_json = scrape_populate_race(results_json, race_url)
+    race_data = pool.apply_async(scrape_populate_race, ({}, race_url))
+
+    results_json["fp1_data"] = fp1_data.get()
+    results_json["fp2_data"] = fp2_data.get()
+    results_json["fp3_data"] = fp3_data.get()
+
+    results_json["q1_data"] = q1_data.get()
+    results_json["q2_data"] = q2_data.get()
+    results_json["q3_data"] = q3_data.get()
+
+    results_json["race_data"] = race_data.get()
+
+    # results_json = populate_practice_results(results_json, "fp1", p1_url)
+    # results_json = populate_practice_results(results_json, "fp2", p2_url)
+    # results_json = populate_practice_results(results_json, "fp3", p3_url)
+    #
+    # results_json = scrape_populate_qualifying(results_json, "q1", q1_url)
+    # results_json = scrape_populate_qualifying(results_json, "q2", q2_url)
+    # results_json = scrape_populate_qualifying(results_json, "q3", q3_url)
+    #
+    # results_json = scrape_populate_race(results_json, race_url)
 
     return jsonify(results_json)
 
