@@ -211,6 +211,12 @@ def scrape_populate_qualifying(results_json, json_title, url):
     return results_json
 
 
+def scrape_populate_race(results_json, url):
+    sessionJson = Scraper.scrape_race_results({}, url)
+    results_json["race"] = sessionJson
+    return results_json
+
+
 @app.route('/get_results/<race_country>/<season>')
 def get_results(race_country, season):
     # Constructing URLs---------------------------------------------------------
@@ -244,8 +250,8 @@ def get_results(race_country, season):
     results_json = scrape_populate_qualifying(results_json, "q1", q1_url)
     results_json = scrape_populate_qualifying(results_json, "q2", q2_url)
     results_json = scrape_populate_qualifying(results_json, "q3", q3_url)
-    #
-    # results_json = scrape_populate_race(results_json, race_url)
+
+    results_json = scrape_populate_race(results_json, race_url)
 
     return jsonify(results_json)
 
