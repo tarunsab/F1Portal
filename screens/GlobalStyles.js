@@ -10,13 +10,12 @@ export const styles = StyleSheet.create({
   },
   header:{
     backgroundColor: '#F5F5F5',
-    // backgroundColor: 'blue',
     paddingTop: 25,
-    paddingBottom: 20,
+    paddingBottom: 19,
     flexDirection: 'row',
     alignContent: 'center',
-    borderBottomWidth: 1.5,
-    borderBottomColor: '#EEEEEE',
+    // borderBottomWidth: 1.5,
+    // borderBottomColor: '#EEEEEE',
   },
   headerText:{
     color: '#F44336',

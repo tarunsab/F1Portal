@@ -25,8 +25,8 @@ const RaceStackNavigator = StackNavigator({
 },{
     navigationOptions: {
       // header: null,
-      headerStyle: styles.header,
       headerTitleStyle: styles.headerText,
+      headerStyle: styles.header,
     },
 });
 
@@ -52,3 +52,4 @@ export default class CalendarNavigator extends React.Component {
   }
 
 }
+
