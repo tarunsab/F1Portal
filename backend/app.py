@@ -6,6 +6,7 @@ from multiprocessing.pool import ThreadPool
 
 import requests
 import json
+import time
 
 app = Flask(__name__)
 
@@ -241,6 +242,8 @@ def get_results(race_country, season):
     # Race results URL
     race_url = url + "/race"
 
+    start = time.time()
+
     # Scraping and populating results JSON--------------------------------------
     results_json = {}
     pool = ThreadPool(processes=7)
@@ -280,6 +283,10 @@ def get_results(race_country, season):
     # results_json = scrape_populate_qualifying(results_json, "q3", q3_url)
     #
     # results_json = scrape_populate_race(results_json, race_url)
+
+    end = time.time()
+
+    print("Time Taken: " + str(end - start))
 
     return jsonify(results_json)
 

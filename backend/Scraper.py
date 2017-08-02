@@ -45,7 +45,6 @@ class Scraper:
         practice_json["timesheet"] = []
 
         for c in cells[1:]:
-            print(c)
             entry = {}
 
             nameObj = c.find('span')
@@ -77,7 +76,6 @@ class Scraper:
         practice_json["timesheet"] = []
 
         for c in cells[1:]:
-            print(c)
             entry = {}
 
             nameObj = c.find('span')
