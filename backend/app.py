@@ -200,8 +200,13 @@ def add_images_to_schedule(new_schedule_data):
 
 # Get race results
 def populate_practice_results(results_json, json_title, url):
-
     sessionJson = Scraper.scrape_practice_results({}, url)
+    results_json[json_title] = sessionJson
+    return results_json
+
+
+def scrape_populate_qualifying(results_json, json_title, url):
+    sessionJson = Scraper.scrape_qualifying_results({}, url)
     results_json[json_title] = sessionJson
     return results_json
 
@@ -236,9 +241,9 @@ def get_results(race_country, season):
     results_json = populate_practice_results(results_json, "fp2", p2_url)
     results_json = populate_practice_results(results_json, "fp3", p3_url)
 
-    # results_json = scrape_populate_qualifying(results_json, "q1", q1_url)
-    # results_json = scrape_populate_qualifying(results_json, "q2", q2_url)
-    # results_json = scrape_populate_qualifying(results_json, "q3", q3_url)
+    results_json = scrape_populate_qualifying(results_json, "q1", q1_url)
+    results_json = scrape_populate_qualifying(results_json, "q2", q2_url)
+    results_json = scrape_populate_qualifying(results_json, "q3", q3_url)
     #
     # results_json = scrape_populate_race(results_json, race_url)
 
