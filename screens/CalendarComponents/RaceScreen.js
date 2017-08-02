@@ -11,16 +11,22 @@ import {
   View,
 } from 'react-native';
 
+var raceName;
+var raceJSON;
 
 export default class RaceScreen extends React.Component {
 
-  static navigationOptions = {
-    title: 'Race Title',
-  };
+  static navigationOptions = ({ navigation }) => ({
+    title: navigation.state.params.race_name,
+  });
 
 
   constructor(props) {
     super(props);
+
+    raceName = this.props.navigation.state.params.race_name;
+    raceJSON = this.props.navigation.state.params.race_json;
+    
     this.state = {
       dataSource: [],
       calendarJson: [],
