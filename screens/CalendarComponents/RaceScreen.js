@@ -6,6 +6,7 @@ import {
 } from 'react-navigation';
 
 import {
+  WebView,
   StyleSheet,
   Text,
   View,
@@ -13,6 +14,9 @@ import {
 
 var raceName;
 var raceJSON;
+var jsCode = `
+  document.querySelector('#resultsarchive-col-right').style.backgroundColor = 'red';
+`;
 
 export default class RaceScreen extends React.Component {
 
@@ -37,17 +41,11 @@ export default class RaceScreen extends React.Component {
   }
 
   render() {
-
     return (
-
       <View style={styles.container}>
-
-
       </View>
-
     );
   }
-
 }
 
 var local_styles = StyleSheet.create({

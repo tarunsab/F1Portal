@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
 from datetime import datetime, timedelta
 from DBManager import DBManager
+from Scraper import Scraper
 
 import requests
 import json
@@ -190,10 +191,58 @@ def add_images_to_schedule(new_schedule_data):
     for track in race_list:
         track_country = track["Circuit"]["Location"]["country"]
         image_url = track_image_url.get(track_country
-                        ,"https://www.imageupload.co.uk/image/DPb2")
+                                        , "https://www.imageupload.co.uk/"
+                                          "image/DPb2")
         track["Circuit"]["imageURL"] = image_url
 
     return new_schedule_data
+
+
+# Get race results
+def populate_practice_results(results_json, json_title, url):
+
+    sessionJson = Scraper.scrape_practice_results({}, url)
+    results_json[json_title] = sessionJson
+    return results_json
+
+
+@app.route('/get_results/<race_country>/<season>')
+def get_results(race_country, season):
+    # Constructing URLs---------------------------------------------------------
+
+    # e.g. http://www.skysports.com/f1/grandprix/australia/results/2017/
+    #                                                               qualifying-1
+
+    url = "http://www.skysports.com/f1/grandprix/"
+    url += race_country + "/results/" + season + "/"
+
+    # Practice results URL
+    p1_url = url + "/practice-1"
+    p2_url = url + "/practice-2"
+    p3_url = url + "/practice-3"
+
+    # Qualifying results URL
+    q1_url = url + "/qualifying-1"
+    q2_url = url + "/qualifying-2"
+    q3_url = url + "/qualifying-3"
+
+    # Race results URL
+    race_url = url + "/race"
+
+    # Scraping and populating results JSON--------------------------------------
+    results_json = {}
+
+    results_json = populate_practice_results(results_json, "fp1", p1_url)
+    results_json = populate_practice_results(results_json, "fp2", p2_url)
+    results_json = populate_practice_results(results_json, "fp3", p3_url)
+
+    # results_json = scrape_populate_qualifying(results_json, "q1", q1_url)
+    # results_json = scrape_populate_qualifying(results_json, "q2", q2_url)
+    # results_json = scrape_populate_qualifying(results_json, "q3", q3_url)
+    #
+    # results_json = scrape_populate_race(results_json, race_url)
+
+    return jsonify(results_json)
 
 
 # Tester function for quick debugging
