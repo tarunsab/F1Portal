@@ -65,7 +65,8 @@ export default class CalendarScreen extends React.Component {
 
   raceInfoClick(raceInfo){
     console.log("Clicked on " + raceInfo.raceName);
-    this.props.navigation.navigate('RaceScreen', {race_name: raceInfo.raceName})
+    this.props.navigation.navigate('RaceScreen'
+      , {race_name: raceInfo.raceName, race_json: raceInfo})
   }
 
   scrollToLatest(){

@@ -11,11 +11,15 @@ export const styles = StyleSheet.create({
   header:{
     backgroundColor: '#F5F5F5',
     paddingTop: 25,
-    paddingBottom: 19,
+    height: 70,
     flexDirection: 'row',
     alignContent: 'center',
-    // borderBottomWidth: 1.5,
-    // borderBottomColor: '#EEEEEE',
+  },
+  stacknavHeader:{
+    backgroundColor: '#F5F5F5',
+    paddingTop: 25,
+    flexDirection: 'row',
+    alignContent: 'center',
   },
   headerText:{
     color: '#F44336',

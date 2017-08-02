@@ -25,6 +25,7 @@ const api = 'https://f1portal.herokuapp.com';
 export default class StandingsScreen extends React.Component {
 
   static navigationOptions = {
+
     tabBarLabel: 'Standings',
     tabBarIcon: ({ tintColor }) => (
       <Image
@@ -223,12 +224,12 @@ export default class StandingsScreen extends React.Component {
     return (
       <View style={styles.container}>
 
-        <View style={styles.header}>
+
+        <View style={local_styles.header}>
           <Text style={styles.headerText}>
             {"Championship Standings"}
           </Text>
         </View>
-
 
         <View style={local_styles.tabHeader}>
           <Tabs selected={this.state.page} style={{backgroundColor:'white'}}
@@ -262,6 +263,13 @@ export default class StandingsScreen extends React.Component {
 }
 
 const local_styles = StyleSheet.create({
+  header:{
+    backgroundColor: '#F5F5F5',
+    paddingTop: 25,
+    height: 70,
+    flexDirection: 'row',
+    alignContent: 'center',
+  },
   tabHeader:{
     backgroundColor: '#F5F5F5',
     paddingTop: 25,
