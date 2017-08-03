@@ -5,3 +5,4 @@ backend/.idea/*
 .idea/*
 *.pyc
 .expo-source
+jsconfig.json
