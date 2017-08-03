@@ -1,9 +1,6 @@
 from pprint import pprint
-
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
-
-from flask.json import jsonify
 
 
 class Scraper:
