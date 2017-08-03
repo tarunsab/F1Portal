@@ -98,10 +98,20 @@ class Scraper:
             timeJSON = otherObj[5].get_text()
             entry["time"] = timeJSON
 
+            pointsJSON = otherObj[7].get_text()
+            entry["pointsGained"] = pointsJSON
+
             practice_json["timesheet"].append(entry)
 
         return practice_json
 
+    @staticmethod
+    def test():
+        Scraper.scrape_qualifying_results(
+            "http://www.skysports.com/f1/grandprix/"
+            "china/results/2017/qualifying-1")
+
+
 if __name__ == '__main__':
-    Scraper.scrape_qualifying_results({},
-        "http://www.skysports.com/f1/grandprix/china/results/2017/qualifying-1")
+    Scraper.test()
+
