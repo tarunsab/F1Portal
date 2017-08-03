@@ -6,3 +6,4 @@ urllib3==1.21.1
 virtualenv==15.1.0
 smartfile==2.19
 psycopg2==2.7.1
+beautifulsoup4==4.6.0
