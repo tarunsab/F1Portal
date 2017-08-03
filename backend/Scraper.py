@@ -1,5 +1,9 @@
+from pprint import pprint
+
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
+
+from flask.json import jsonify
 
 
 class Scraper:
@@ -136,11 +140,59 @@ class Scraper:
         return race_json
 
     @staticmethod
-    def test():
-        Scraper.scrape_qualifying_results(
-            "http://www.skysports.com/f1/grandprix/"
-            "china/results/2017/qualifying-1")
+    def scrape_showtimes(url):
+
+        # JSON to be populated with scraped results
+        showtimes_json = {}
+
+        # Opening provided URL to be scraped
+        r = urlopen(url).read()
+        soup = BeautifulSoup(r, "html.parser")
+
+        days = soup.findAll('h3', attrs={'class': 'text-h4 -rs-style20 box'})
+
+        for d in days:
+
+            session_day = d.get_text()
+            session_day = session_day.replace(" ", "_")
+            showtimes_json[session_day] = {}
+
+            day_sessions_obj = d.find_next_sibling()
+
+            # Finding table of session results as a list
+            cells = day_sessions_obj.findAll('div',
+                                attrs={'class': 'event-group -layout2'})
+
+            # For each row in the results table
+            for c in cells:
+
+                # Obtaining session name
+                session_name_obj = c.find('strong')
+                session_name_raw = session_name_obj.get_text()
+                session_name = session_name_raw.split('- ')[-1]
+                session_name = session_name.lower()
+
+                session_name = session_name.replace("practice 1", "fp1")
+                session_name = session_name.replace("practice 2", "fp2")
+                session_name = session_name.replace("practice 3", "fp3")
+
+                session_name = session_name.replace("qualifying 1", "q1")
+                session_name = session_name.replace("qualifying 2", "q2")
+                session_name = session_name.replace("qualifying 3", "q3")
+
+                session_name = session_name.replace(" ", "_")
+
+                # Obtaining session time
+                session_time_obj = c.find('p',
+                            attrs={'class': 'event-detail -center caption'})
+                session_time_raw = session_time_obj.get_text()
+                session_time = session_time_raw.split('(')[-1][:-1]
+
+                showtimes_json[session_day][session_name] = session_time
+
+        return showtimes_json
 
 
 if __name__ == '__main__':
-    Scraper.test()
+    # Scraper.test("http://www.skysports.com/watch/f1-on-sky/grand-prix/italy")
+    pass
