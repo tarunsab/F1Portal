@@ -240,7 +240,7 @@ def get_results(season, race_country):
     results_json = {}
     pool = ThreadPool(processes=7)
 
-    # Submitting tasks
+    # Submitting tasks to execute concurrently
     fp1_data = pool.apply_async(populate_practice_results, (p1_url, ))
     fp2_data = pool.apply_async(populate_practice_results, (p2_url, ))
     fp3_data = pool.apply_async(populate_practice_results, (p3_url, ))
@@ -251,7 +251,8 @@ def get_results(season, race_country):
 
     race_data = pool.apply_async(populate_race_results, (race_url,))
 
-    # Waiting for executing tasks to obtain JSON results
+    # Waiting for executing tasks to obtain JSON results and then populating
+    # results JSON with the obtained results------------------------------------
     results_json["fp1"] = fp1_data.get()
     results_json["fp2"] = fp2_data.get()
     results_json["fp3"] = fp3_data.get()
