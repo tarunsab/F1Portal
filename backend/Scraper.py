@@ -1,7 +1,5 @@
-from pprint import pprint
-from datetime import *
-from dateutil.parser import *
 from bs4 import BeautifulSoup
+from dateutil.parser import *
 from urllib.request import urlopen
 
 
@@ -140,7 +138,7 @@ class Scraper:
         return race_json
 
     @staticmethod
-    def scrape_showtimes(url, year):
+    def scrape_showtimes(year, url):
 
         # JSON to be populated with scraped results
         showtimes_json = {}
@@ -159,7 +157,7 @@ class Scraper:
             # Finding table of session results as a list for the particular day
             day_sessions_obj = d.find_next_sibling()
             cells = day_sessions_obj.findAll('div', attrs={'class':
-                                                        'event-group -layout2'})
+                                                    'event-group -layout2'})
 
             # For each row in the results table
             for c in cells:
@@ -187,8 +185,7 @@ class Scraper:
 
                 # Obtaining session iso datetime, e.g. 2017-08-25T09:00:00
                 session_datetime = session_date + ' ' + session_time
-                session_datetime = parse(
-                    session_datetime).isoformat()
+                session_datetime = parse(session_datetime).isoformat()
 
                 # Populating results json with session name and datetime
                 showtimes_json[session_name] = session_datetime
@@ -197,10 +194,9 @@ class Scraper:
 
     @staticmethod
     def test():
-        string = "Fri 25th August-2017 09:00:00"
-        string = parse(string).isoformat()
-        print(string)
-        return
+        Scraper.scrape_showtimes("2017"
+                                 , "http://www.skysports.com/watch/f1-on-sky/"
+                                   "grand-prix/italy")
 
 
 if __name__ == '__main__':
