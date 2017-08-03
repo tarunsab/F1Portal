@@ -1,5 +1,5 @@
 from pprint import pprint
-import dateutil.parser
+import dateutil
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
 
