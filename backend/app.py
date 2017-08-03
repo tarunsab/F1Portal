@@ -266,15 +266,15 @@ def get_results(season, race_country):
 
 
 # Tester function for quick debugging
-@app.route('/get_showtimes/<race_country>')
-def get_showtimes(race_country):
+@app.route('/get_showtimes/<season>/<race_country>')
+def get_showtimes(season, race_country):
 
     # Obtaining URL to scrape
     # e.g. "http://www.skysports.com/watch/f1-on-sky/grand-prix/italy"
     url = "http://www.skysports.com/watch/f1-on-sky/grand-prix/"
     url += race_country
 
-    showtimes_json = Scraper.scrape_showtimes(url)
+    showtimes_json = Scraper.scrape_showtimes(url, season)
     return jsonify(showtimes_json)
 
 

@@ -1,4 +1,5 @@
 from pprint import pprint
+import dateutil.parser
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
 
@@ -137,7 +138,7 @@ class Scraper:
         return race_json
 
     @staticmethod
-    def scrape_showtimes(url):
+    def scrape_showtimes(url, year):
 
         # JSON to be populated with scraped results
         showtimes_json = {}
@@ -150,19 +151,16 @@ class Scraper:
 
         for d in days:
 
-            session_day = d.get_text()
-            session_day = session_day.replace(" ", "_")
-            showtimes_json[session_day] = {}
+            # Obtaining day of race weekend
+            session_date = d.get_text() + '-' + year
 
+            # Finding table of session results as a list for the particular day
             day_sessions_obj = d.find_next_sibling()
-
-            # Finding table of session results as a list
-            cells = day_sessions_obj.findAll('div',
-                                attrs={'class': 'event-group -layout2'})
+            cells = day_sessions_obj.findAll('div', attrs={'class':
+                                                        'event-group -layout2'})
 
             # For each row in the results table
             for c in cells:
-
                 # Obtaining session name
                 session_name_obj = c.find('strong')
                 session_name_raw = session_name_obj.get_text()
@@ -179,17 +177,29 @@ class Scraper:
 
                 session_name = session_name.replace(" ", "_")
 
-                # Obtaining session time
-                session_time_obj = c.find('p',
-                            attrs={'class': 'event-detail -center caption'})
+                # Obtaining session time, e.g. 09:00:00
+                session_time_obj = c.find('p', attrs={
+                    'class': 'event-detail -center caption'})
                 session_time_raw = session_time_obj.get_text()
-                session_time = session_time_raw.split('(')[-1][:-1]
+                session_time = session_time_raw.split('(')[-1][:-1] + ":00"
 
-                showtimes_json[session_day][session_name] = session_time
+                # Obtaining session iso datetime, e.g. 2017-08-25T09:00:00
+                session_datetime = session_date + ' ' + session_time
+                session_datetime = dateutil.parser.parse(
+                    session_datetime).isoformat()
+
+                # Populating results json with session name and datetime
+                showtimes_json[session_name] = session_datetime
 
         return showtimes_json
 
+    @staticmethod
+    def test():
+        string = "Fri 25th August-2017 09:00:00"
+        string = dateutil.parser.parse(string).isoformat()
+        print(string)
+
 
 if __name__ == '__main__':
-    # Scraper.test("http://www.skysports.com/watch/f1-on-sky/grand-prix/italy")
+    Scraper.test()
     pass
