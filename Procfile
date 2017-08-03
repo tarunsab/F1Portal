@@ -1,1 +1,1 @@
-web: python3 ./backend/python.py
+web: python3 ./backend/app.py
