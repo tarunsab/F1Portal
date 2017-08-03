@@ -229,6 +229,10 @@ def get_results(season, race_country):
     # e.g. http://www.skysports.com/f1/grandprix/australia/results/2017/
     #                                                               qualifying-1
 
+    # Special case
+    if race_country == "uae":
+        race_country = "unitedarabemirates"
+
     url = "http://www.skysports.com/f1/grandprix/"
     url += race_country + "/results/" + season + "/"
 
@@ -247,6 +251,11 @@ def get_results(season, race_country):
 
     # Constructing URL to scrape showtimes
     # e.g. "http://www.skysports.com/watch/f1-on-sky/grand-prix/italy"
+
+    # Special case
+    if race_country == "unitedarabemirates":
+        race_country = "abu-dhabi"
+
     showtimes_url = "http://www.skysports.com/watch/f1-on-sky/grand-prix/"
     showtimes_url += race_country
 
