@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from dateutil.parser import *
 from urllib.request import urlopen
 
 
@@ -137,16 +138,6 @@ class Scraper:
         return race_json
 
     @staticmethod
-<<<<<<< Updated upstream
-    def test():
-        Scraper.scrape_qualifying_results(
-            "http://www.skysports.com/f1/grandprix/"
-            "china/results/2017/qualifying-1")
-
-
-if __name__ == '__main__':
-    Scraper.test()
-=======
     def scrape_showtimes(year, url):
 
         # JSON to be populated with scraped results
@@ -194,8 +185,7 @@ if __name__ == '__main__':
 
                 # Obtaining session iso datetime, e.g. 2017-08-25T09:00:00
                 session_datetime = session_date + ' ' + session_time
-                session_datetime = parse(
-                    session_datetime).isoformat()
+                session_datetime = parse(session_datetime).isoformat()
 
                 # Populating results json with session name and datetime
                 showtimes_json[session_name] = session_datetime
@@ -210,6 +200,5 @@ if __name__ == '__main__':
 
 
 if __name__ == '__main__':
-    # Scraper.test()
+    Scraper.test()
     pass
->>>>>>> Stashed changes

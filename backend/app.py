@@ -255,11 +255,6 @@ def get_results(season, race_country):
     pool = ThreadPool(processes=7)
 
     # Submitting tasks to execute concurrently
-<<<<<<< Updated upstream
-    fp1_data = pool.apply_async(populate_practice_results, (p1_url, ))
-    fp2_data = pool.apply_async(populate_practice_results, (p2_url, ))
-    fp3_data = pool.apply_async(populate_practice_results, (p3_url, ))
-=======
     fp1_data = pool.apply_async(get_practice_results, (p1_url,))
     fp2_data = pool.apply_async(get_practice_results, (p2_url,))
     fp3_data = pool.apply_async(get_practice_results, (p3_url,))
@@ -267,7 +262,6 @@ def get_results(season, race_country):
     q1_data = pool.apply_async(get_qualifying_results, (q1_url,))
     q2_data = pool.apply_async(get_qualifying_results, (q2_url,))
     q3_data = pool.apply_async(get_qualifying_results, (q3_url,))
->>>>>>> Stashed changes
 
     race_data = pool.apply_async(get_race_results, (race_url,))
 
@@ -287,11 +281,8 @@ def get_results(season, race_country):
 
     results_json.update(showtime_data.get())
 
-<<<<<<< Updated upstream
-=======
     return jsonify(results_json)
 
->>>>>>> Stashed changes
 
 # Tester function for quick debugging
 @app.route('/test')
