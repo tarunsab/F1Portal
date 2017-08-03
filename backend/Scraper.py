@@ -1,5 +1,6 @@
 from pprint import pprint
-import dateutil
+from datetime import *
+from dateutil.parser import *
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
 
@@ -185,7 +186,7 @@ class Scraper:
 
                 # Obtaining session iso datetime, e.g. 2017-08-25T09:00:00
                 session_datetime = session_date + ' ' + session_time
-                session_datetime = dateutil.parser.parse(
+                session_datetime = parse(
                     session_datetime).isoformat()
 
                 # Populating results json with session name and datetime
@@ -196,7 +197,7 @@ class Scraper:
     @staticmethod
     def test():
         string = "Fri 25th August-2017 09:00:00"
-        string = dateutil.parser.parse(string).isoformat()
+        string = parse(string).isoformat()
         print(string)
 
 
