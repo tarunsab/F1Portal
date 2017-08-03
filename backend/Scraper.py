@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from urllib.request import urlopen
 
 
+# noinspection PyPackageRequirements
 class Scraper:
     @staticmethod
     def scrape_practice_results(url):
@@ -199,6 +200,7 @@ class Scraper:
         string = "Fri 25th August-2017 09:00:00"
         string = parse(string).isoformat()
         print(string)
+        return
 
 
 if __name__ == '__main__':

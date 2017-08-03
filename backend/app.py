@@ -200,22 +200,31 @@ def add_images_to_schedule(new_schedule_data):
     return new_schedule_data
 
 
-# Get race results
-def populate_practice_results(url):
+# Get practice results from scraper
+def get_practice_results(url):
     return Scraper.scrape_practice_results(url)
 
 
-def populate_qualifying_results(url):
+# Get qualifying results from scraper
+def get_qualifying_results(url):
     return Scraper.scrape_qualifying_results(url)
 
 
-def populate_race_results(url):
+# Get race results from scraper
+def get_race_results(url):
     return Scraper.scrape_race_results(url)
 
 
-@app.route('/get_results/<season>/<race_country>')
+# Get showtimes from scraper
+def get_showtimes(season, url):
+    return Scraper.scrape_showtimes(season, url)
+
+
+@app.route('/get_results/<string:season>/<string:race_country>')
 def get_results(season, race_country):
     # Constructing URLs---------------------------------------------------------
+
+    # Constructing URL to scrape results
     # e.g. http://www.skysports.com/f1/grandprix/australia/results/2017/
     #                                                               qualifying-1
 
@@ -235,20 +244,27 @@ def get_results(season, race_country):
     # Race results URL
     race_url = url + "/race"
 
+    # Constructing URL to scrape showtimes
+    # e.g. "http://www.skysports.com/watch/f1-on-sky/grand-prix/italy"
+    showtimes_url = "http://www.skysports.com/watch/f1-on-sky/grand-prix/"
+    showtimes_url += race_country
+
     # Scraping and populating results JSON--------------------------------------
     results_json = {}
     pool = ThreadPool(processes=7)
 
     # Submitting tasks to execute concurrently
-    fp1_data = pool.apply_async(populate_practice_results, (p1_url,))
-    fp2_data = pool.apply_async(populate_practice_results, (p2_url,))
-    fp3_data = pool.apply_async(populate_practice_results, (p3_url,))
+    fp1_data = pool.apply_async(get_practice_results, (p1_url,))
+    fp2_data = pool.apply_async(get_practice_results, (p2_url,))
+    fp3_data = pool.apply_async(get_practice_results, (p3_url,))
 
-    q1_data = pool.apply_async(populate_qualifying_results, (q1_url,))
-    q2_data = pool.apply_async(populate_qualifying_results, (q2_url,))
-    q3_data = pool.apply_async(populate_qualifying_results, (q3_url,))
+    q1_data = pool.apply_async(get_qualifying_results, (q1_url,))
+    q2_data = pool.apply_async(get_qualifying_results, (q2_url,))
+    q3_data = pool.apply_async(get_qualifying_results, (q3_url,))
 
-    race_data = pool.apply_async(populate_race_results, (race_url,))
+    race_data = pool.apply_async(get_race_results, (race_url,))
+
+    showtime_data = pool.apply_async(get_showtimes, (season, showtimes_url))
 
     # Waiting for executing tasks to obtain JSON results and then populating
     # results JSON with the obtained results------------------------------------
@@ -262,8 +278,9 @@ def get_results(season, race_country):
 
     results_json["race"] = race_data.get()
 
-    return jsonify(results_json)
+    results_json.update(showtime_data.get())
 
+    return jsonify(results_json)
 
 # Tester function for quick debugging
 @app.route('/get_showtimes/<season>/<race_country>')
