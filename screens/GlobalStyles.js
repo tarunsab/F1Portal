@@ -11,19 +11,13 @@ export const styles = StyleSheet.create({
   header:{
     backgroundColor: '#F5F5F5',
     paddingTop: 25,
-    height: 70,
+    height: 60,
     flexDirection: 'row',
     alignContent: 'center',
   },
-  stacknavHeader:{
+ tabHeader:{
     backgroundColor: '#F5F5F5',
-    paddingTop: 25,
-    flexDirection: 'row',
-    alignContent: 'center',
-  },
-  tabHeader:{
-    backgroundColor: '#F5F5F5',
-    paddingTop: 25,
+    paddingTop: 32,
     paddingBottom: 19,
     flexDirection: 'row',
     alignContent: 'center',

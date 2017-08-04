@@ -224,7 +224,6 @@ export default class StandingsScreen extends React.Component {
     return (
       <View style={styles.container}>
 
-
         <View style={styles.header}>
           <Text style={styles.headerText}>
             {"Championship Standings"}

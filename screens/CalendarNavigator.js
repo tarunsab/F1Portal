@@ -24,9 +24,8 @@ const RaceStackNavigator = StackNavigator({
   }
 },{
     navigationOptions: {
-      // header: null,
+      headerStyle: styles.header,
       headerTitleStyle: styles.headerText,
-      headerStyle: styles.stacknavHeader,
     },
 });
 
