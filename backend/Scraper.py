@@ -1,3 +1,6 @@
+import datetime
+from pprint import pprint
+
 from bs4 import BeautifulSoup
 from dateutil.parser import *
 from urllib.request import urlopen
@@ -18,6 +21,8 @@ class Scraper:
         # Finding table of session results as a list
         table = soup.find('table', attrs={'class': 'standing-table__table'})
         cells = table.findAll('tr', attrs={'class': 'standing-table__row'})
+
+        fastest_time = ""
 
         # For each row in the results table
         for c in cells[1:]:
@@ -42,6 +47,16 @@ class Scraper:
             # Scraping best time for driver in session
             timeJSON = otherObj[3].get_text()
             entry["time"] = timeJSON
+            if c == cells[1]:
+                fastest_time = timeJSON
+
+            # Calculating and adding time delta from fastest time to json
+            fastest = datetime.datetime.strptime(fastest_time, "%M:%S.%f")
+            driver_best = datetime.datetime.strptime(timeJSON, "%M:%S.%f")
+            timedelta = driver_best - fastest
+            timedelta_string = '+' + str(timedelta.seconds) + '.' \
+                               + str(timedelta.microseconds)[0:3]
+            entry["timeDiff"] = timedelta_string
 
             # Adding add the scraped data as an entry to the timesheet JSON list
             practice_json["timesheet"].append(entry)
@@ -194,9 +209,10 @@ class Scraper:
 
     @staticmethod
     def test():
-        Scraper.scrape_showtimes("2017"
-                                 , "http://www.skysports.com/watch/f1-on-sky/"
-                                   "grand-prix/italy")
+        json = Scraper.scrape_practice_results(
+            "http://www.skysports.com/f1/grandprix/"
+            "australia/results/2017/practice-1")
+        # pprint(json)
 
 
 if __name__ == '__main__':
