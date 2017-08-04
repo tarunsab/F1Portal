@@ -6,7 +6,18 @@ from dateutil.parser import *
 from urllib.request import urlopen
 
 
-# noinspection PyPackageRequirements
+def calc_timedelta(fastest_time, driver_time):
+    try:
+        fastest = datetime.datetime.strptime(fastest_time, "%M:%S.%f")
+        driver_best = datetime.datetime.strptime(driver_time, "%M:%S.%f")
+        timedelta = driver_best - fastest
+        timedelta_string = '+' + str(timedelta.seconds) + '.' \
+                           + str(timedelta.microseconds)[0:3]
+        return timedelta_string
+    except ValueError:
+        return ""
+
+
 class Scraper:
     @staticmethod
     def scrape_practice_results(url):
@@ -22,6 +33,7 @@ class Scraper:
         table = soup.find('table', attrs={'class': 'standing-table__table'})
         cells = table.findAll('tr', attrs={'class': 'standing-table__row'})
 
+        # Fastest time of the session to calculate time delata
         fastest_time = ""
 
         # For each row in the results table
@@ -51,15 +63,7 @@ class Scraper:
                 fastest_time = timeJSON
 
             # Calculating and adding time delta from fastest time to json
-            try:
-                fastest = datetime.datetime.strptime(fastest_time, "%M:%S.%f")
-                driver_best = datetime.datetime.strptime(timeJSON, "%M:%S.%f")
-                timedelta = driver_best - fastest
-                timedelta_string = '+' + str(timedelta.seconds) + '.' \
-                                   + str(timedelta.microseconds)[0:3]
-                entry["timeDiff"] = timedelta_string
-            except ValueError:
-                pass
+            entry["timedelta"] = calc_timedelta(fastest_time, timeJSON)
 
             # Adding add the scraped data as an entry to the timesheet JSON list
             practice_json["timesheet"].append(entry)
@@ -79,6 +83,9 @@ class Scraper:
         # Finding table of session results as a list
         table = soup.find('table', attrs={'class': 'standing-table__table'})
         cells = table.findAll('tr', attrs={'class': 'standing-table__row'})
+
+        # Fastest time of the session to calculate time delata
+        fastest_time = ""
 
         # For each row in the results table
         for c in cells[1:]:
@@ -104,8 +111,14 @@ class Scraper:
             # Scraping best time for driver in session
             timeJSON = otherObj[5].get_text()
             entry["time"] = timeJSON
+            if c == cells[1]:
+                fastest_time = timeJSON
+
+            # Calculating and adding time delta from fastest time to json
+            entry["timedelta"] = calc_timedelta(fastest_time, timeJSON)
 
             qualifying_json["timesheet"].append(entry)
+
 
         return qualifying_json
 
@@ -185,13 +198,8 @@ class Scraper:
                 session_name = session_name_raw.split('- ')[-1]
                 session_name = session_name.lower()
 
-                session_name = session_name.replace("practice 1", "fp1")
-                session_name = session_name.replace("practice 2", "fp2")
-                session_name = session_name.replace("practice 3", "fp3")
-
-                session_name = session_name.replace("qualifying 1", "q1")
-                session_name = session_name.replace("qualifying 2", "q2")
-                session_name = session_name.replace("qualifying 3", "q3")
+                session_name = session_name.replace("practice ", "fp")
+                session_name = session_name.replace("qualifying ", "q")
 
                 session_name = session_name.replace(" ", "_")
 
