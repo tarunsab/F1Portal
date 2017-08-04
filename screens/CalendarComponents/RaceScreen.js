@@ -11,6 +11,7 @@ import {
   FlatList,
   View,
   ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 
 import {styles} from '../GlobalStyles.js'
@@ -70,9 +71,22 @@ export default class RaceScreen extends React.Component {
   renderRow(data) {
       var entryData = data.item;
       return (
-          <Text>
-            {entryData.name}
-          </Text>
+        <View style={local_styles.listElem}>
+
+          <View style={local_styles.standingsOrder}>
+            <Text> {entryData.position} </Text>
+          </View>
+
+          <View style={local_styles.standingsNameBox}>
+            <Text> {entryData.name} </Text>
+          </View>
+
+          <View style={local_styles.pointsBox}>
+            <Text> {entryData.time} </Text>
+          </View>
+
+        </View>
+
       );
   }
   
@@ -119,7 +133,7 @@ export default class RaceScreen extends React.Component {
 
         }
 
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
           <FlatList ref="flatlist"
             data={this.state.dataSource[sessionCode].timesheet}
             renderItem={this.renderRow.bind(this)}
@@ -131,3 +145,30 @@ export default class RaceScreen extends React.Component {
     );
   }
 }
+
+const local_styles = StyleSheet.create({
+  listElem:{
+    width: Dimensions.get('window').width,
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingLeft: 30,
+    paddingRight: 30,
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: '#F5F5F5',
+    alignItems: 'flex-start'
+  },
+  pointsBox:{
+    flex: 1,
+    alignItems: 'flex-end'
+  },
+  standingsNameBox:{
+    flex: 1,
+    alignItems: 'flex-start',
+    flexDirection: 'column'
+  },
+  standingsOrder:{
+    alignItems: 'flex-start',
+    minWidth: 25,
+  },
+});  
