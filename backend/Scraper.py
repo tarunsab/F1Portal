@@ -51,12 +51,15 @@ class Scraper:
                 fastest_time = timeJSON
 
             # Calculating and adding time delta from fastest time to json
-            fastest = datetime.datetime.strptime(fastest_time, "%M:%S.%f")
-            driver_best = datetime.datetime.strptime(timeJSON, "%M:%S.%f")
-            timedelta = driver_best - fastest
-            timedelta_string = '+' + str(timedelta.seconds) + '.' \
-                               + str(timedelta.microseconds)[0:3]
-            entry["timeDiff"] = timedelta_string
+            try:
+                fastest = datetime.datetime.strptime(fastest_time, "%M:%S.%f")
+                driver_best = datetime.datetime.strptime(timeJSON, "%M:%S.%f")
+                timedelta = driver_best - fastest
+                timedelta_string = '+' + str(timedelta.seconds) + '.' \
+                                   + str(timedelta.microseconds)[0:3]
+                entry["timeDiff"] = timedelta_string
+            except ValueError:
+                pass
 
             # Adding add the scraped data as an entry to the timesheet JSON list
             practice_json["timesheet"].append(entry)
