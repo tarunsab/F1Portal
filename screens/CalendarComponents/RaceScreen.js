@@ -34,7 +34,7 @@ export default class RaceScreen extends React.Component {
       calendarJson: [],
       isLoading: true,
       refreshing: false,
-      sessionType: 'practice',
+      sessionType: 'fp',
       sessionNum: '1',
     };
     
@@ -57,8 +57,8 @@ export default class RaceScreen extends React.Component {
           <Tabs selected={this.state.sessionType} style={{backgroundColor:'white'}}
           selectedStyle={{color:'red'}} onSelect={el => this.changeSessionTabs(el)}>
           
-          <Text name="practice">Practice</Text>
-          <Text name="qualifying">Qualifying</Text>
+          <Text name="fp">Practice</Text>
+          <Text name="q">Qualifying</Text>
           <Text name="race">Race</Text>
           
           </Tabs>
