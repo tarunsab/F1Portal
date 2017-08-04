@@ -1,5 +1,4 @@
 import React from 'react';
-import {styles} from '../GlobalStyles.js'
 
 import {
   StackNavigator,
@@ -12,11 +11,10 @@ import {
   View,
 } from 'react-native';
 
+import {styles} from '../GlobalStyles.js'
+import Tabs from 'react-native-tabs';
 var raceName;
 var raceJSON;
-var jsCode = `
-  document.querySelector('#resultsarchive-col-right').style.backgroundColor = 'red';
-`;
 
 export default class RaceScreen extends React.Component {
 
@@ -36,13 +34,29 @@ export default class RaceScreen extends React.Component {
       calendarJson: [],
       isLoading: true,
       refreshing: false,
+      page: 'practice',
     };
 
+  }
+
+  changeTabs(event) {
+    var nextPage = event.props.name;
+    this.setState({page: nextPage});
   }
 
   render() {
     return (
       <View style={styles.container}>
+        <View style={styles.tabHeader}>
+          <Tabs selected={this.state.page} style={{backgroundColor:'white'}}
+                selectedStyle={{color:'red'}} onSelect={el => this.changeTabs(el)}>
+
+              <Text name="practice">Practice</Text>
+              <Text name="qualifying">Qualifying</Text>
+              <Text name="race">Race</Text>
+
+          </Tabs>
+        </View>
       </View>
     );
   }
