@@ -229,6 +229,9 @@ def get_results(season, race_country):
     # e.g. http://www.skysports.com/f1/grandprix/australia/results/2017/
     #                                                               qualifying-1
 
+    # url only work with lowercase countries
+    race_country = race_country.lower()
+    
     # Special case
     if race_country == "uae":
         race_country = "unitedarabemirates"
