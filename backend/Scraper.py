@@ -22,6 +22,7 @@ class Scraper:
         table = soup.find('table', attrs={'class': 'standing-table__table'})
         cells = table.findAll('tr', attrs={'class': 'standing-table__row'})
 
+        # Fastest time of the session to calculate time delata
         fastest_time = ""
 
         # For each row in the results table
@@ -80,6 +81,9 @@ class Scraper:
         table = soup.find('table', attrs={'class': 'standing-table__table'})
         cells = table.findAll('tr', attrs={'class': 'standing-table__row'})
 
+        # Fastest time of the session to calculate time delata
+        fastest_time = ""
+
         # For each row in the results table
         for c in cells[1:]:
             entry = {}
@@ -104,8 +108,22 @@ class Scraper:
             # Scraping best time for driver in session
             timeJSON = otherObj[5].get_text()
             entry["time"] = timeJSON
+            if c == cells[1]:
+                fastest_time = timeJSON
+
+            # Calculating and adding time delta from fastest time to json
+            try:
+                fastest = datetime.datetime.strptime(fastest_time, "%M:%S.%f")
+                driver_best = datetime.datetime.strptime(timeJSON, "%M:%S.%f")
+                timedelta = driver_best - fastest
+                timedelta_string = '+' + str(timedelta.seconds) + '.' \
+                                   + str(timedelta.microseconds)[0:3]
+                entry["timeDiff"] = timedelta_string
+            except ValueError:
+                pass
 
             qualifying_json["timesheet"].append(entry)
+
 
         return qualifying_json
 
@@ -145,7 +163,7 @@ class Scraper:
 
             # Scraping best time for driver in session
             timeJSON = otherObj[5].get_text()
-            entry["time"] = timeJSON
+            entry["timedelta"] = timeJSON
 
             # Scraping points gained from the race for the driver
             pointsJSON = otherObj[7].get_text()
