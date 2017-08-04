@@ -21,6 +21,7 @@ export const styles = StyleSheet.create({
     paddingBottom: 19,
     flexDirection: 'row',
     alignContent: 'center',
+    // alignSelf: 'flex-start',
     borderBottomWidth: 1.5,
     borderBottomColor: '#EEEEEE',
   },

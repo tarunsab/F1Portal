@@ -17,15 +17,15 @@ var raceName;
 var raceJSON;
 
 export default class RaceScreen extends React.Component {
-
+  
   static navigationOptions = ({ navigation }) => ({
     title: navigation.state.params.race_name,
   });
-
-
+  
+  
   constructor(props) {
     super(props);
-
+    
     raceName = this.props.navigation.state.params.race_name;
     raceJSON = this.props.navigation.state.params.race_json;
     
@@ -34,29 +34,51 @@ export default class RaceScreen extends React.Component {
       calendarJson: [],
       isLoading: true,
       refreshing: false,
-      page: 'practice',
+      sessionType: 'practice',
+      sessionNum: '1',
     };
-
+    
   }
-
-  changeTabs(event) {
+  
+  changeSessionTabs(event) {
     var nextPage = event.props.name;
-    this.setState({page: nextPage});
+    this.setState({sessionType: nextPage});
   }
-
+  changeSessionNumTabs(event) {
+    var nextPage = event.props.name;
+    this.setState({sessionNum: nextPage});
+  }
+  
   render() {
     return (
       <View style={styles.container}>
+
         <View style={styles.tabHeader}>
-          <Tabs selected={this.state.page} style={{backgroundColor:'white'}}
-                selectedStyle={{color:'red'}} onSelect={el => this.changeTabs(el)}>
-
-              <Text name="practice">Practice</Text>
-              <Text name="qualifying">Qualifying</Text>
-              <Text name="race">Race</Text>
-
+          <Tabs selected={this.state.sessionType} style={{backgroundColor:'white'}}
+          selectedStyle={{color:'red'}} onSelect={el => this.changeSessionTabs(el)}>
+          
+          <Text name="practice">Practice</Text>
+          <Text name="qualifying">Qualifying</Text>
+          <Text name="race">Race</Text>
+          
           </Tabs>
         </View>
+
+        {(this.state.sessionType !== 'race') &&
+
+          <View style={styles.tabHeader}>
+            <Tabs selected={this.state.sessionNum} //style={{backgroundColor:'#EEEEEE'}}
+            selectedStyle={{color:'red'}} onSelect={el => this.changeSessionNumTabs(el)}>
+            
+            <Text name="1">1</Text>
+            <Text name="2">2</Text>
+            <Text name="3">3</Text>
+            
+            </Tabs>
+          </View>
+
+        }
+
       </View>
     );
   }
