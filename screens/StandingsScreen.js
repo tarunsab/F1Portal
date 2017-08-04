@@ -225,13 +225,13 @@ export default class StandingsScreen extends React.Component {
       <View style={styles.container}>
 
 
-        <View style={local_styles.header}>
+        <View style={styles.header}>
           <Text style={styles.headerText}>
             {"Championship Standings"}
           </Text>
         </View>
 
-        <View style={local_styles.tabHeader}>
+        <View style={styles.tabHeader}>
           <Tabs selected={this.state.page} style={{backgroundColor:'white'}}
                 selectedStyle={{color:'red'}} onSelect={el => this.changeTabs(el)}>
               <Text name="drivers">Drivers</Text>
@@ -263,22 +263,6 @@ export default class StandingsScreen extends React.Component {
 }
 
 const local_styles = StyleSheet.create({
-  header:{
-    backgroundColor: '#F5F5F5',
-    paddingTop: 25,
-    height: 70,
-    flexDirection: 'row',
-    alignContent: 'center',
-  },
-  tabHeader:{
-    backgroundColor: '#F5F5F5',
-    paddingTop: 25,
-    paddingBottom: 19,
-    flexDirection: 'row',
-    alignContent: 'center',
-    borderBottomWidth: 1.5,
-    borderBottomColor: '#EEEEEE',
-  },
   listElem:{
     width: Dimensions.get('window').width,
     paddingTop: 20,

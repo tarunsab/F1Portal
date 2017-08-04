@@ -21,6 +21,15 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignContent: 'center',
   },
+  tabHeader:{
+    backgroundColor: '#F5F5F5',
+    paddingTop: 25,
+    paddingBottom: 19,
+    flexDirection: 'row',
+    alignContent: 'center',
+    borderBottomWidth: 1.5,
+    borderBottomColor: '#EEEEEE',
+  },
   headerText:{
     color: '#F44336',
     textAlign: 'center',
