@@ -81,8 +81,14 @@ export default class RaceScreen extends React.Component {
           </View>
 
           <View style={local_styles.pointsBox}>
-            <Text> {entryData.time} </Text>
-            <Text style={{textAlign: 'right'}}> {entryData.timedelta} </Text>
+            <View style={{flex: 1}}>
+              <Text> {entryData.time} </Text>
+            </View>
+            <View style={{flex: 1}}>
+              <Text style={{textAlign: 'right', color: 'grey'}}> 
+                {entryData.timedelta} 
+              </Text>
+            </View>
           </View>
 
         </View>
@@ -159,7 +165,7 @@ const local_styles = StyleSheet.create({
     alignItems: 'flex-start'
   },
   pointsBox:{
-    flex: 1,
+    flex: 0.63,
     alignItems: 'flex-end',
     flexDirection: 'row'
   },
