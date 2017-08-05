@@ -119,7 +119,6 @@ class Scraper:
 
             qualifying_json["timesheet"].append(entry)
 
-
         return qualifying_json
 
     @staticmethod
@@ -158,7 +157,7 @@ class Scraper:
 
             # Scraping best time for driver in session
             timeJSON = otherObj[5].get_text()
-            entry["time"] = timeJSON
+            entry["timedelta"] = timeJSON
 
             # Scraping points gained from the race for the driver
             pointsJSON = otherObj[7].get_text()
