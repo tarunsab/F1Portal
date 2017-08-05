@@ -264,7 +264,7 @@ def get_results(season, race_country):
 
     # Scraping and populating results JSON--------------------------------------
     results_json = {}
-    pool = ThreadPool(processes=8)
+    pool = ThreadPool(processes=9)
 
     # Submitting tasks to execute concurrently
     fp1_data = pool.apply_async(get_practice_results, (p1_url,))

@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
   },
   header:{
     backgroundColor: '#F5F5F5',
+    // backgroundColor: '#E53935',
     paddingTop: 25,
     height: 60,
     flexDirection: 'row',
@@ -27,6 +28,7 @@ export const styles = StyleSheet.create({
   },
   headerText:{
     color: '#F44336',
+    // color: 'white',
     textAlign: 'center',
     fontWeight: 'normal',
     flex: 1,

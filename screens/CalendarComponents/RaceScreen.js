@@ -114,8 +114,8 @@ export default class RaceScreen extends React.Component {
       <View style={styles.container}>
 
         <View style={styles.tabHeader}>
-          <Tabs selected={this.state.sessionType} style={{backgroundColor:'white'}}
-          selectedStyle={{color:'red'}} onSelect={el => this.changeSessionTabs(el)}>
+          <Tabs selected={this.state.sessionType} style={{backgroundColor:'#03A9F4'}}
+          selectedStyle={{color:'white'}} onSelect={el => this.changeSessionTabs(el)}>
           
           <Text name="fp">Practice</Text>
           <Text name="q">Qualifying</Text>
@@ -127,7 +127,7 @@ export default class RaceScreen extends React.Component {
         {(this.state.sessionType !== 'race') &&
 
           <View style={styles.tabHeader}>
-            <Tabs selected={this.state.sessionNum} //style={{backgroundColor:'#EEEEEE'}}
+            <Tabs selected={this.state.sessionNum} style={{backgroundColor:'white'}}
             selectedStyle={{color:'red'}} onSelect={el => this.changeSessionNumTabs(el)}>
             
             <Text name="1">1</Text>
