@@ -69,8 +69,17 @@ export default class RaceScreen extends React.Component {
 
   renderRow(data) {
       var entryData = data.item;
+      var entryBackground;
+
+      if ((parseInt(entryData.position) % 2) === 0) {
+        entryBackground = 'white'
+      } else {
+        entryBackground = 'rgb(248,248,248)'
+      }
+
       return (
-        <View style={local_styles.listElem}>
+        <View style={[local_styles.listElem, {backgroundColor: entryBackground,
+           height: 55}]}>
 
           <View style={local_styles.standingsOrder}>
             <Text> {entryData.position} </Text>
@@ -107,14 +116,17 @@ export default class RaceScreen extends React.Component {
     }
 
     //e.g. converting sessionType "fp" and sessionNum "3" to sessionCode "fp3"
-    var sessionCode = this.state.sessionType + this.state.sessionNum;
+    var sessionCode = this.state.sessionType 
+    if (sessionCode !== 'race') {
+      sessionCode += this.state.sessionNum;
+    }
 
     return (
 
       <View style={styles.container}>
 
         <View style={styles.tabHeader}>
-          <Tabs selected={this.state.sessionType} style={{backgroundColor:'#03A9F4'}}
+          <Tabs selected={this.state.sessionType} style={{backgroundColor:'#F44336'}}
           selectedStyle={{color:'white'}} onSelect={el => this.changeSessionTabs(el)}>
           
           <Text name="fp">Practice</Text>
