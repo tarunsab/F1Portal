@@ -67,7 +67,6 @@ export default class RaceScreen extends React.Component {
     this.setState({sessionNum: nextPage});
   }
 
-  //TODO
   renderRow(data) {
       var entryData = data.item;
       return (
@@ -83,6 +82,7 @@ export default class RaceScreen extends React.Component {
 
           <View style={local_styles.pointsBox}>
             <Text> {entryData.time} </Text>
+            <Text style={{textAlign: 'right'}}> {entryData.timedelta} </Text>
           </View>
 
         </View>
@@ -151,8 +151,8 @@ const local_styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     paddingTop: 20,
     paddingBottom: 20,
-    paddingLeft: 30,
-    paddingRight: 30,
+    paddingLeft: 15,
+    paddingRight: 15,
     flexDirection: 'row',
     borderBottomWidth: 1,
     borderBottomColor: '#F5F5F5',
@@ -160,7 +160,8 @@ const local_styles = StyleSheet.create({
   },
   pointsBox:{
     flex: 1,
-    alignItems: 'flex-end'
+    alignItems: 'flex-end',
+    flexDirection: 'row'
   },
   standingsNameBox:{
     flex: 1,
