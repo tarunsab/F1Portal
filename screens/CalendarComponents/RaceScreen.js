@@ -91,12 +91,30 @@ export default class RaceScreen extends React.Component {
 
           <View style={local_styles.pointsBox}>
             <View style={{flex: 1}}>
-              <Text> {entryData.time} </Text>
+
+              {(this.state.sessionType !== 'race') && 
+                <Text> {entryData.time} </Text>
+              }
+
+              {(this.state.sessionType === 'race') && 
+                <Text> {entryData.timedelta.slice(0,7)} </Text>
+              }
+
             </View>
             <View style={{flex: 1}}>
-              <Text style={{textAlign: 'right', color: 'grey'}}> 
-                {entryData.timedelta} 
-              </Text>
+
+              {(this.state.sessionType !== 'race') && 
+                <Text style={{textAlign: 'right', color: 'grey'}}> 
+                  {entryData.timedelta} 
+                </Text>
+              }
+
+              {(this.state.sessionType === 'race') && 
+                <Text style={{textAlign: 'right', color: 'grey'}}> 
+                  {entryData.pointsGained} 
+                </Text>
+              }
+
             </View>
           </View>
 
