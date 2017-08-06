@@ -293,6 +293,8 @@ def get_results(season, race_country):
 
     results_json.update(showtime_data.get())
 
+    pool.close()
+
     return jsonify(results_json)
 
 
