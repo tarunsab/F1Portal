@@ -129,17 +129,7 @@ export default class CalendarScreen extends React.Component {
 
                     <CountDownTimer
                       date={date}
-                      // days={{plural: 'Days ',singular: 'day '}}
-                      hours=':'
-                      mins=':'
-                      segs=''
-
-                      daysStyle={styles.time}
-                      hoursStyle={styles.time}
-                      minsStyle={styles.time}
-                      secsStyle={styles.time}
-                      firstColonStyle={styles.colon}
-                      secondColonStyle={styles.colon}
+                      color='white'
                     />
 
                   }

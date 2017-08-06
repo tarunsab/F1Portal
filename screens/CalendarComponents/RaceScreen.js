@@ -187,20 +187,17 @@ export default class RaceScreen extends React.Component {
           }
 
           {(!sessionElapsed) && 
-            <CountDownTimer
-              date={this.state.dataSource[sessionCode]}
-              // days={{plural: 'Days ',singular: 'day '}}
-              // hours=':'
-              // mins=':'
-              // segs=''
 
-              // daysStyle={styles.time}
-              // hoursStyle={styles.time}
-              // minsStyle={styles.time}
-              // secsStyle={styles.time}
-              // firstColonStyle={styles.colon}
-              // secondColonStyle={styles.colon}
-            />
+            <View>
+              <Text>
+                {this.state.dataSource[sessionCode]}
+              </Text>
+
+              <CountDownTimer
+                date={this.state.dataSource[sessionCode]}
+                color='black'
+              />
+            </View>
           }
         </View>
 

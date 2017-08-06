@@ -14,14 +14,19 @@ const styles = StyleSheet.create({
     color: '#ee394b',
     textAlign: 'left',
   },
-  text: {
-    color: 'black',
-    // color: 'white',
-    // textShadowColor: 'black',
-    // textShadowOffset: {width: 1, height: 1},
-    // textShadowRadius: 3,
+  whiteText: {
+    color: 'white',
+    textShadowColor: 'black',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: 3,
     fontSize: 13,
-    // textAlign: 'left',
+    textAlign: 'left',
+    alignSelf: 'flex-start',
+
+  },
+  blackText: {
+    color: 'black',
+    fontSize: 13,
     alignSelf: 'flex-start',
 
   },
@@ -130,15 +135,23 @@ class CountDown extends Component {
     } else {
       days = this.props.days.plural;
     }
+
+    var textStyle;
+    if (this.props.color === 'black') {
+      textStyle = styles.blackText;
+    } else {
+      textStyle = styles.whiteText;
+    }
+
     return (
        <View style={styles.container}>
-         <Text style={styles.text}>{
+         <Text style={textStyle}>{
            this.leadingZeros(countDown.days)    + "D: " 
            + this.leadingZeros(countDown.hours) + "H: "
            + this.leadingZeros(countDown.min)   + "M: "
          }</Text>
          <View style={{width: 1, paddingRight:40}}>
-          <Text style={styles.text}>
+          <Text style={textStyle}>
            {this.leadingZeros(countDown.sec) + "S"}
           </Text> 
          </View>
