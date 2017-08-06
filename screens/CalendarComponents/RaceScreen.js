@@ -139,6 +139,12 @@ export default class RaceScreen extends React.Component {
       sessionCode += this.state.sessionNum;
     }
 
+    var sessionElapsed = true;
+    var timesheet = this.state.dataSource[sessionCode].timesheet;
+    if (timesheet === undefined) {
+      sessionElapsed = false;
+    }
+
     return (
 
       <View style={styles.container}>
@@ -170,11 +176,20 @@ export default class RaceScreen extends React.Component {
         }
 
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
-          <FlatList ref="flatlist"
-            data={this.state.dataSource[sessionCode].timesheet}
-            renderItem={this.renderRow.bind(this)}
-            keyExtractor={item => item.name}
-          />
+
+          {(sessionElapsed) && 
+            <FlatList ref="flatlist"
+              data={timesheet}
+              renderItem={this.renderRow.bind(this)}
+              keyExtractor={item => item.name}
+            />
+          }
+
+          {(!sessionElapsed) && 
+            <Text>
+              {this.state.dataSource[sessionCode]}
+            </Text>
+          }
         </View>
 
       </View>
