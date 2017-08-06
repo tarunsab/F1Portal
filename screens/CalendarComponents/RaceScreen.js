@@ -1,4 +1,7 @@
 import React from 'react';
+import {styles} from '../GlobalStyles.js'
+import Tabs from 'react-native-tabs';
+import CountDownTimer from '../OtherComponents/CountDownReact.js' 
 
 import {
   StackNavigator,
@@ -14,8 +17,6 @@ import {
   Dimensions,
 } from 'react-native';
 
-import {styles} from '../GlobalStyles.js'
-import Tabs from 'react-native-tabs';
 var raceName;
 var raceJSON;
 const api = 'https://f1portal.herokuapp.com';
@@ -186,9 +187,20 @@ export default class RaceScreen extends React.Component {
           }
 
           {(!sessionElapsed) && 
-            <Text>
-              {this.state.dataSource[sessionCode]}
-            </Text>
+            <CountDownTimer
+              date={this.state.dataSource[sessionCode]}
+              // days={{plural: 'Days ',singular: 'day '}}
+              // hours=':'
+              // mins=':'
+              // segs=''
+
+              // daysStyle={styles.time}
+              // hoursStyle={styles.time}
+              // minsStyle={styles.time}
+              // secsStyle={styles.time}
+              // firstColonStyle={styles.colon}
+              // secondColonStyle={styles.colon}
+            />
           }
         </View>
 

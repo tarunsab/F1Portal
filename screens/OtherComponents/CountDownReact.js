@@ -15,12 +15,13 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   text: {
-    color: 'white',
-    textShadowColor: 'black',
-    textShadowOffset: {width: 1, height: 1},
-    textShadowRadius: 3,
+    color: 'black',
+    // color: 'white',
+    // textShadowColor: 'black',
+    // textShadowOffset: {width: 1, height: 1},
+    // textShadowRadius: 3,
     fontSize: 13,
-    textAlign: 'left',
+    // textAlign: 'left',
     alignSelf: 'flex-start',
 
   },
