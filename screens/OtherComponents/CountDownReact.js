@@ -12,26 +12,18 @@ import {
 const styles = StyleSheet.create({
   cardItemTimeRemainTxt: {
     color: '#ee394b',
-    textAlign: 'left',
+    textAlign: 'center',
   },
-  whiteText: {
-    color: 'white',
+  text: {
     textShadowColor: 'black',
     textShadowOffset: {width: 1, height: 1},
-    textShadowRadius: 3,
-    fontSize: 13,
-    textAlign: 'left',
-    alignSelf: 'flex-start',
-
-  },
-  blackText: {
-    color: 'black',
-    fontSize: 13,
-    alignSelf: 'flex-start',
-
   },
   container: {
+    width: 200,
+    height: 40,
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   defaultTime: {
     paddingHorizontal: 3,
@@ -136,25 +128,24 @@ class CountDown extends Component {
       days = this.props.days.plural;
     }
 
-    var textStyle;
-    if (this.props.color === 'black') {
-      textStyle = styles.blackText;
-    } else {
-      textStyle = styles.whiteText;
+    var textStyle = [styles.text, {fontSize: parseInt(this.props.fontSize),
+                                    color: this.props.color}];
+    if (this.props.shadow === 'true') {
+      textStyle = [textStyle, {textShadowRadius: 3}]
     }
 
+    var containerStyle = [styles.container,
+      {height: parseInt(this.props.height), width: parseInt(this.props.width)}]
+
     return (
-       <View style={styles.container}>
+       <View style={containerStyle}>
          <Text style={textStyle}>{
            this.leadingZeros(countDown.days)    + "D: " 
            + this.leadingZeros(countDown.hours) + "H: "
            + this.leadingZeros(countDown.min)   + "M: "
+           + this.leadingZeros(countDown.sec) + "S"
          }</Text>
-         <View style={{width: 1, paddingRight:40}}>
-          <Text style={textStyle}>
-           {this.leadingZeros(countDown.sec) + "S"}
-          </Text> 
-         </View>
+
        </View>
     
     );

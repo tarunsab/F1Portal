@@ -2,6 +2,7 @@ import React from 'react';
 import {styles} from '../GlobalStyles.js'
 import Tabs from 'react-native-tabs';
 import CountDownTimer from '../OtherComponents/CountDownReact.js' 
+import dateFormat from 'dateformat';
 
 import {
   StackNavigator,
@@ -141,10 +142,16 @@ export default class RaceScreen extends React.Component {
     }
 
     var sessionElapsed = true;
+    var raceDatePaddingTop = 70;
     var timesheet = this.state.dataSource[sessionCode].timesheet;
     if (timesheet === undefined) {
       sessionElapsed = false;
+      var raceDate = new Date(this.state.dataSource[sessionCode]);
+      if (sessionCode === 'race') {
+        raceDatePaddingTop += 52.5;
+      }
     }
+
 
     return (
 
@@ -176,7 +183,7 @@ export default class RaceScreen extends React.Component {
 
         }
 
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
+        <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center', backgroundColor: 'white'}}>
 
           {(sessionElapsed) && 
             <FlatList ref="flatlist"
@@ -188,15 +195,24 @@ export default class RaceScreen extends React.Component {
 
           {(!sessionElapsed) && 
 
-            <View>
-              <Text>
-                {this.state.dataSource[sessionCode]}
-              </Text>
+            <View style={{flexDirection: 'column'}}>
 
-              <CountDownTimer
-                date={this.state.dataSource[sessionCode]}
-                color='black'
-              />
+              <View style={{paddingTop: raceDatePaddingTop, paddingBottom: 70}}>
+                <Text style={{fontSize: 20}}>
+                  {dateFormat(raceDate, "dddd mmmm dS h:MMTT")}                  
+                </Text>
+              </View>
+
+              <View style={{backgroundColor: '#F44336', alignSelf: 'center', padding: 15}}>
+                  <CountDownTimer
+                    date={this.state.dataSource[sessionCode]}
+                    color='white'
+                    fontSize='20'
+                    shadow='true'
+                    height="40"
+                    width="200"
+                  />
+              </View>
             </View>
           }
         </View>

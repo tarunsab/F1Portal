@@ -3,8 +3,7 @@ import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {styles} from '../GlobalStyles.js'
 import CountDownTimer from '../OtherComponents/CountDownReact.js' 
-
-var dateFormat = require('dateformat');
+import dateFormat from 'dateformat';
 
 import {
   StackNavigator,
@@ -285,6 +284,6 @@ var local_styles = StyleSheet.create({
   raceCountdownView:{
     flex: 3,
     alignItems: 'flex-start',
-    paddingLeft: 1,
+    paddingRight: 12,
   },
 });
