@@ -284,6 +284,6 @@ var local_styles = StyleSheet.create({
   raceCountdownView:{
     flex: 3,
     alignItems: 'flex-start',
-    paddingRight: 12,
+    paddingRight: 10,
   },
 });
