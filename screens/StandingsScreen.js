@@ -271,8 +271,8 @@ export default class StandingsScreen extends React.Component {
         </View>
 
         <View style={styles.tabHeader}>
-          <Tabs selected={this.state.page} style={{backgroundColor:'white'}}
-                selectedStyle={{color:'red'}} onSelect={el => this.changeTabs(el)}>
+          <Tabs selected={this.state.page} style={{backgroundColor:'#F44336'}}
+                selectedStyle={{color:'white'}} onSelect={el => this.changeTabs(el)}>
               <Text name="drivers">Drivers</Text>
               <Text name="constructors">Constructors</Text>
           </Tabs>
