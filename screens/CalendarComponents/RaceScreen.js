@@ -147,6 +147,9 @@ export default class RaceScreen extends React.Component {
     if (timesheet === undefined) {
       sessionElapsed = false;
       var raceDate = new Date(this.state.dataSource[sessionCode]);
+
+      //Compensating for missing session number picker tab e.g. 1,2 or 3 for fp/q
+      //in the race tab
       if (sessionCode === 'race') {
         raceDatePaddingTop += 52.5;
       }
@@ -211,6 +214,7 @@ export default class RaceScreen extends React.Component {
                     shadow='true'
                     height="40"
                     width="200"
+                    showSeconds='true'
                   />
               </View>
             </View>

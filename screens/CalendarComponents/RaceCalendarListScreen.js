@@ -129,6 +129,7 @@ export default class CalendarScreen extends React.Component {
                     <CountDownTimer
                       date={date}
                       color='white'
+                      fontSize="15"
                     />
 
                   }
@@ -284,6 +285,7 @@ var local_styles = StyleSheet.create({
   raceCountdownView:{
     flex: 3,
     alignItems: 'flex-start',
-    paddingRight: 10,
+    paddingRight: 14,
+    paddingTop: 2,
   },
 });

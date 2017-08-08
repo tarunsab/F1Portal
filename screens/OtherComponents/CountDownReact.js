@@ -137,13 +137,19 @@ class CountDown extends Component {
     var containerStyle = [styles.container,
       {height: parseInt(this.props.height), width: parseInt(this.props.width)}]
 
+    var countdownText = this.leadingZeros(countDown.days) + "D: " 
+                       + this.leadingZeros(countDown.hours) + "H: "
+    if (this.props.showSeconds === 'true') {
+      countdownText += this.leadingZeros(countDown.min)   + "M: "
+                      + this.leadingZeros(countDown.sec) + "S"
+    } else {
+      countdownText += this.leadingZeros(countDown.min)   + "M"
+    }
+
     return (
        <View style={containerStyle}>
          <Text style={textStyle}>{
-           this.leadingZeros(countDown.days)    + "D: " 
-           + this.leadingZeros(countDown.hours) + "H: "
-           + this.leadingZeros(countDown.min)   + "M: "
-           + this.leadingZeros(countDown.sec) + "S"
+            countdownText
          }</Text>
 
        </View>
