@@ -23,8 +23,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignContent: 'center',
     // alignSelf: 'flex-start',
-    borderBottomWidth: 1.5,
-    borderBottomColor: '#EEEEEE',
+    // borderBottomWidth: 1.5,
+    // borderBottomColor: '#EEEEEE',
   },
   headerText:{
     color: '#F44336',
