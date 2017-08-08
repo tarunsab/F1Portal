@@ -145,6 +145,46 @@ export default class StandingsScreen extends React.Component {
 
   }
 
+  renderHeader() {
+    return(
+      <View style={local_styles.header}>
+
+          <View style={local_styles.standingsOrder}>
+            <Text style={local_styles.headerText}>
+              #
+            </Text>
+          </View>
+
+          {
+            ((this.state.page === 'drivers') &&
+              <View style={local_styles.standingsNameBox}>
+                <Text style={local_styles.headerText}>
+                  Driver
+                </Text>
+              </View>
+            )
+          }
+
+          {
+            ((this.state.page === 'constructors') &&
+              <View style={local_styles.standingsNameBox}>
+                <Text style={local_styles.headerText}>
+                  Constructor
+                </Text>
+              </View>
+            )
+          }
+
+          <View style={local_styles.pointsBox}>
+            <Text style={local_styles.headerText}>
+              Points
+            </Text>
+          </View>
+
+        </View>
+    )
+  }
+
   renderRow(standingCell, something, rowID) {
 
     return (
@@ -238,6 +278,8 @@ export default class StandingsScreen extends React.Component {
           </Tabs>
         </View>
 
+        {this.renderHeader()}
+
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           <ListView
             flex-start dataSource={this.state.dataSource}
@@ -262,6 +304,19 @@ export default class StandingsScreen extends React.Component {
 }
 
 const local_styles = StyleSheet.create({
+  header:{
+    width: Dimensions.get('window').width,
+    paddingLeft: 30,
+    paddingRight: 30,
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    borderBottomWidth: 1.5,
+    borderBottomColor: 'rgb(238, 237, 237)',
+    alignItems: 'flex-start',
+  },
+  headerText:{
+    color: 'grey',
+  },
   listElem:{
     width: Dimensions.get('window').width,
     paddingTop: 20,

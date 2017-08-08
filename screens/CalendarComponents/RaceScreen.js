@@ -268,17 +268,13 @@ export default class RaceScreen extends React.Component {
 const local_styles = StyleSheet.create({
   header:{
     width: Dimensions.get('window').width,
-    // paddingTop: 20,
-    // paddingBottom: 20,
     paddingLeft: 15,
     paddingRight: 15,
     flexDirection: 'row',
-    // backgroundColor: '#F44336',
     backgroundColor: 'white',
-    borderBottomWidth: 2,
+    borderBottomWidth: 1.5,
     borderBottomColor: 'rgb(238, 237, 237)',
     alignItems: 'flex-start',
-    // height: 30,
   },
   headerText:{
     color: 'grey',
