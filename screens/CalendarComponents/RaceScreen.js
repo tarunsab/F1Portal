@@ -206,7 +206,8 @@ export default class RaceScreen extends React.Component {
                 </Text>
               </View>
 
-              <View style={{backgroundColor: '#F44336', alignSelf: 'center', padding: 15}}>
+              <View style={{backgroundColor: '#F44336', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', padding: 15, 
+              width: 250, height: 70}}>
                   <CountDownTimer
                     date={this.state.dataSource[sessionCode]}
                     color='white'
