@@ -69,6 +69,41 @@ export default class RaceScreen extends React.Component {
     this.setState({sessionNum: nextPage});
   }
 
+  renderHeader() {
+    return (
+     <View style={local_styles.header}>
+
+          <View style={local_styles.standingsOrder}>
+            <Text style={local_styles.headerText}> #</Text>
+          </View>
+
+          <View style={local_styles.standingsNameBox}>
+            <Text style={local_styles.headerText}> Driver</Text>
+          </View>
+
+          <View style={[local_styles.pointsBox, {flex: 0.8}]}>
+
+            <View style={{flex: 1}}>
+              <Text style={local_styles.headerText}> Time</Text>
+            </View> 
+
+            <View style={{flex: 1, paddingLeft: 10}}>
+
+              {(this.state.sessionType !== 'race') && 
+                <Text style={local_styles.headerText}> Diff</Text>
+              }
+
+              {(this.state.sessionType === 'race') && 
+                <Text style={local_styles.headerText}>Points</Text>
+              }
+
+            </View>
+
+          </View>
+      </View>
+    )
+  }
+
   renderRow(data) {
       var entryData = data.item;
       var entryBackground;
@@ -91,7 +126,7 @@ export default class RaceScreen extends React.Component {
             <Text> {entryData.name} </Text>
           </View>
 
-          <View style={local_styles.pointsBox}>
+          <View style={[local_styles.pointsBox, {flex: 0.8}]}>
             <View style={{flex: 1}}>
 
               {(this.state.sessionType !== 'race') && 
@@ -103,16 +138,16 @@ export default class RaceScreen extends React.Component {
               }
 
             </View>
-            <View style={{flex: 1}}>
+            <View style={{flex: 1, paddingLeft: 10}}>
 
               {(this.state.sessionType !== 'race') && 
-                <Text style={{textAlign: 'right', color: 'grey'}}> 
+                <Text style={{color: 'grey'}}> 
                   {entryData.timedelta} 
                 </Text>
               }
 
               {(this.state.sessionType === 'race') && 
-                <Text style={{textAlign: 'right', color: 'grey'}}> 
+                <Text style={{color: 'grey'}}> 
                   {entryData.pointsGained} 
                 </Text>
               }
@@ -188,12 +223,15 @@ export default class RaceScreen extends React.Component {
 
         <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center', backgroundColor: 'white'}}>
 
-          {(sessionElapsed) && 
-            <FlatList ref="flatlist"
-              data={timesheet}
-              renderItem={this.renderRow.bind(this)}
-              keyExtractor={item => item.name}
-            />
+          {(sessionElapsed) &&
+            <View>
+              {this.renderHeader()}
+              <FlatList ref="flatlist"
+                data={timesheet}
+                renderItem={this.renderRow.bind(this)}
+                keyExtractor={item => item.name}
+              />
+            </View>
           }
 
           {(!sessionElapsed) && 
@@ -207,7 +245,7 @@ export default class RaceScreen extends React.Component {
               </View>
 
               <View style={{backgroundColor: '#F44336', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', padding: 15, 
-              width: 250, height: 70}}>
+              width: 250, height: 75}}>
                   <CountDownTimer
                     date={this.state.dataSource[sessionCode]}
                     color='white'
@@ -228,6 +266,23 @@ export default class RaceScreen extends React.Component {
 }
 
 const local_styles = StyleSheet.create({
+  header:{
+    width: Dimensions.get('window').width,
+    // paddingTop: 20,
+    // paddingBottom: 20,
+    paddingLeft: 15,
+    paddingRight: 15,
+    flexDirection: 'row',
+    // backgroundColor: '#F44336',
+    backgroundColor: 'white',
+    borderBottomWidth: 2,
+    borderBottomColor: 'rgb(238, 237, 237)',
+    alignItems: 'flex-start',
+    // height: 30,
+  },
+  headerText:{
+    color: 'grey',
+  },
   listElem:{
     width: Dimensions.get('window').width,
     paddingTop: 20,
