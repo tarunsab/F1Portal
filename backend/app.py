@@ -301,7 +301,7 @@ def get_results(season, race_country):
 # Tester function for quick debugging
 @app.route('/test')
 def test():
-    return jsonify(get_standings_from_api())
+    return jsonify(get_standings_from_api(None))
 
 
 if __name__ == '__main__':
