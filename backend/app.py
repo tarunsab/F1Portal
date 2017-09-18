@@ -49,9 +49,8 @@ def get_standings():
 # Obtaining the drivers and constructors standings data from Ergast API and
 # caching to database
 def get_standings_from_api(old_standings_json):
-    # Obtaining drivers and constructors json from API
+    # Obtaining drivers json from API
     new_standings_json = {}
-
     drivers_standings = requests.get(apiUrl + '/driverStandings.json')
     driver_json = drivers_standings.json()
     new_standings_json["driver_standings"] = driver_json
@@ -59,10 +58,10 @@ def get_standings_from_api(old_standings_json):
     # Checking if API standings are updated after race has ended
     if old_standings_json is not None:
 
-        old_round = int(old_standings_json["driver_data"]["MRData"]
-                        ["StandingsTable"]["StandingsLists"]["round"])
-        new_round = int(new_standings_json["driver_data"]["MRData"]
-                        ["StandingsTable"]["StandingsLists"]["round"])
+        old_round = int(old_standings_json["driver_standings"]["MRData"]
+                        ["StandingsTable"]["StandingsLists"][0]["round"])
+        new_round = int(new_standings_json["driver_standings"]["MRData"]
+                        ["StandingsTable"]["StandingsLists"][0]["round"])
 
         # If API standings are not yet updated, return old standings data with
         # the same expiry so this check will be conducted again next time
@@ -70,6 +69,7 @@ def get_standings_from_api(old_standings_json):
             print("API standings are not yet updated. Using old cached data.")
             return old_standings_json
 
+    # Obtaining Constructors json from API
     constructor_standings = requests.get(apiUrl + '/constructorStandings.json')
     constructor_json = constructor_standings.json()
     new_standings_json["constructor_standings"] = constructor_json
