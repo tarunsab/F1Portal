@@ -52,6 +52,8 @@ export default class RaceScreen extends React.Component {
         this.setState({
           isLoading: false,
           dataSource: responseJson,
+          sessionType: responseJson['latestSessionType'],
+          sessionNum: responseJson['latestSessionNum'],
         });
       })
       .catch((error) => {
