@@ -301,8 +301,13 @@ def get_results(season, race_country):
         else:
             break
 
-    results_json["latestSession"] = latest_session
-
+    if latest_session == "race":
+        results_json["latestSessionType"] = latest_session
+        results_json["latestSessionNum"] = ""
+    else:
+        results_json["latestSessionType"] = latest_session[:-1]
+        results_json["latestSessionNum"] = latest_session[-1:]
+        
     # Update showtimes for the sessions without results
     results_json.update(showtime_data.get())
 
