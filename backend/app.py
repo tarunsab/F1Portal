@@ -222,7 +222,6 @@ def get_showtimes(season, url):
 
 @app.route('/get_results/<string:season>/<string:race_country>')
 def get_results(season, race_country):
-
     # Constructing URLs---------------------------------------------------------
 
     # Constructing URL to scrape results
@@ -231,7 +230,7 @@ def get_results(season, race_country):
 
     # url only work with lowercase countries
     race_country = race_country.lower()
-    
+
     # Special case
     if race_country == "uae":
         race_country = "unitedarabemirates"
@@ -291,10 +290,23 @@ def get_results(season, race_country):
 
     results_json["race"] = race_data.get()
 
+    # Obtain latest session based on results published
+    latest_session = "fp1"
+    for session in results_json:
+
+        session_data = results_json[session]["timesheet"]
+
+        if session_data:
+            latest_session = session
+        else:
+            break
+
+    results_json["latestSession"] = latest_session
+
+    # Update showtimes for the sessions without results
     results_json.update(showtime_data.get())
 
     pool.close()
-
     return jsonify(results_json)
 
 
