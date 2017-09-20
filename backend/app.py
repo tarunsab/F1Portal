@@ -216,8 +216,8 @@ def get_race_results(url):
 
 
 # Get showtimes from scraper
-def get_showtimes(season, url):
-    return Scraper.scrape_showtimes(season, url)
+def get_showtimes(season, url, country):
+    return Scraper.scrape_showtimes(season, url, country)
 
 
 @app.route('/get_results/<string:season>/<string:race_country>')
@@ -276,7 +276,8 @@ def get_results(season, race_country):
 
     race_data = pool.apply_async(get_race_results, (race_url,))
 
-    showtime_data = pool.apply_async(get_showtimes, (season, showtimes_url))
+    showtime_data = pool.apply_async(get_showtimes, (season, showtimes_url,
+                                                     race_country))
 
     # Waiting for executing tasks to obtain JSON results and then populating
     # results JSON with the obtained results------------------------------------

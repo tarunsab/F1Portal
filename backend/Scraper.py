@@ -4,6 +4,8 @@ from pprint import pprint
 from bs4 import BeautifulSoup
 from dateutil.parser import *
 from urllib.request import urlopen
+from DBManager import DBManager
+
 
 
 def calc_timedelta(fastest_time, driver_time):
@@ -33,7 +35,7 @@ class Scraper:
         table = soup.find('table', attrs={'class': 'standing-table__table'})
         cells = table.findAll('tr', attrs={'class': 'standing-table__row'})
 
-        # Fastest time of the session to calculate time delata
+        # Fastest time of the session to calculate time delta
         fastest_time = ""
 
         # For each row in the results table
@@ -168,7 +170,20 @@ class Scraper:
         return race_json
 
     @staticmethod
-    def scrape_showtimes(year, url):
+    def scrape_showtimes(year, url, race_country):
+
+        # Obtaining cached standings data from database
+        entry = DBManager.get_showtimes_entry(race_country)
+
+        # Check cached data exists and is from the current season to be
+        # valid. If valid, then return
+        if entry:
+            cached_showtimes_data = entry[0][0]
+            if cached_showtimes_data:
+                json_year = cached_showtimes_data['year']
+                if json_year == year:
+                    print("Showtimes obtained from cache")
+                    return cached_showtimes_data
 
         # JSON to be populated with scraped results
         showtimes_json = {}
@@ -215,6 +230,17 @@ class Scraper:
                 # Populating results json with session name and datetime
                 showtimes_json[session_name] = session_datetime
 
+        if showtimes_json == {}:
+            print("Showtimes unavailable as session has elapsed")
+            return showtimes_json
+
+        # Add year to showtimes data to depict season
+        showtimes_json['year'] = year
+
+        # Update cached showtimes file in database
+        DBManager.update_showtimes_entry(race_country, showtimes_json)
+
+        print("Showtimes obtained from website")
         return showtimes_json
 
     @staticmethod

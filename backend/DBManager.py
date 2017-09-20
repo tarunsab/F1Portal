@@ -13,16 +13,29 @@ CREATE_PORTAL_TABLE = '''
     jsonData        JSONB);
     '''
 
-CREATE_ENTRY = '''
+CREATE_PORTALTABLE_ENTRY = '''
     INSERT INTO portaltable VALUES (%s, %s)
     '''
 
-UPDATE_ENTRY = '''
+UPDATE_PORTALTABLE_ENTRY = '''
     UPDATE portaltable SET jsonData = %s WHERE ID = %s
     '''
 
-GET_ENTRY = '''
+GET_PORTALTABLE_ENTRY = '''
     SELECT jsonData FROM portaltable WHERE id= %s
+    '''
+
+UPDATE_SHOWTIMES_ENTRY = '''
+    UPDATE showtimes SET showtimes_data = %s WHERE grandprix = %s
+    '''
+INSERT_SHOWTIMES_ENTRY = '''
+    INSERT INTO showtimes(grandprix, showtimes_data)
+           VALUES(%s, %s)
+           ON CONFLICT DO NOTHING
+    '''
+
+GET_SHOWTIMES_ENTRY = '''
+    SELECT showtimes_data FROM showtimes WHERE grandprix = %s
     '''
 
 
@@ -63,7 +76,6 @@ def close_connection(cnxn, cursor):
 
 # Class to manage entries ------------------------------------------------------
 class DBManager:
-
     @staticmethod
     def create_portal_table():
         conn, cur = establish_connection()
@@ -74,19 +86,19 @@ class DBManager:
     @staticmethod
     def create_standings_entry(data):
         conn, cur = establish_connection()
-        cur.execute(CREATE_ENTRY, (standings_id, json.dumps(data)))
+        cur.execute(CREATE_PORTALTABLE_ENTRY, (standings_id, json.dumps(data)))
         close_connection(conn, cur)
 
     @staticmethod
     def update_standings_entry(data):
         conn, cur = establish_connection()
-        cur.execute(UPDATE_ENTRY, (json.dumps(data), standings_id))
+        cur.execute(UPDATE_PORTALTABLE_ENTRY, (json.dumps(data), standings_id))
         close_connection(conn, cur)
 
     @staticmethod
     def get_standings_entry():
         conn, cur = establish_connection()
-        cur.execute(GET_ENTRY, (standings_id,))
+        cur.execute(GET_PORTALTABLE_ENTRY, (standings_id,))
         result = cur.fetchall()
         close_connection(conn, cur)
         return result
@@ -95,22 +107,42 @@ class DBManager:
     @staticmethod
     def create_schedule_entry(data):
         conn, cur = establish_connection()
-        cur.execute(CREATE_ENTRY, (schedule_id, json.dumps(data)))
+        cur.execute(CREATE_PORTALTABLE_ENTRY, (schedule_id, json.dumps(data)))
         close_connection(conn, cur)
 
     @staticmethod
     def update_schedule_entry(data):
         conn, cur = establish_connection()
-        cur.execute(UPDATE_ENTRY, (json.dumps(data), schedule_id))
+        cur.execute(UPDATE_PORTALTABLE_ENTRY, (json.dumps(data), schedule_id))
         close_connection(conn, cur)
 
     @staticmethod
     def get_schedule_entry():
         conn, cur = establish_connection()
-        cur.execute(GET_ENTRY, (schedule_id,))
+        cur.execute(GET_PORTALTABLE_ENTRY, (schedule_id,))
         result = cur.fetchall()
         close_connection(conn, cur)
         return result
+
+    # Showtimes ----------------------------------------------------------------
+    @staticmethod
+    def update_showtimes_entry(race_country, data):
+        conn, cur = establish_connection()
+
+        # Update or insert if race_country doesn't exist. Only one succeeds
+        cur.execute(UPDATE_SHOWTIMES_ENTRY, (json.dumps(data), race_country))
+        cur.execute(INSERT_SHOWTIMES_ENTRY, (race_country, json.dumps(data)))
+
+        close_connection(conn, cur)
+
+    @staticmethod
+    def get_showtimes_entry(race_country):
+        conn, cur = establish_connection()
+        cur.execute(GET_SHOWTIMES_ENTRY, (race_country,))
+        result = cur.fetchall()
+        close_connection(conn, cur)
+        return result
+
 
 if __name__ == '__main__':
     print("Shouldn't open DBManager!")
