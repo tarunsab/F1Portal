@@ -251,6 +251,10 @@ def get_results(season, race_country):
     # Race results URL
     race_url = url + "/race"
 
+    # Generating a results URL list
+    sessions = ["fp1", "fp2", "fp3", "q1", "q2", "q3", "race"]
+    urls = [p1_url, p2_url, p3_url, q1_url, q2_url, q3_url, race_url]
+
     # Constructing URL to scrape showtimes
     # e.g. "http://www.skysports.com/watch/f1-on-sky/grand-prix/italy"
 
@@ -266,30 +270,41 @@ def get_results(season, race_country):
     pool = ThreadPool(processes=9)
 
     # Submitting tasks to execute concurrently
-    fp1_data = pool.apply_async(get_practice_results, (p1_url,))
-    fp2_data = pool.apply_async(get_practice_results, (p2_url,))
-    fp3_data = pool.apply_async(get_practice_results, (p3_url,))
+    tasks = []
+    # TODO: Calculate next session
+    next_session_id = 7
+    for i in range(next_session_id):
 
-    q1_data = pool.apply_async(get_qualifying_results, (q1_url,))
-    q2_data = pool.apply_async(get_qualifying_results, (q2_url,))
-    q3_data = pool.apply_async(get_qualifying_results, (q3_url,))
+        # ID: 1-3 = practice. 4-6 = qualifying. 7 = race
+        practice_id = 3
+        qualifying_id = 6
 
-    race_data = pool.apply_async(get_race_results, (race_url,))
+        # If session is practice
+        if i < practice_id:
+            tasks.append(pool.apply_async(get_practice_results, (urls[i],)))
+
+        # If session is qualifying
+        elif i < qualifying_id:
+            tasks.append(pool.apply_async(get_qualifying_results, (urls[i],)))
+
+        # If session is race
+        else:
+            tasks.append(pool.apply_async(get_race_results, (urls[i],)))
 
     showtime_data = pool.apply_async(get_showtimes, (season, showtimes_url,
                                                      race_country))
 
     # Waiting for executing tasks to obtain JSON results and then populating
     # results JSON with the obtained results------------------------------------
-    results_json["fp1"] = fp1_data.get()
-    results_json["fp2"] = fp2_data.get()
-    results_json["fp3"] = fp3_data.get()
+    for i in range(len(sessions)):
 
-    results_json["q1"] = q1_data.get()
-    results_json["q2"] = q2_data.get()
-    results_json["q3"] = q3_data.get()
+        # If session has been submitted to be scraped
+        if i < len(tasks):
+            get = tasks[i].get()
+            results_json[sessions[i]] = get
 
-    results_json["race"] = race_data.get()
+        else:
+            results_json[sessions[i]] = ""
 
     # Obtain latest session based on results published
     latest_session = "fp1"
