@@ -200,9 +200,41 @@ def add_images_to_schedule(new_schedule_data):
     return new_schedule_data
 
 
+# Get showtimes of weekend from cache or scraper
+def get_showtimes(season, url, race_country):
+
+    # Obtaining cached standings data from database
+    entry = DBManager.get_showtimes_entry(race_country)
+
+    # Check cached data exists and is from the current season to be
+    # valid. If valid, then return
+    if entry:
+        cached_showtimes_data = entry[0][0]
+        if cached_showtimes_data:
+            json_year = cached_showtimes_data['year']
+            if json_year == season:
+                print("Showtimes obtained from cache")
+                return cached_showtimes_data
+
+    # Scrape showtimes from url website
+    showtimes_data = Scraper.scrape_showtimes(season, url)
+
+    if showtimes_data == {}:
+        print("Showtimes unavailable as session has elapsed")
+        return showtimes_data
+
+    # Add year to showtimes data to depict season
+    showtimes_data['year'] = season
+
+    # Update cached showtimes file in database
+    DBManager.update_showtimes_entry(race_country, showtimes_data)
+
+    print("Showtimes obtained from website")
+    return showtimes_data
+
+
 # Get session results from cache or scraper
 def get_session_results(url, race_country, session_name, year):
-
     # Obtain cached results from database
     entry = DBManager.get_session_results_entry(race_country, session_name)
 
@@ -217,7 +249,6 @@ def get_session_results(url, race_country, session_name, year):
 
     # Otherwise, scrape
     session_results = {}
-
 
     if session_name[:2] == 'fp':
         session_results = Scraper.scrape_practice_results(url)
@@ -290,9 +321,8 @@ def get_results(season, race_country):
     pool = ThreadPool(processes=9)
 
     # Obtain showtimes for all sessions
-    # TODO: Extract to Function that decides to get form cache of scrape rather
-    # TODO: than placing that logic within the scraping function below
-    showtimes_json = Scraper.scrape_showtimes(season, url, race_country)
+    # showtimes_json = Scraper.scrape_showtimes(season, url, race_country)
+    showtimes_json = get_showtimes(season, url, race_country)
 
     # Calculating the next session's ID(can have value in range 0-7). Tells
     # us the max session we need to obtain results for to avoid redundant
