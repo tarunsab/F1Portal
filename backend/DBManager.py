@@ -17,6 +17,7 @@ CREATE_PORTALTABLE_ENTRY = '''
     INSERT INTO portaltable VALUES (%s, %s)
     '''
 
+# General queries
 UPDATE_PORTALTABLE_ENTRY = '''
     UPDATE portaltable SET jsonData = %s WHERE ID = %s
     '''
@@ -25,6 +26,7 @@ GET_PORTALTABLE_ENTRY = '''
     SELECT jsonData FROM portaltable WHERE id= %s
     '''
 
+# Showtimes queries
 UPDATE_SHOWTIMES_ENTRY = '''
     UPDATE showtimes SET showtimes_data = %s WHERE grandprix = %s
     '''
@@ -38,6 +40,21 @@ GET_SHOWTIMES_ENTRY = '''
     SELECT showtimes_data FROM showtimes WHERE grandprix = %s
     '''
 
+# Results queries
+UPDATE_RESULTS_ENTRY = '''
+    UPDATE results SET results_data = %s
+    WHERE grandprix = %s AND session_name = %s
+    '''
+INSERT_RESULTS_ENTRY = '''
+    INSERT INTO results(grandprix, session_name, results_data)
+           VALUES(%s, %s, %s)
+           ON CONFLICT DO NOTHING
+    '''
+
+GET_RESULTS_ENTRY = '''
+    SELECT results_data FROM results
+    WHERE grandprix = %s AND session_name = %s
+    '''
 
 # Private methods to manage connections ----------------------------------------
 def establish_connection():
@@ -143,6 +160,29 @@ class DBManager:
         close_connection(conn, cur)
         return result
 
+    # Session Results ----------------------------------------------------------
+    @staticmethod
+    def update_session_results_entry(race_country, session_name,
+                                    session_results):
+        conn, cur = establish_connection()
+
+        # Update or insert if race_country doesn't exist. Only one succeeds
+        cur.execute(UPDATE_RESULTS_ENTRY, (json.dumps(session_results),
+                                             race_country,
+                                             session_name))
+        cur.execute(INSERT_RESULTS_ENTRY, (race_country,
+                                             session_name,
+                                             json.dumps(session_results)))
+
+        close_connection(conn, cur)
+
+    @staticmethod
+    def get_session_results_entry(race_country, session_name):
+        conn, cur = establish_connection()
+        cur.execute(GET_RESULTS_ENTRY, (race_country, session_name))
+        result = cur.fetchall()
+        close_connection(conn, cur)
+        return result
 
 if __name__ == '__main__':
     print("Shouldn't open DBManager!")

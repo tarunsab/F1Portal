@@ -171,7 +171,6 @@ class Scraper:
 
     @staticmethod
     def scrape_showtimes(year, url, race_country):
-
         # Obtaining cached standings data from database
         entry = DBManager.get_showtimes_entry(race_country)
 

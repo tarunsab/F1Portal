@@ -200,19 +200,44 @@ def add_images_to_schedule(new_schedule_data):
     return new_schedule_data
 
 
-# Get practice results from scraper
-def get_practice_results(url):
-    return Scraper.scrape_practice_results(url)
+# Get session results from cache or scraper
+def get_session_results(url, race_country, session_name, year):
+
+    # Obtain cached results from database
+    entry = DBManager.get_session_results_entry(race_country, session_name)
+
+    # Check if valid using year/season and if empty. If valid, return
+    if entry:
+        cached_session_results = entry[0][0]
+        if cached_session_results:
+            json_year = cached_session_results['year']
+            if json_year == year:
+                print(session_name + " results obtained from cache")
+                return cached_session_results
+
+    # Otherwise, scrape
+    session_results = {}
 
 
-# Get qualifying results from scraper
-def get_qualifying_results(url):
-    return Scraper.scrape_qualifying_results(url)
+    if session_name[:2] == 'fp':
+        session_results = Scraper.scrape_practice_results(url)
 
+    elif session_name[0] == 'q':
+        session_results = Scraper.scrape_qualifying_results(url)
 
-# Get race results from scraper
-def get_race_results(url):
-    return Scraper.scrape_race_results(url)
+    else:
+        session_results = Scraper.scrape_race_results(url)
+
+    # Add year to showtimes data to depict season
+    session_results['year'] = year
+
+    # Update cached showtimes file in database
+    DBManager.update_session_results_entry(race_country,
+                                           session_name,
+                                           session_results)
+
+    print("Showtimes obtained from website")
+    return session_results
 
 
 @app.route('/get_results/<string:season>/<string:race_country>')
@@ -265,8 +290,9 @@ def get_results(season, race_country):
     pool = ThreadPool(processes=9)
 
     # Obtain showtimes for all sessions
+    # TODO: Extract to Function that decides to get form cache of scrape rather
+    # TODO: than placing that logic within the scraping function below
     showtimes_json = Scraper.scrape_showtimes(season, url, race_country)
-
 
     # Calculating the next session's ID(can have value in range 0-7). Tells
     # us the max session we need to obtain results for to avoid redundant
@@ -295,10 +321,11 @@ def get_results(season, race_country):
                 if session_time > curr_timestamp:
                     break
 
-
     # Submitting tasks to execute concurrently
     tasks = []
     for i in range(next_session_id):
+
+        session_name = sessions[i]
 
         # ID: 0-2 = practice. 3-5 = qualifying. 6 = race
         practice_id = 3
@@ -306,16 +333,24 @@ def get_results(season, race_country):
 
         # If session is practice
         if i < practice_id:
-            tasks.append(pool.apply_async(get_practice_results, (urls[i],)))
+            tasks.append(pool.apply_async(get_session_results, (urls[i],
+                                                                race_country,
+                                                                session_name,
+                                                                season)))
 
         # If session is qualifying
         elif i < qualifying_id:
-            tasks.append(pool.apply_async(get_qualifying_results, (urls[i],)))
+            tasks.append(pool.apply_async(get_session_results, (urls[i],
+                                                                race_country,
+                                                                session_name,
+                                                                season)))
 
         # If session is race
         else:
-            tasks.append(pool.apply_async(get_race_results, (urls[i],)))
-
+            tasks.append(pool.apply_async(get_session_results, (urls[i],
+                                                                race_country,
+                                                                session_name,
+                                                                season)))
 
     # Waiting for executing tasks to obtain JSON results and then populating
     # results JSON with the obtained results------------------------------------
