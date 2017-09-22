@@ -357,30 +357,11 @@ def get_results(season, race_country):
 
         session_name = sessions[i]
 
-        # ID: 0-2 = practice. 3-5 = qualifying. 6 = race
-        practice_id = 3
-        qualifying_id = 6
+        tasks.append(pool.apply_async(get_session_results, (urls[i],
+                                                            race_country,
+                                                            session_name,
+                                                            season)))
 
-        # If session is practice
-        if i < practice_id:
-            tasks.append(pool.apply_async(get_session_results, (urls[i],
-                                                                race_country,
-                                                                session_name,
-                                                                season)))
-
-        # If session is qualifying
-        elif i < qualifying_id:
-            tasks.append(pool.apply_async(get_session_results, (urls[i],
-                                                                race_country,
-                                                                session_name,
-                                                                season)))
-
-        # If session is race
-        else:
-            tasks.append(pool.apply_async(get_session_results, (urls[i],
-                                                                race_country,
-                                                                session_name,
-                                                                season)))
 
     # Waiting for executing tasks to obtain JSON results and then populating
     # results JSON with the obtained results------------------------------------
