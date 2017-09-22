@@ -215,11 +215,6 @@ def get_race_results(url):
     return Scraper.scrape_race_results(url)
 
 
-# Get showtimes from scraper
-def get_showtimes(season, url, country):
-    return Scraper.scrape_showtimes(season, url, country)
-
-
 @app.route('/get_results/<string:season>/<string:race_country>')
 def get_results(season, race_country):
     # Constructing URLs---------------------------------------------------------
@@ -269,13 +264,43 @@ def get_results(season, race_country):
     results_json = {}
     pool = ThreadPool(processes=9)
 
+    # Obtain showtimes for all sessions
+    showtimes_json = Scraper.scrape_showtimes(season, url, race_country)
+
+
+    # Calculating the next session's ID(can have value in range 0-7). Tells
+    # us the max session we need to obtain results for to avoid redundant
+    # scraping/reading from cache when weekend is in progress.
+    # TODO: Replace IDs and sessions with an enum class
+    next_session_id = 0
+
+    # By default, all sessions need to be obtained from cache in case weekend
+    # has elapsed. So set the id to be the maximum.
+    if not showtimes_json:
+        next_session_id = 7
+
+    # If weekend is in progress or hasn't started, can prune sessions to be
+    # obtained from cache/website
+    else:
+        curr_timestamp = datetime.utcnow()
+        for st in showtimes_json:
+            if st in sessions:
+                next_session_id += 1
+                session_time_raw = showtimes_json[st]
+                session_time = datetime.strptime(session_time_raw,
+                                                 '%Y-%m-%dT%H:%M:%S')
+
+                # If session hasn't elapsed. This is the next session as we are
+                # iterating in ascending order of sessions in list so break
+                if session_time > curr_timestamp:
+                    break
+
+
     # Submitting tasks to execute concurrently
     tasks = []
-    # TODO: Calculate next session
-    next_session_id = 7
     for i in range(next_session_id):
 
-        # ID: 1-3 = practice. 4-6 = qualifying. 7 = race
+        # ID: 0-2 = practice. 3-5 = qualifying. 6 = race
         practice_id = 3
         qualifying_id = 6
 
@@ -291,8 +316,6 @@ def get_results(season, race_country):
         else:
             tasks.append(pool.apply_async(get_race_results, (urls[i],)))
 
-    showtime_data = pool.apply_async(get_showtimes, (season, showtimes_url,
-                                                     race_country))
 
     # Waiting for executing tasks to obtain JSON results and then populating
     # results JSON with the obtained results------------------------------------
@@ -306,7 +329,9 @@ def get_results(season, race_country):
         else:
             results_json[sessions[i]] = ""
 
-    # Obtain latest session based on results published
+    # Obtain latest session based on results published. Cannot use
+    # next_session_id as we could be waiting for current session results to be
+    # published after it has elapsed which that variable doesnt account for.
     latest_session = "fp1"
     for session in results_json:
 
@@ -324,8 +349,7 @@ def get_results(season, race_country):
         results_json["latestSessionType"] = latest_session[:-1]
         results_json["latestSessionNum"] = latest_session[-1:]
 
-    # Update showtimes for the sessions without results
-    results_json.update(showtime_data.get())
+    results_json.update(showtimes_json)
 
     pool.close()
     return jsonify(results_json)
