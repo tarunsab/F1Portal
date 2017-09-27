@@ -1,8 +1,8 @@
 import React from 'react';
-import {styles} from './GlobalStyles.js'
+import {styles} from '../GlobalStyles.js'
 
-import RaceScreen from './CalendarComponents/RaceScreen';
-import RaceCalendarListScreen from './CalendarComponents/RaceCalendarListScreen';
+import CalendarRaceDetails from './screens/CalendarRaceDetails';
+import CalendarRaceList from './screens/CalendarRaceList';
 
 import {
   StackNavigator,
@@ -16,11 +16,11 @@ import {
 const RaceStackNavigator = StackNavigator({
 
   RaceCalendarListScreen: {
-    screen: RaceCalendarListScreen
+    screen: CalendarRaceList
   },
 
   RaceScreen: {
-    screen: RaceScreen,
+    screen: CalendarRaceDetails,
   }
 },{
     navigationOptions: {
@@ -35,7 +35,7 @@ export default class CalendarNavigator extends React.Component {
     tabBarLabel: 'Calendar',
     tabBarIcon: ({ tintColor }) => (
       <Image
-        source={require('../images/icons/calendar.png')}
+        source={require('../../images/icons/calendar.png')}
         style={[styles.icon, {tintColor: tintColor}]}
       />
     ),

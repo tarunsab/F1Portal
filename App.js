@@ -6,13 +6,13 @@ import {
 } from 'react-navigation';
 
 
-import StandingsScreen from './screens/StandingsScreen';
-import CalendarNavigator from './screens/CalendarNavigator';
+import AllStandings from './screens/Standings/AllStandings';
+import CalendarNavigator from './screens/Calendar/CalendarNavigator.js';
 
 const Tabs = TabNavigator({
 
   Standings: {
-    screen: StandingsScreen
+    screen: AllStandings
   },
 
   Calendar: {
@@ -25,7 +25,6 @@ const Tabs = TabNavigator({
       swipeEnabled: true,
       tabBarPosition: 'bottom',
       animationEnabled: true,
-
     },
 
     tabBarPosition: 'bottom',

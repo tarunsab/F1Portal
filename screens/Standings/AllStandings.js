@@ -18,18 +18,18 @@ import {
 
 import Toast from 'react-native-easy-toast'
 import Tabs from 'react-native-tabs';
-import {styles} from './GlobalStyles.js'
+import {styles} from '../GlobalStyles.js'
 
 const api = 'https://f1portal.herokuapp.com';
 
-export default class StandingsScreen extends React.Component {
+export default class AllStandings extends React.Component {
 
   static navigationOptions = {
 
     tabBarLabel: 'Standings',
     tabBarIcon: ({ tintColor }) => (
       <Image
-        source={require('../images/icons/standings.png')}
+        source={require('../../images/icons/standings.png')}
         style={[styles.icon, {tintColor: tintColor}]}
       />
     ),

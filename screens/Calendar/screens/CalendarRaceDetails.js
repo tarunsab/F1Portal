@@ -1,7 +1,7 @@
 import React from 'react';
-import {styles} from '../GlobalStyles.js'
+import {styles} from '../../GlobalStyles.js'
 import Tabs from 'react-native-tabs';
-import CountDownTimer from '../OtherComponents/CountDownReact.js' 
+import CountDownTimer from '../../Components/CountDownComponent.js' 
 import dateFormat from 'dateformat';
 
 import {
@@ -22,7 +22,7 @@ var raceName;
 var raceJSON;
 const api = 'https://f1portal.herokuapp.com';
 
-export default class RaceScreen extends React.Component {
+export default class CalendarRaceDetails extends React.Component {
   
   static navigationOptions = ({ navigation }) => ({
     title: navigation.state.params.race_name,

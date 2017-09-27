@@ -1,8 +1,8 @@
 import React from 'react';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {styles} from '../GlobalStyles.js'
-import CountDownTimer from '../OtherComponents/CountDownReact.js' 
+import {styles} from '../../GlobalStyles.js'
+import CountDownTimer from '../../Components/CountDownComponent.js' 
 import dateFormat from 'dateformat';
 
 import {
@@ -27,7 +27,7 @@ const today = new Date();
 var seasonRound;
 
 
-export default class CalendarScreen extends React.Component {
+export default class CalendarRaceList extends React.Component {
 
   static navigationOptions = {
     title: 'Race Calendar',
